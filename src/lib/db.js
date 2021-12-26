@@ -11,7 +11,7 @@ if(!connection) {
     connection = client.connect()    
 }
 
-export default await connection
+export default connection
 
 // let client;
 // let clientPromise;
