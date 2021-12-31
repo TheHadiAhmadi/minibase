@@ -1,5 +1,101 @@
-<script>
-    import 'virtual:windi.css'
+<script context="module">
+	import user from '$lib/stores/user';
 </script>
 
-<slot/>
+<script>
+	import '@ubeac/svelte-components/styles.css';
+	import 'virtual:windi.css';
+
+	import supabase from '$lib/supabase';
+	import { onMount } from 'svelte';
+
+	import {
+		Avatar,
+		Breadcrumb,
+		BreadcrumbItem,
+		Dropdown,
+		Icon,
+		Menu,
+		MenuItem,
+		MenuTitle,
+		Spinner
+	} from '@ubeac/svelte-components';
+	import { navigating } from '$app/stores';
+	import { page } from '$app/stores';
+
+	onMount(() => {
+		user.load();
+		supabase.auth.onAuthStateChange((event) => {
+			if (event === 'SIGNED_IN') {
+				user.load();
+			} else if (event === 'SIGNED_OUT') {
+				user.load();
+			}
+		});
+	});
+
+	function login() {
+		supabase.auth.signIn({
+			provider: 'github'
+		});
+	}
+</script>
+
+<div class="bg-gradient-to-tr from-blue-200 to-green-100 min-h-screen">
+	{#if $user}
+		<div class="p-2 px-4 text-black w-full flex items-center justify-between">
+			<Breadcrumb>
+				<BreadcrumbItem href="/">
+					<Icon name="fas-database" class="m-2" />
+					Minibase
+				</BreadcrumbItem>
+
+				<!-- <BreadcrumbItem href="/apps/${$app.id}">
+					{$app.name}
+				</BreadcrumbItem> -->
+				<!-- {/if} -->
+			</Breadcrumb>
+			<Dropdown end>
+				<Icon slot="title" name="fas-bars" />
+				<!-- <Avatar
+					size="sm"
+					slot="title"
+					class="shadow rounded-full hover:shadow-lg"
+					image={$user.user_metadata.avatar_url}
+				/> -->
+				<Menu rounded>
+					<MenuTitle>{$user.user_metadata.user_name}</MenuTitle>
+					<MenuItem href="/profile">
+						<Icon slot="prefix" name="fas-user" />
+						Profile
+					</MenuItem>
+					<MenuItem href="/new">
+						<Icon slot="prefix" name="fas-plus" />
+						New App
+					</MenuItem>
+					<MenuItem href="/settings">
+						<Icon slot="prefix" name="fas-cog" />
+						Settings
+					</MenuItem>
+					<MenuItem href="/logout">
+						<Icon slot="prefix" name="fas-sign-out-alt" />
+						Logout
+					</MenuItem>
+				</Menu>
+			</Dropdown>
+		</div>
+		<div class="w-full mx-auto p-2 container">
+			{#if $navigating}
+				<div class="w-full h-screen -mt-24 flex items-center justify-center">
+					<Spinner size="sm" />
+				</div>
+			{:else}
+				<slot />
+			{/if}
+		</div>
+	{:else}
+		<div class="w-full h-screen grid place-content-center">
+			<button on:click={login} class="btn"> Login With Github </button>
+		</div>
+	{/if}
+</div>

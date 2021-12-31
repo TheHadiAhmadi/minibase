@@ -1,10 +1,8 @@
-import db from '$lib/db'
+import { find } from '$lib/dbApi';
 
 export async function get(request) {
-
-    const database = await db
-    console.log(database)
-    return {    
-        body: '123'
-    }
+	const result = await find('apps');
+	return {
+		body: result
+	};
 }

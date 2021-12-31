@@ -1,10 +1,10 @@
 import { MongoClient } from 'mongodb';
 
 
-const uri = import.meta.env.VITE_MONGODB;
+const uri : string = import.meta.env.VITE_MONGODB;
 const options = {}
 
-let connection = null
+let connection : Promise<MongoClient> = null
 
 if(!connection) {
     const client = new MongoClient(uri, options)
