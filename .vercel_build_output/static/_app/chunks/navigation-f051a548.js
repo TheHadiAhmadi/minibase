@@ -1,1 +1,0 @@
-import{r as a}from"./singletons-12a22614.js";const e=a,f=i,m=c,g=u;async function i(t,o){return e.goto(t,o,[])}async function c(t){const{href:o}=new URL(t,location.href);return e.renderer.invalidate(o)}async function u(t){const r=(t?e.routes.filter(n=>t.some(s=>n[0].test(s))):e.routes).map(n=>Promise.all(n[1].map(s=>s())));await Promise.all(r)}export{f as g,m as i,g as p};
