@@ -18,6 +18,9 @@ export async function get(request) {
 export async function post({ params, body }) {
 	const { app, table } = params;
 
+	// require apiKey
+	console.log('We need apiKey to make request');
+
 	const result = await insert('data', { value: body, app_id: app, table_id: table });
 
 	return {

@@ -1,5 +1,5 @@
 <script context="module">
-	export async function load({ page, fetch, session, stuff }) {
+	export async function load({ params, fetch, session, stuff }) {
 		const todos = await fetch('/todos.json').then((res) => res.json());
 
 		console.log('inside load');

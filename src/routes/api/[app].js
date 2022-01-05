@@ -13,7 +13,7 @@ export async function post({ body, params }) {
 	const result = await insert('tables', {
 		app_id: params.app,
 		name: body.name,
-		schema: body.schema
+		rows: body.rows
 	});
 
 	return {

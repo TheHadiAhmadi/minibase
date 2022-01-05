@@ -1,9 +1,9 @@
 <script context="module">
-	export async function load({ page, fetch }) {
+	export async function load({ params, fetch }) {
 		return {
 			props: {
-				tables: await fetch(`/api/${page.params.app}`).then((res) => res.json()),
-				app_name: page.params.app
+				tables: await fetch(`/api/${params.app}`).then((res) => res.json()),
+				app_name: params.app
 			}
 		};
 	}
@@ -36,6 +36,7 @@
 	export let app_name;
 
 	let newTable = {};
+	let newRow = '';
 
 	onMount(async () => {
 		const result = await prefetchRoutes();
@@ -47,15 +48,20 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ name: newTable.name, shcema: newTable.schema ?? {} })
+			body: JSON.stringify({ name: newTable.name, rows: newTable.rows ?? [] })
 		}).then((res) => res.json());
 
 		console.log('add Table: ', result);
 		if (result.acknowledged) {
-			await invalidate(`/api/${newTable}`);
+			await invalidate(`/api/${app_name}`);
 			newTable.name = '';
-			newTable.schema = {};
+			newTable.rows = [];
 		}
+	}
+
+	function addRow() {
+		newTable.rows = newTable.rows ?? []
+		newTable.rows.push(newRow)
 	}
 </script>
 
@@ -68,7 +74,7 @@
 					<div
 						class="p-4 mt-2 shadow-lg flex items-center justify-between rounded-lg bg-blue-100 border border-blue-400"
 					>
-						{#if table.schema}
+						{#if table.rows.length > 0}
 							<Icon name="fas-check" />
 						{/if}
 						<a sveltekit:prefetch href="./{app_name}/{table.name}">{table.name}</a>
@@ -82,8 +88,25 @@
 				{/each}
 				<div class="flex mt-4 pt-4 border-t border-dashed border-gray-200 space-x-2">
 					<Input bordered placeholder="New Table" shadow bind:value={newTable.name} />
-					<Button shadow on:click={submit}>Add</Button>
+					
+				
 				</div>
+					{#if newTable.name} 
+					<Card compact class="mt-2">
+						{#each (newTable.rows ?? []) as row}
+							<div>{row}</div>
+						{/each}
+						<FormGroup>
+							<Label>row</Label>
+							<div class="flex space-x-2">
+								<Input bind:value={newRow} shadow bordered class="w-full focus:shadow-lg"/>
+								<Button on:click={addRow} variant="neutral">Add</Button>
+							</div>
+						</FormGroup>
+						<Button shadow on:click={submit}>Add</Button>
+						</Card>	
+					{/if}
+
 			</Card>
 		</TabPane>
 		<TabPane name="settings">Settings</TabPane>

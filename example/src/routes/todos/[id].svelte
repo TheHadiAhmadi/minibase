@@ -1,7 +1,7 @@
 <script>
-	import { page } from '$app/stores';
+	import { params } from '$app/stores';
 
-	$: id = $page.params.id;
+	$: id = $params.id;
 </script>
 
 <div>Todo #{id}</div>

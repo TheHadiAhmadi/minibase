@@ -1,5 +1,5 @@
 <script context="module">
-	import user from '$lib/stores/user';
+	import session from '$lib/stores/session';
 </script>
 
 <script>
@@ -24,12 +24,11 @@
 	import { page } from '$app/stores';
 
 	onMount(() => {
-		user.load();
-		supabase.auth.onAuthStateChange((event) => {
+		supabase.auth.onAuthStateChange((event, payload) => {
 			if (event === 'SIGNED_IN') {
-				user.load();
+				session.load(payload);
 			} else if (event === 'SIGNED_OUT') {
-				user.load();
+				session.load();
 			}
 		});
 	});
@@ -42,7 +41,7 @@
 </script>
 
 <div class="bg-gradient-to-tr from-blue-200 to-green-100 min-h-screen">
-	{#if $user}
+	{#if $session}
 		<div class="p-2 px-4 text-black w-full flex items-center justify-between">
 			<Breadcrumb>
 				<BreadcrumbItem href="/">
@@ -61,10 +60,10 @@
 					size="sm"
 					slot="title"
 					class="shadow rounded-full hover:shadow-lg"
-					image={$user.user_metadata.avatar_url}
+					image={$session.user_metadata.avatar_url}
 				/> -->
 				<Menu rounded>
-					<MenuTitle>{$user.user_metadata.user_name}</MenuTitle>
+					<MenuTitle>{$session.user.user_metadata.user_name}</MenuTitle>
 					<MenuItem href="/profile">
 						<Icon slot="prefix" name="fas-user" />
 						Profile

@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import session from '$lib/stores/session';
 
 	import { Button, FormGroup, Input, Label } from '@ubeac/svelte-components';
 
@@ -10,10 +11,12 @@
 
 	async function submit(e) {
 		e.preventDefault();
+		console.log($session);
 		await fetch('/api/new', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + $session.access_token
 			},
 			body: JSON.stringify(request)
 		});

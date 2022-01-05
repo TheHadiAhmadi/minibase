@@ -1,13 +1,17 @@
 <script context="module">
-	import user from '$lib/stores/user';
+	import session from '$lib/stores/session';
 	import { get_store_value } from 'svelte/internal';
 
-	export async function load({ fetch, page }) {
-		console.log(get_store_value(user));
+	export async function load({ fetch, params }) {
+		console.log(get_store_value(session));
 
 		return {
 			props: {
-				apps: await fetch('/api').then((res) => res.json())
+				apps: await fetch('/api', {
+					headers: {
+						Authorization: `Bearer ${get_store_value(session).access_token}`
+					}
+				}).then((res) => res.json())
 			}
 		};
 	}
