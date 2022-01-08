@@ -1,26 +1,16 @@
 <script>
 	import { goto } from '$app/navigation';
-	import session from '$lib/stores/session';
+	import { baseUrl } from '$lib/helpers';
+	import { session } from '$app/stores';
 
 	import { Button, FormGroup, Input, Label } from '@ubeac/svelte-components';
-
-	import Page from './Page.svelte';
-	let sidebarOpen = true;
+	import { post } from '$lib/api';
 
 	let request = {};
 
-	async function submit(e) {
-		e.preventDefault();
-		console.log($session);
-		await fetch('/api/new', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + $session.access_token
-			},
-			body: JSON.stringify(request)
-		});
-		console.log('Goto: /');
+	async function onSubmit(e) {
+		await post('/api', request);
+
 		goto('/');
 	}
 
@@ -46,7 +36,7 @@
 	}
 </script>
 
-<form on:submit={submit}>
+<form on:submit|preventDefault={onSubmit}>
 	<FormGroup name="name">
 		<Label>App Name</Label>
 		<Input bind:value={request.name} />
@@ -57,9 +47,7 @@
 		<Input type="text" bind:value={request.description} />
 	</FormGroup>
 
-	<Button
-		type="submit"
-		disabled={!valid}
-		class="w-full ml-auto mt-8 {valid ? '' : 'input-disabled'}">Create</Button
-	>
+	<Button type="submit" disabled={!valid} class="w-full ml-auto mt-8 {valid ? '' : 'btn-disabled'}">
+		Create
+	</Button>
 </form>

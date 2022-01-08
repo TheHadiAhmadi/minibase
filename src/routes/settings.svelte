@@ -1,4 +1,6 @@
 <script>
+	// @ts-nocheck
+
 	import { Card, CardTitle, FormGroup, Label, Toggle } from '@ubeac/svelte-components';
 </script>
 

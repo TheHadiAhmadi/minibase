@@ -1,5 +1,5 @@
-<script context="module">
-	import session from '$lib/stores/session';
+<!-- <script context="module">
+	import { session } from '$app/stores';
 	import { get_store_value } from 'svelte/internal';
 
 	export async function load({ fetch, params }) {
@@ -7,21 +7,24 @@
 
 		return {
 			props: {
-				apps: await fetch('/api', {
-					headers: {
-						Authorization: `Bearer ${get_store_value(session).access_token}`
-					}
-				}).then((res) => res.json())
+				apps: 
 			}
 		};
 	}
-</script>
-
+</script> -->
 <script>
-	import { Card, CardTitle, Link } from '@ubeac/svelte-components';
+	import { Card, CardTitle } from '@ubeac/svelte-components';
 
 	import { goto } from '$app/navigation';
+	import { baseUrl } from '$lib/helpers';
+	import { session } from '$app/stores';
+	import { get } from '$lib/api';
 
+	async function loadApps() {
+		apps = await get('/');
+	}
+
+	loadApps();
 	export let apps = [];
 </script>
 

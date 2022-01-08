@@ -1,7 +1,3 @@
-<script context="module">
-	import session from '$lib/stores/session';
-</script>
-
 <script>
 	import '@ubeac/svelte-components/styles.css';
 	import 'virtual:windi.css';
@@ -21,15 +17,12 @@
 		Spinner
 	} from '@ubeac/svelte-components';
 	import { navigating } from '$app/stores';
-	import { page } from '$app/stores';
+	import { session, page } from '$app/stores';
 
 	onMount(() => {
-		supabase.auth.onAuthStateChange((event, payload) => {
-			if (event === 'SIGNED_IN') {
-				session.load(payload);
-			} else if (event === 'SIGNED_OUT') {
-				session.load();
-			}
+		$session = supabase.auth.session();
+		supabase.auth.onAuthStateChange((event, sess) => {
+			$session = sess;
 		});
 	});
 
@@ -63,7 +56,7 @@
 					image={$session.user_metadata.avatar_url}
 				/> -->
 				<Menu rounded>
-					<MenuTitle>{$session.user.user_metadata.user_name}</MenuTitle>
+					<MenuTitle>{$session?.user?.user_metadata?.user_name}</MenuTitle>
 					<MenuItem href="/profile">
 						<Icon slot="prefix" name="fas-user" />
 						Profile

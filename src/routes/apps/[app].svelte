@@ -11,6 +11,7 @@
 
 <script>
 	import { invalidate, prefetchRoutes } from '$app/navigation';
+	import { baseUrl } from '$lib/helpers';
 
 	import { Button, Link } from '@ubeac/svelte-components';
 
@@ -43,7 +44,7 @@
 		console.log('prefetch', result);
 	});
 	async function submit() {
-		const result = await fetch(`/api/${app_name}`, {
+		const result = await fetch(baseUrl + `/api/${app_name}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -60,8 +61,8 @@
 	}
 
 	function addRow() {
-		newTable.rows = newTable.rows ?? []
-		newTable.rows.push(newRow)
+		newTable.rows = newTable.rows ?? [];
+		newTable.rows.push(newRow);
 	}
 </script>
 
@@ -88,25 +89,22 @@
 				{/each}
 				<div class="flex mt-4 pt-4 border-t border-dashed border-gray-200 space-x-2">
 					<Input bordered placeholder="New Table" shadow bind:value={newTable.name} />
-					
-				
 				</div>
-					{#if newTable.name} 
+				{#if newTable.name}
 					<Card compact class="mt-2">
-						{#each (newTable.rows ?? []) as row}
+						{#each newTable.rows ?? [] as row}
 							<div>{row}</div>
 						{/each}
 						<FormGroup>
 							<Label>row</Label>
 							<div class="flex space-x-2">
-								<Input bind:value={newRow} shadow bordered class="w-full focus:shadow-lg"/>
+								<Input bind:value={newRow} shadow bordered class="w-full focus:shadow-lg" />
 								<Button on:click={addRow} variant="neutral">Add</Button>
 							</div>
 						</FormGroup>
 						<Button shadow on:click={submit}>Add</Button>
-						</Card>	
-					{/if}
-
+					</Card>
+				{/if}
 			</Card>
 		</TabPane>
 		<TabPane name="settings">Settings</TabPane>

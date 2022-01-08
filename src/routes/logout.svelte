@@ -1,10 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import user from '$lib/stores/session';
+	import supabase from '$lib/supabase';
 
 	onMount(async () => {
-		await user.logout();
+		supabase.auth.signOut();
 		goto('/');
 	});
 </script>

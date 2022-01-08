@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+if (!supabaseUrl) throw new Error('VITE_SUPABASE_URL not found');
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
+if (!supabaseKey) throw new Error('VITE_SUPABASE_Key not found');
 
 const client = createClient(supabaseUrl, supabaseKey);
 
