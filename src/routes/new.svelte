@@ -9,7 +9,7 @@
 	let request = {};
 
 	async function onSubmit(e) {
-		await post('/api', request);
+		await post('/', request);
 
 		goto('/');
 	}

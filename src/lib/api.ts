@@ -1,9 +1,9 @@
-import { session } from '$app/stores';
 import { baseUrl } from '$lib';
-import { get as getStore } from 'svelte/store';
+import supabase from '$lib/supabase';
 
 async function send(method, path, data) {
-	const { access_token } = getStore(session);
+
+	const {access_token} = supabase.auth.session()
 
 	const opts : any = {
 		headers: {
