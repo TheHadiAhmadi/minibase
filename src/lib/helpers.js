@@ -1,1 +1,1 @@
-export const baseUrl = 'https://minibase.deno.dev';
+export const baseUrl = 'https://minibase.deno.dev/api';
