@@ -1,16 +1,7 @@
-<script context="module">
-	export async function load({ params, fetch }) {
-		return {
-			props: {
-				tables: await fetch(`/api/${params.app}`).then((res) => res.json()),
-				app_name: params.app
-			}
-		};
-	}
-</script>
-
 <script>
 	import { invalidate, prefetchRoutes } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { get } from '$lib/api';
 	import { baseUrl } from '$lib/helpers';
 
 	import { Button, Link } from '@ubeac/svelte-components';
@@ -33,8 +24,15 @@
 	} from '@ubeac/svelte-components';
 	import { onMount } from 'svelte';
 
-	export let tables;
-	export let app_name;
+	async function loadTables() {
+		tables = await get('/' + $page.params.app);
+	}
+	loadTables();
+	let tables = [];
+
+	$: console.log(tables);
+
+	let app_name = $page.params.app;
 
 	let newTable = {};
 	let newRow = '';
@@ -49,20 +47,20 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ name: newTable.name, rows: newTable.rows ?? [] })
+			body: JSON.stringify({ name: newTable.name, schema: newTable.schema ?? [] })
 		}).then((res) => res.json());
 
 		console.log('add Table: ', result);
 		if (result.acknowledged) {
 			await invalidate(`/api/${app_name}`);
 			newTable.name = '';
-			newTable.rows = [];
+			newTable.schema = [];
 		}
 	}
 
 	function addRow() {
-		newTable.rows = newTable.rows ?? [];
-		newTable.rows.push(newRow);
+		newTable.schema = newTable.schema ?? [];
+		newTable.schema.push(newRow);
 	}
 </script>
 
@@ -75,7 +73,7 @@
 					<div
 						class="p-4 mt-2 shadow-lg flex items-center justify-between rounded-lg bg-blue-100 border border-blue-400"
 					>
-						{#if table.rows.length > 0}
+						{#if table.schema.length > 0}
 							<Icon name="fas-check" />
 						{/if}
 						<a sveltekit:prefetch href="./{app_name}/{table.name}">{table.name}</a>
@@ -87,12 +85,13 @@
 						</div>
 					</div>
 				{/each}
+
 				<div class="flex mt-4 pt-4 border-t border-dashed border-gray-200 space-x-2">
 					<Input bordered placeholder="New Table" shadow bind:value={newTable.name} />
 				</div>
 				{#if newTable.name}
 					<Card compact class="mt-2">
-						{#each newTable.rows ?? [] as row}
+						{#each newTable.schema ?? [] as row}
 							<div>{row}</div>
 						{/each}
 						<FormGroup>

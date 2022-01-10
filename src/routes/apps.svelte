@@ -13,12 +13,13 @@
 	}
 </script> -->
 <script>
-	import { Card, CardTitle } from '@ubeac/svelte-components';
+	import { Card, CardTitle, Spinner } from '@ubeac/svelte-components';
 
 	import { goto } from '$app/navigation';
 	import { baseUrl } from '$lib/helpers';
 	import { session } from '$app/stores';
 	import { get } from '$lib/api';
+	import { AppCard } from '$components';
 
 	async function loadApps() {
 		apps = await get('/');
@@ -28,7 +29,7 @@
 	export let apps = [];
 </script>
 
-<div class="flex justify-between items-center w-full p-2 pt-8">
+<div class="flex justify-between items-center w-full p-2">
 	<div class="font-semibold text-xl items-baseline px-4">Apps</div>
 	<button class="btn border border-blue-300 " on:click={() => goto('/new')}>
 		Create New App
@@ -37,12 +38,12 @@
 
 <div class="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 	{#each apps as app}
-		<Card compact shadow bordered class="h-40 bg-base-100">
-			<CardTitle>
-				<a sveltekit:prefetch href="/apps/{app.name}">{app.name}</a>
-			</CardTitle>
-			{app.description}
-		</Card>
+		<AppCard name={app.name} description={app.description} />
+	{:else}
+		<div class="relative">
+			<div class="absolute">Loading...</div>
+			<Spinner />
+		</div>
 	{/each}
 </div>
 

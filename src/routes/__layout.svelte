@@ -9,6 +9,7 @@
 		Avatar,
 		Breadcrumb,
 		BreadcrumbItem,
+		Card,
 		Dropdown,
 		Icon,
 		Menu,
@@ -82,7 +83,9 @@
 					<Spinner size="sm" />
 				</div>
 			{:else}
-				<slot />
+				<Card class="bg-base-200 bg-opacity-80">
+					<slot />
+				</Card>
 			{/if}
 		</div>
 	{:else}

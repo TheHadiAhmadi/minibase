@@ -3,7 +3,14 @@ import supabase from '$lib/supabase';
 
 async function send(method, path, data) {
 
-	const {access_token} = supabase.auth.session()
+	const session = supabase.auth.session()
+
+	if(!session) {
+		console.log("session is null")
+		return;
+	}
+
+	const {access_token} = session
 
 	const opts : any = {
 		headers: {

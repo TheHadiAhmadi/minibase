@@ -1,18 +1,19 @@
 <script context="module">
+	import { get } from '$lib/api';
+
 	import { baseUrl } from '$lib/helpers';
 
 	export async function load({ fetch, params, session, stuff }) {
 		const { app, table } = params;
 
-		const tables = await fetch(baseUrl + `/api/${app}/${table}`).then((res) => res.json());
-		const rows = await fetch(baseUrl + `/api/${app}`).then((res) => res.json()); //.rows ?? [];
-		console.log(rows);
+		const tables = await get(`/${app}/${table}`);
+		const allTables = await get(`/${app}`);
 
 		return {
 			props: {
 				tables,
 				table_name: table,
-				rows: rows
+				rows: allTables.find((tabl) => tabl.name === table).rows ?? []
 			},
 			status: 200
 		};
@@ -36,9 +37,9 @@
 	} from '@ubeac/svelte-components';
 	import { insert } from 'svelte/internal';
 
-	export let table_name;
-	export let tables;
-	let rows = ['id', 'name', 'age'];
+	export let table_name = '';
+	export let tables = [];
+	export let rows = [];
 
 	let insertMode = false;
 	let inserting = {};
