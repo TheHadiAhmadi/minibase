@@ -1,54 +1,40 @@
-<!-- <script context="module">
-	import { session } from '$app/stores';
-	import { get_store_value } from 'svelte/internal';
-
-	export async function load({ fetch, params }) {
-		console.log(get_store_value(session));
-
+<script context="module">
+	export async function load({ stuff }) {
 		return {
 			props: {
-				apps: 
+				something: stuff.something,
+				apps: await get('/')
 			}
 		};
 	}
-</script> -->
+</script>
+
 <script>
-	import { Card, CardTitle, Spinner } from '@ubeac/svelte-components';
-
-	import { goto } from '$app/navigation';
-	import { baseUrl } from '$lib/helpers';
-	import { session } from '$app/stores';
-	import { get } from '$lib/api';
 	import { AppCard } from '$components';
-
-	async function loadApps() {
-		apps = await get('/');
-	}
-
-	loadApps();
+	import { get } from '$lib/api';
 	export let apps = [];
 </script>
 
-<div class="flex justify-between items-center w-full p-2">
+<!-- 
+<svelte:fragment slot="sidebar">
+	{#each apps as app}
+		{app}
+	{/each}
+</svelte:fragment> -->
+<!-- <div class="flex justify-between items-center w-full p-2">
 	<div class="font-semibold text-xl items-baseline px-4">Apps</div>
 	<button class="btn border border-blue-300 " on:click={() => goto('/new')}>
 		Create New App
 	</button>
-</div>
+</div> -->
 
-<div class="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+<div class="p-4 grid gap-4 grid-cols-1 mx-auto md:grid-cols-2 xl:grid-cols-3">
 	{#each apps as app}
 		<AppCard name={app.name} description={app.description} />
-	{:else}
-		<div class="relative">
+		<!-- {:else} -->
+		<!-- <div class="relative w-full h-full flex items-center justify-center">
 			<div class="absolute">Loading...</div>
 			<Spinner />
-		</div>
+		</div> -->
 	{/each}
 </div>
-
-<!-- <div>{$user.id}</div> 
-    <div>{$user.email}</div>
-    <div>{$user.user_metadata.full_name}</div>
-    <div>{$user.user_metadata.user_name}</div>
-    <div>{$user.user_metadata.avatar_url}</div> -->

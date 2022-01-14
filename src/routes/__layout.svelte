@@ -1,3 +1,13 @@
+<script context="module">
+	export async function load() {
+		return {
+			stuff: {
+				something: 123
+			}
+		};
+	}
+</script>
+
 <script>
 	import '@ubeac/svelte-components/styles.css';
 	import 'virtual:windi.css';
@@ -17,8 +27,17 @@
 		MenuTitle,
 		Spinner
 	} from '@ubeac/svelte-components';
+	import { Layout } from '@ubeac/svelte-components/layouts';
 	import { navigating } from '$app/stores';
 	import { session, page } from '$app/stores';
+	import { baseUrl } from '$lib';
+
+	let title = '';
+
+	let sidebarMode = 'open'; // open | close | mini
+	let navbarMode = 'wide'; // wide | tight
+	let navbarColor = 'neutral'; // base | neutral | primary
+	let sidebarColor = 'base'; // base | neutral | primary
 
 	onMount(() => {
 		$session = supabase.auth.session();
@@ -34,28 +53,23 @@
 	}
 </script>
 
-<div class="bg-gradient-to-tr from-blue-200 to-green-100 min-h-screen">
+<div class="">
 	{#if $session}
-		<div class="p-2 px-4 text-black w-full flex items-center justify-between">
-			<Breadcrumb>
+		<Layout {title} {sidebarColor} {sidebarMode} {navbarMode} {navbarColor}>
+			<Breadcrumb slot="navbar-start">
 				<BreadcrumbItem href="/">
 					<Icon name="fas-database" class="m-2" />
 					Minibase
 				</BreadcrumbItem>
-
-				<!-- <BreadcrumbItem href="/apps/${$app.id}">
-					{$app.name}
-				</BreadcrumbItem> -->
-				<!-- {/if} -->
 			</Breadcrumb>
-			<Dropdown end>
-				<Icon slot="title" name="fas-bars" />
-				<!-- <Avatar
+			<Dropdown slot="navbar-end" end>
+				<!-- <Icon slot="title" name="fas-bars" /> -->
+				<Avatar
 					size="sm"
 					slot="title"
 					class="shadow rounded-full hover:shadow-lg"
-					image={$session.user_metadata.avatar_url}
-				/> -->
+					image={$session?.user?.user_metadata?.avatar_url}
+				/>
 				<Menu rounded>
 					<MenuTitle>{$session?.user?.user_metadata?.user_name}</MenuTitle>
 					<MenuItem href="/profile">
@@ -76,18 +90,27 @@
 					</MenuItem>
 				</Menu>
 			</Dropdown>
-		</div>
-		<div class="w-full mx-auto p-2 container">
+			<!-- <div class="w-full mx-auto p-2 container"> -->
 			{#if $navigating}
-				<div class="w-full h-screen -mt-24 flex items-center justify-center">
+				<div class="w-full h-full -mt-24 flex items-center justify-center">
 					<Spinner size="sm" />
 				</div>
 			{:else}
-				<Card class="bg-base-200 bg-opacity-80">
-					<slot />
-				</Card>
+				<slot />
 			{/if}
-		</div>
+			<!-- </div> -->
+			<!-- 
+			<Menu slot="sidebar">
+				<MenuItem href="/apps">Home</MenuItem>
+				<MenuTitle>apps</MenuTitle>
+				{#each apps as app}
+					<MenuItem iconOnly={sidebarMode === 'mini'} href="/apps/{app.name}">
+						<Icon name="fas-user" slot="prefix" />
+						{app.name}
+					</MenuItem>
+				{/each}
+			</Menu> -->
+		</Layout>
 	{:else}
 		<div class="w-full h-screen grid place-content-center">
 			<button on:click={login} class="btn"> Login With Github </button>

@@ -9,7 +9,7 @@
 	let request = {};
 
 	async function onSubmit(e) {
-		await post('/', request);
+		const result = await post('/', request);
 
 		goto('/');
 	}
