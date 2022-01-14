@@ -12,7 +12,17 @@
 <script>
 	import { AppCard } from '$components';
 	import { get } from '$lib/api';
+	import sidebar from '$lib/sidebar';
+	import { onMount } from 'svelte';
 	export let apps = [];
+
+	$: console.log(apps);
+	onMount(() => {
+		$sidebar = {
+			title: 'apps',
+			items: apps.map((app) => ({ href: '/apps/' + app.name, name: app.name }))
+		};
+	});
 </script>
 
 <!-- 

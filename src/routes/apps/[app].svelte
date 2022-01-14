@@ -30,17 +30,16 @@
 	loadTables();
 	let tables = [];
 
-	$: console.log(tables);
-
 	let app_name = $page.params.app;
 
 	let newTable = {};
 	let newRow = '';
 
-	onMount(async () => {
-		const result = await prefetchRoutes();
-		console.log('prefetch', result);
-	});
+	// onMount(async () => {
+	// 	const result = await prefetchRoutes();
+	// 	console.log('prefetch', result);
+	// });
+
 	async function submit() {
 		const result = await fetch(baseUrl + `/api/${app_name}`, {
 			method: 'POST',
@@ -62,13 +61,22 @@
 		newTable.schema = newTable.schema ?? [];
 		newTable.schema.push(newRow);
 	}
+
+	function addTable() {
+		console.log('open modal');
+	}
 </script>
 
 <div>
 	<TabContent lifted>
 		<TabPane name="Data">
 			<Card compact>
-				<CardTitle slot="title">Tables</CardTitle>
+				<CardTitle slot="title" class="flex items-center justify-between">
+					Tables
+					<Button on:click={addTable}>
+						<Icon name="fas-plus" />
+					</Button>
+				</CardTitle>
 				{#each tables as table}
 					<div
 						class="p-4 mt-2 shadow-lg flex items-center justify-between rounded-lg bg-blue-100 border border-blue-400"
@@ -86,7 +94,7 @@
 					</div>
 				{/each}
 
-				<div class="flex mt-4 pt-4 border-t border-dashed border-gray-200 space-x-2">
+				<!-- <div class="flex mt-4 pt-4 border-t border-dashed border-gray-200 space-x-2">
 					<Input bordered placeholder="New Table" shadow bind:value={newTable.name} />
 				</div>
 				{#if newTable.name}
@@ -103,7 +111,7 @@
 						</FormGroup>
 						<Button shadow on:click={submit}>Add</Button>
 					</Card>
-				{/if}
+				{/if} -->
 			</Card>
 		</TabPane>
 		<TabPane name="settings">Settings</TabPane>

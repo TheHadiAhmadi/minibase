@@ -3,13 +3,14 @@
 	import { baseUrl } from '$lib/helpers';
 	import { session } from '$app/stores';
 
-	import { Button, FormGroup, Input, Label } from '@ubeac/svelte-components';
+	import { Button, Card, CardTitle, FormGroup, Input, Label } from '@ubeac/svelte-components';
 	import { post } from '$lib/api';
 
 	let request = {};
 
 	async function onSubmit(e) {
 		const result = await post('/', request);
+		console.log('submit', result);
 
 		goto('/');
 	}
@@ -36,18 +37,25 @@
 	}
 </script>
 
-<form on:submit|preventDefault={onSubmit}>
-	<FormGroup name="name">
-		<Label>App Name</Label>
-		<Input bind:value={request.name} />
-		<div class="text-sm text-gray-700">{nameFeedback}</div>
-	</FormGroup>
-	<FormGroup name="description">
-		<Label>Description</Label>
-		<Input type="text" bind:value={request.description} />
-	</FormGroup>
+<Card compact>
+	<CardTitle slot="title">Create New App</CardTitle>
+	<form on:submit|preventDefault={onSubmit}>
+		<FormGroup name="name">
+			<Label>App Name</Label>
+			<Input bind:value={request.name} />
+			<div class="text-sm text-gray-700">{nameFeedback}</div>
+		</FormGroup>
+		<FormGroup name="description">
+			<Label>Description</Label>
+			<Input type="text" bind:value={request.description} />
+		</FormGroup>
 
-	<Button type="submit" disabled={!valid} class="w-full ml-auto mt-8 {valid ? '' : 'btn-disabled'}">
-		Create
-	</Button>
-</form>
+		<Button
+			type="submit"
+			disabled={!valid}
+			class="w-full ml-auto mt-8 {valid ? '' : 'btn-disabled'}"
+		>
+			Create
+		</Button>
+	</form>
+</Card>

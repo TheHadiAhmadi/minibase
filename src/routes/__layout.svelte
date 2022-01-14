@@ -31,6 +31,7 @@
 	import { navigating } from '$app/stores';
 	import { session, page } from '$app/stores';
 	import { baseUrl } from '$lib';
+	import sidebar from '$lib/sidebar';
 
 	let title = '';
 
@@ -53,12 +54,12 @@
 	}
 </script>
 
-<div class="">
+<div class="h-screen overflow-hidden">
 	{#if $session}
 		<Layout {title} {sidebarColor} {sidebarMode} {navbarMode} {navbarColor}>
 			<Breadcrumb slot="navbar-start">
 				<BreadcrumbItem href="/">
-					<Icon name="fas-database" class="m-2" />
+					<Icon name="fas-database" class="mr-2" />
 					Minibase
 				</BreadcrumbItem>
 			</Breadcrumb>
@@ -99,8 +100,18 @@
 				<slot />
 			{/if}
 			<!-- </div> -->
-			<!-- 
+
 			<Menu slot="sidebar">
+				<MenuTitle>{$sidebar.title}</MenuTitle>
+				{#each $sidebar.items as item}
+					<MenuItem iconOnly={sidebarMode === 'mini'} href={item.href}>
+						<Icon name="fas-database" slot="prefix" />
+						{item.name}
+					</MenuItem>
+				{/each}
+			</Menu>
+
+			<!-- 				
 				<MenuItem href="/apps">Home</MenuItem>
 				<MenuTitle>apps</MenuTitle>
 				{#each apps as app}
@@ -108,8 +119,7 @@
 						<Icon name="fas-user" slot="prefix" />
 						{app.name}
 					</MenuItem>
-				{/each}
-			</Menu> -->
+				{/each} -->
 		</Layout>
 	{:else}
 		<div class="w-full h-screen grid place-content-center">
