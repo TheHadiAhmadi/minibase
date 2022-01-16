@@ -3,6 +3,8 @@
 	import { page } from '$app/stores';
 	import { get } from '$lib/api';
 	import { baseUrl } from '$lib/helpers';
+	import sidebar from '$lib/sidebar';
+	import title from '$lib/title';
 
 	import { Button, Link } from '@ubeac/svelte-components';
 
@@ -28,12 +30,20 @@
 		tables = await get('/' + $page.params.app);
 	}
 	loadTables();
-	let tables = [];
+	let tables = [
+		{ id: 'ds', name: 'sdkl', schema: { id: 'string', title: 'string', completed: 'boolean' } },
+		{
+			id: 'ds2',
+			name: 'sdkl3',
+			schema: { id: 'string', name: 'string', salary: 'number', age: 'number' }
+		}
+	];
 
 	let app_name = $page.params.app;
 
 	let newTable = {};
 	let newRow = '';
+	let adding = false;
 
 	// onMount(async () => {
 	// 	const result = await prefetchRoutes();
@@ -65,6 +75,14 @@
 	function addTable() {
 		console.log('open modal');
 	}
+
+	onMount(() => {
+		title.set(app_name);
+		sidebar.set({
+			title: 'Tables of ' + app_name,
+			items: tables
+		});
+	});
 </script>
 
 <div>
@@ -73,47 +91,56 @@
 			<Card compact>
 				<CardTitle slot="title" class="flex items-center justify-between">
 					Tables
-					<Button on:click={addTable}>
+					<Button
+						size="sm"
+						compact
+						circle
+						on:click={() => {
+							console.log('adding');
+							adding = true;
+						}}
+					>
 						<Icon name="fas-plus" />
 					</Button>
 				</CardTitle>
 				{#each tables as table}
 					<div
-						class="p-4 mt-2 shadow-lg flex items-center justify-between rounded-lg bg-blue-100 border border-blue-400"
+						class="p-4 mt-2 shadow-lg flex items-center justify-between rounded-lg bg-info bg-opacity-30"
 					>
 						{#if table.schema.length > 0}
 							<Icon name="fas-check" />
 						{/if}
 						<a sveltekit:prefetch href="./{app_name}/{table.name}">{table.name}</a>
 						<div class="flex space-x-1">
-							<Button size="sm">Open</Button>
+							<Button size="sm" compact variant="info">
+								<Icon name="fas-edit" />
+							</Button>
 							<Button size="sm" compact variant="error">
 								<Icon name="fas-trash-alt" />
 							</Button>
 						</div>
 					</div>
 				{/each}
-
-				<!-- <div class="flex mt-4 pt-4 border-t border-dashed border-gray-200 space-x-2">
-					<Input bordered placeholder="New Table" shadow bind:value={newTable.name} />
-				</div>
-				{#if newTable.name}
-					<Card compact class="mt-2">
-						{#each newTable.schema ?? [] as row}
-							<div>{row}</div>
-						{/each}
-						<FormGroup>
-							<Label>row</Label>
-							<div class="flex space-x-2">
-								<Input bind:value={newRow} shadow bordered class="w-full focus:shadow-lg" />
-								<Button on:click={addRow} variant="neutral">Add</Button>
-							</div>
-						</FormGroup>
-						<Button shadow on:click={submit}>Add</Button>
-					</Card>
-				{/if} -->
 			</Card>
 		</TabPane>
 		<TabPane name="settings">Settings</TabPane>
 	</TabContent>
 </div>
+
+<div>Modal</div>
+<Modal open={true}>
+	<Input bordered placeholder="New Table" shadow bind:value={newTable.name} />
+	<!-- <Card compact class="mt-2">
+		{#each newTable.schema ?? [] as row}
+			<div>{row}</div>
+		{/each}
+		<FormGroup>
+			<Label>row</Label>
+			<div class="flex space-x-2">
+				<Input bind:value={newRow} shadow bordered class="w-full focus:shadow-lg" />
+				<Button on:click={addRow} variant="neutral">Add</Button>
+			</div>
+		</FormGroup>
+		<Button shadow on:click={submit}>Add</Button>
+	</Card> -->
+</Modal>

@@ -1,13 +1,3 @@
-<script context="module">
-	export async function load() {
-		return {
-			stuff: {
-				something: 123
-			}
-		};
-	}
-</script>
-
 <script>
 	import '@ubeac/svelte-components/styles.css';
 	import 'virtual:windi.css';
@@ -29,11 +19,9 @@
 	} from '@ubeac/svelte-components';
 	import { Layout } from '@ubeac/svelte-components/layouts';
 	import { navigating } from '$app/stores';
-	import { session, page } from '$app/stores';
-	import { baseUrl } from '$lib';
+	import { session } from '$app/stores';
 	import sidebar from '$lib/sidebar';
-
-	let title = '';
+	import title from '$lib/title';
 
 	let sidebarMode = 'open'; // open | close | mini
 	let navbarMode = 'wide'; // wide | tight
@@ -56,7 +44,7 @@
 
 <div class="h-screen overflow-hidden">
 	{#if $session}
-		<Layout {title} {sidebarColor} {sidebarMode} {navbarMode} {navbarColor}>
+		<Layout title={$title} {sidebarColor} bind:sidebarMode {navbarMode} {navbarColor}>
 			<Breadcrumb slot="navbar-start">
 				<BreadcrumbItem href="/">
 					<Icon name="fas-database" class="mr-2" />
