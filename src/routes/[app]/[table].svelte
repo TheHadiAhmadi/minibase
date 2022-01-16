@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
 	import { get } from '$lib/api';
 
 	import { baseUrl } from '$lib/helpers';
@@ -6,8 +6,8 @@
 	export async function load({ fetch, params, session, stuff }) {
 		const { app, table } = params;
 
-		const tables = await get(`/${app}/${table}`);
-		const allTables = await get(`/${app}`);
+		const tables = await get<{ data: any[] }>(`/${app}/${table}`).then(({ data }) => data);
+		const allTables = await get<{ data: any[] }>(`/${app}`).then(({ data }) => data);
 
 		return {
 			props: {
@@ -57,7 +57,7 @@
 	<Table>
 		<TableHeader>
 			{#each rows as row}
-				<Cell>{row}</Cell>
+				<Cell>{row.name}</Cell>
 			{/each}
 			<Cell>Actions</Cell>
 		</TableHeader>
@@ -65,11 +65,15 @@
 		{#each tables as table}
 			<TableRow>
 				{#each rows as row}
-					<Cell>{table[row]}</Cell>
+					<Cell>{table[row.name]}</Cell>
 				{/each}
 				<Cell>
-					<Button>Update</Button>
-					<Button>Delete</Button>
+					<Button square size="sm" compact>
+						<Icon name="fas-edit" />
+					</Button>
+					<Button square size="sm" compact>
+						<Icon name="fas-trash-alt" />
+					</Button>
 				</Cell>
 			</TableRow>
 		{/each}

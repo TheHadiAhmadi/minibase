@@ -27,23 +27,25 @@
 	import { onMount } from 'svelte';
 
 	async function loadTables() {
-		tables = await get('/' + $page.params.app);
+		const result = await get('/' + $page.params.app);
+		console.log(result);
+		tables = result?.data;
 	}
 	loadTables();
 	let tables = [
-		{ id: 'ds', name: 'sdkl', schema: { id: 'string', title: 'string', completed: 'boolean' } },
-		{
-			id: 'ds2',
-			name: 'sdkl3',
-			schema: { id: 'string', name: 'string', salary: 'number', age: 'number' }
-		}
+		// { id: 'ds', name: 'sdkl', rows: { id: 'string', title: 'string', completed: 'boolean' } },
+		// {
+		// 	id: 'ds2',
+		// 	name: 'sdkl3',
+		// 	rows: { id: 'string', name: 'string', salary: 'number', age: 'number' }
+		// }
 	];
 
 	let app_name = $page.params.app;
 
 	let newTable = {};
 	let newRow = '';
-	let adding = false;
+	let modalOpen = false;
 
 	// onMount(async () => {
 	// 	const result = await prefetchRoutes();
@@ -56,20 +58,20 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ name: newTable.name, schema: newTable.schema ?? [] })
+			body: JSON.stringify({ name: newTable.name, rows: newTable.rows ?? [] })
 		}).then((res) => res.json());
 
 		console.log('add Table: ', result);
 		if (result.acknowledged) {
 			await invalidate(`/api/${app_name}`);
 			newTable.name = '';
-			newTable.schema = [];
+			newTable.rows = [];
 		}
 	}
 
 	function addRow() {
-		newTable.schema = newTable.schema ?? [];
-		newTable.schema.push(newRow);
+		newTable.rows = newTable.rows ?? [];
+		newTable.rows.push(newRow);
 	}
 
 	function addTable() {
@@ -107,7 +109,7 @@
 					<div
 						class="p-4 mt-2 shadow-lg flex items-center justify-between rounded-lg bg-info bg-opacity-30"
 					>
-						{#if table.schema.length > 0}
+						{#if table.rows.length > 0}
 							<Icon name="fas-check" />
 						{/if}
 						<a sveltekit:prefetch href="./{app_name}/{table.name}">{table.name}</a>
@@ -128,10 +130,10 @@
 </div>
 
 <div>Modal</div>
-<Modal open={true}>
+<Modal open={modalOpen}>
 	<Input bordered placeholder="New Table" shadow bind:value={newTable.name} />
 	<!-- <Card compact class="mt-2">
-		{#each newTable.schema ?? [] as row}
+		{#each newTable.rows ?? [] as row}
 			<div>{row}</div>
 		{/each}
 		<FormGroup>

@@ -17,7 +17,7 @@
 		MenuTitle,
 		Spinner
 	} from '@ubeac/svelte-components';
-	import { Layout } from '@ubeac/svelte-components/layouts';
+	import { default as Layout } from '@ubeac/svelte-components/layouts/Dashboard.svelte';
 	import { navigating } from '$app/stores';
 	import { session } from '$app/stores';
 	import sidebar from '$lib/sidebar';

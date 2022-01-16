@@ -2,7 +2,7 @@
 	export async function load({ stuff }) {
 		return {
 			props: {
-				apps: await get('/')
+				apps: await get('/').then(console.log)
 			}
 		};
 	}
@@ -16,7 +16,7 @@
 	import { onMount } from 'svelte';
 	export let apps = [];
 
-	$: console.log(apps);
+	$: console.log({ apps });
 	onMount(() => {
 		$title = 'apps';
 		$sidebar = {

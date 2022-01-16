@@ -17,7 +17,7 @@
 		"@sveltejs/kit": "next",
 		"prettier": "^2.4.1",
 		"prettier-plugin-svelte": "^2.4.0",
-		"svelte": "^3.44.0",
+		"svelte": "^3.46.1",
 		"svelte-check": "^2.2.6",
 		"svelte-preprocess": "^4.9.4",
 		"tslib": "^2.3.1",
@@ -28,7 +28,7 @@
 	"type": "module",
 	"dependencies": {
 		"@supabase/supabase-js": "^1.29.1",
-		"@ubeac/svelte-components": "^0.0.16",
+		"@ubeac/svelte-components": "^0.0.20",
 		"mongodb": "^4.2.2",
 		"uuid": "^8.3.2"
 	}
