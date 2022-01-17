@@ -59,6 +59,7 @@
 			const result = await post('/' + $page.params.app, editingTable);
 			console.log(result);
 		}
+		loadTables();
 	}
 	async function cancel() {
 		modalOpen = false;

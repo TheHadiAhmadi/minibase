@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<!-- <script context="module" lang="ts">
 	import { get } from '$lib/api';
 
 	import { baseUrl } from '$lib/helpers';
@@ -18,8 +18,7 @@
 			status: 200
 		};
 	}
-</script>
-
+</script> -->
 <script>
 	import {
 		Button,
@@ -36,10 +35,11 @@
 		TableRow
 	} from '@ubeac/svelte-components';
 	import { insert } from 'svelte/internal';
+	// import { path } from '$app/navigation';
 
-	export let table_name = '';
-	export let tables = [];
-	export let rows = [];
+	let table_name = '';
+	let tables = [];
+	let rows = [];
 
 	let insertMode = false;
 	let inserting = {};
