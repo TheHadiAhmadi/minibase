@@ -7,7 +7,7 @@ async function send(method, path, data) {
 
 	if(!session) {
 		console.log("session is null")
-		return;
+		throw new Error("Session is null");
 	}
 
 	const {access_token} = session

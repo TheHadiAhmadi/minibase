@@ -3,7 +3,15 @@
 	import { baseUrl } from '$lib/helpers';
 	import { session } from '$app/stores';
 
-	import { Button, Card, CardTitle, FormGroup, Input, Label } from '@ubeac/svelte-components';
+	import {
+		Button,
+		Card,
+		CardTitle,
+		Checkbox,
+		FormGroup,
+		Input,
+		Label
+	} from '@ubeac/svelte-components';
 	import { post } from '$lib/api';
 
 	let request = {};
@@ -49,6 +57,7 @@
 			<Label>Description</Label>
 			<Input type="text" bind:value={request.description} />
 		</FormGroup>
+		<Checkbox bind:value={request.public}>Public</Checkbox>
 
 		<Button
 			type="submit"

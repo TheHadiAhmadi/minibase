@@ -1,18 +1,20 @@
 <script>
-	import { invalidate, prefetchRoutes } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { get } from '$lib/api';
-	import { baseUrl } from '$lib/helpers';
+	import { del, get, post, put } from '$lib/api';
 	import sidebar from '$lib/sidebar';
 	import title from '$lib/title';
 
-	import { Button, Link } from '@ubeac/svelte-components';
-
 	import {
+		Button,
+		Checkbox,
+		Dropdown,
+		Link,
 		Table,
 		TableRow,
 		Cell,
 		TableHeader,
+		Menu,
+		MenuItem,
 		TabContent,
 		TabPane,
 		Card,
@@ -28,54 +30,67 @@
 
 	async function loadTables() {
 		const result = await get('/' + $page.params.app);
-		console.log(result);
-		tables = result?.data;
+		tables = result?.data ?? [];
 	}
+
 	loadTables();
-	let tables = [
-		// { id: 'ds', name: 'sdkl', rows: { id: 'string', title: 'string', completed: 'boolean' } },
-		// {
-		// 	id: 'ds2',
-		// 	name: 'sdkl3',
-		// 	rows: { id: 'string', name: 'string', salary: 'number', age: 'number' }
-		// }
-	];
+	let tables = [];
 
 	let app_name = $page.params.app;
 
-	let newTable = {};
-	let newRow = '';
+	let editTableName = '';
+
+	let editingTable = {
+		rows: [],
+		public: true
+	};
+
 	let modalOpen = false;
 
-	// onMount(async () => {
-	// 	const result = await prefetchRoutes();
-	// 	console.log('prefetch', result);
-	// });
-
 	async function submit() {
-		const result = await fetch(baseUrl + `/api/${app_name}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ name: newTable.name, rows: newTable.rows ?? [] })
-		}).then((res) => res.json());
+		modalOpen = false;
 
-		console.log('add Table: ', result);
-		if (result.acknowledged) {
-			await invalidate(`/api/${app_name}`);
-			newTable.name = '';
-			newTable.rows = [];
+		if (editTableName) {
+			// update table
+			const result = await put('/' + $page.params.app + '/' + editTableName, editingTable);
+			console.log('Update successfully', result);
+		} else {
+			// create new table
+			const result = await post('/' + $page.params.app, editingTable);
+			console.log(result);
 		}
 	}
+	async function cancel() {
+		modalOpen = false;
+	}
+
+	const rowTypes = ['string', 'number', 'boolean', 'object', 'array'];
 
 	function addRow() {
-		newTable.rows = newTable.rows ?? [];
-		newTable.rows.push(newRow);
+		editingTable.rows = [...(editingTable.rows ?? []), { name: '', type: rowTypes[0] }];
 	}
 
 	function addTable() {
-		console.log('open modal');
+		modalOpen = true;
+		editingTable = {
+			public: true,
+			rows: [],
+			name: ''
+		};
+	}
+
+	function updateTable(table) {
+		editTableName = table.name;
+		modalOpen = true;
+		editingTable = table;
+		loadTables();
+	}
+
+	async function removeTable(table) {
+		console.log('prompt before delete');
+		const result = await del('/' + $page.params.app + '/' + table.name);
+		console.log('Delete', result);
+		loadTables();
 	}
 
 	onMount(() => {
@@ -90,35 +105,24 @@
 <div>
 	<TabContent lifted>
 		<TabPane name="Data">
-			<Card compact>
+			<Card>
 				<CardTitle slot="title" class="flex items-center justify-between">
 					Tables
-					<Button
-						size="sm"
-						compact
-						circle
-						on:click={() => {
-							console.log('adding');
-							adding = true;
-						}}
-					>
+					<Button size="sm" circle on:click={addTable}>
 						<Icon name="fas-plus" />
 					</Button>
 				</CardTitle>
 				{#each tables as table}
 					<div
-						class="p-4 mt-2 shadow-lg flex items-center justify-between rounded-lg bg-info bg-opacity-30"
+						class="p-4 mt-2 shadow-lg flex items-center justify-between rounded-lg bg-info border border-info border-opacity-25 shadow bg-opacity-10 "
 					>
-						{#if table.rows.length > 0}
-							<Icon name="fas-check" />
-						{/if}
 						<a sveltekit:prefetch href="./{app_name}/{table.name}">{table.name}</a>
 						<div class="flex space-x-1">
-							<Button size="sm" compact variant="info">
-								<Icon name="fas-edit" />
+							<Button on:click={() => updateTable(table)} size="xs" square variant="info">
+								<Icon size="sm" name="fas-edit" />
 							</Button>
-							<Button size="sm" compact variant="error">
-								<Icon name="fas-trash-alt" />
+							<Button on:click={() => removeTable(table)} size="xs" square variant="error">
+								<Icon size="sm" name="fas-trash-alt" />
 							</Button>
 						</div>
 					</div>
@@ -129,20 +133,47 @@
 	</TabContent>
 </div>
 
-<div>Modal</div>
-<Modal open={modalOpen}>
-	<Input bordered placeholder="New Table" shadow bind:value={newTable.name} />
-	<!-- <Card compact class="mt-2">
-		{#each newTable.rows ?? [] as row}
-			<div>{row}</div>
-		{/each}
-		<FormGroup>
-			<Label>row</Label>
-			<div class="flex space-x-2">
-				<Input bind:value={newRow} shadow bordered class="w-full focus:shadow-lg" />
-				<Button on:click={addRow} variant="neutral">Add</Button>
-			</div>
-		</FormGroup>
-		<Button shadow on:click={submit}>Add</Button>
-	</Card> -->
+<Modal bind:open={modalOpen}>
+	<FormGroup>
+		<Label>Table Name</Label>
+		<Input bordered shadow bind:value={editingTable.name} />
+	</FormGroup>
+	<Checkbox class="mt-2" bind:value={editingTable.public}>Public</Checkbox>
+
+	<FormGroup class="">
+		<div class="flex items-center justify-between">
+			<Label>Rows</Label>
+			<Button on:click={addRow} compact size="xs" circle>
+				<Icon name="fas-plus" />
+			</Button>
+		</div>
+		{#if editingTable.rows}
+			{#each editingTable.rows as row, index}
+				<div class="flex items-center gap-2">
+					<Button
+						size="xs"
+						square
+						variant="error"
+						on:click={() => (editingTable.rows = editingTable.rows.filter((row, i) => i !== index))}
+					>
+						<Icon variant="error" name="fas-times" />
+					</Button>
+					<Input shadow size="sm" bind:value={row.name} />
+					<Dropdown position="top" end>
+						<Button size="sm" variant="ghost" slot="title">{row.type}</Button>
+						<Menu class="bg-base-300">
+							{#each rowTypes as type}
+								<li on:click={() => (row.type = type)}><a class="!py-1">{type}</a></li>
+							{/each}
+						</Menu>
+					</Dropdown>
+				</div>
+			{/each}
+		{/if}
+	</FormGroup>
+
+	<ModalActions end class="mt-4">
+		<Button size="sm" variant="ghost" on:click={cancel}>Cancel</Button>
+		<Button size="sm" on:click={submit}>Submit</Button>
+	</ModalActions>
 </Modal>

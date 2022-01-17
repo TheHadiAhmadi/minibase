@@ -85,7 +85,9 @@
 					<Spinner size="sm" />
 				</div>
 			{:else}
-				<slot />
+				<div class="p-2">
+					<slot />
+				</div>
 			{/if}
 			<!-- </div> -->
 
