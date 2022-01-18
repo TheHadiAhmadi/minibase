@@ -5,19 +5,24 @@ async function send(method, path, data) {
 
 	const session = supabase.auth.session()
 
-	if(!session) {
-		console.log("session is null")
-		throw new Error("Session is null");
-	}
+	let access_token = null
 
-	const {access_token} = session
+	if(session) {
+		// load public data
+
+		access_token = session.access_token
+	}
 
 	const opts : any = {
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: 'Bearer ' + access_token
 		}
 	};
+
+	if(access_token) {
+		opts.headers.Authorization = 'Bearer ' + access_token
+	}
+
 
 	if (['POST', 'PUT', 'DELETE'].includes(method)) {
 		opts.method = method;

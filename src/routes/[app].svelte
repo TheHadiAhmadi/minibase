@@ -1,5 +1,5 @@
 <script>
-	import { page } from '$app/stores';
+	import { page, session } from '$app/stores';
 	import { del, get, post, put } from '$lib/api';
 	import sidebar from '$lib/sidebar';
 	import title from '$lib/title';
@@ -29,11 +29,17 @@
 	import { onMount } from 'svelte';
 
 	async function loadTables() {
-		const result = await get('/' + $page.params.app);
-		tables = result?.data ?? [];
+		try {
+			const result = await get('/' + $page.params.app);
+			console.log(result);
+			tables = result?.data.tables ?? [];
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	loadTables();
+
 	let tables = [];
 
 	let app_name = $page.params.app;
@@ -96,10 +102,10 @@
 
 	onMount(() => {
 		title.set(app_name);
-		sidebar.set({
-			title: 'Tables of ' + app_name,
-			items: tables
-		});
+		// sidebar.set({
+		// 	title: 'Tables of ' + app_name,
+		// 	items: tables
+		// });
 	});
 </script>
 
