@@ -11,11 +11,17 @@
 		BreadcrumbItem,
 		Button,
 		Card,
+		Divider,
 		Dropdown,
+		FormGroup,
 		Icon,
+		Input,
+		Label,
 		Menu,
 		MenuItem,
 		MenuTitle,
+		Modal,
+		ModalActions,
 		Spinner
 	} from '@ubeac/svelte-components';
 	import { default as Layout } from '@ubeac/svelte-components/layouts/Dashboard.svelte';
@@ -29,6 +35,9 @@
 	let navbarColor = 'neutral'; // base | neutral | primary
 	let sidebarColor = 'base'; // base | neutral | primary
 
+	let modalOpen = false;
+	let email = '';
+
 	onMount(() => {
 		$session = supabase.auth.session();
 		supabase.auth.onAuthStateChange((event, sess) => {
@@ -36,10 +45,26 @@
 		});
 	});
 
-	function login() {
+	function loginWithGithub() {
+		modalOpen = false;
 		supabase.auth.signIn({
 			provider: 'github'
 		});
+	}
+
+	async function loginWithEmail() {
+		modalOpen = false;
+		const result = await supabase.auth.signIn({
+			email: email
+		});
+
+		if (result.data) {
+			alert('Email sent! Please check your inbox');
+		}
+	}
+
+	function cancel() {
+		modalOpen = false;
 	}
 </script>
 
@@ -62,7 +87,7 @@
 						class="shadow rounded-full hover:shadow-lg"
 						image={$session?.user?.user_metadata?.avatar_url}
 					/>
-					<Menu rounded>
+					<Menu class="border border-base-300 bg-base-100 text-base-content" rounded>
 						<MenuTitle>{$session?.user?.user_metadata?.user_name}</MenuTitle>
 						<MenuItem href="/profile">
 							<Icon slot="prefix" name="fas-user" />
@@ -83,7 +108,13 @@
 					</Menu>
 				</Dropdown>
 			{:else}
-				<Button variant="neutral" on:click={login}>Sign In</Button>
+				<Button
+					variant="neutral"
+					on:click={() => {
+						email = '';
+						modalOpen = true;
+					}}>Sign In</Button
+				>
 			{/if}
 		</svelte:fragment>
 
@@ -124,3 +155,17 @@
 	<!-- </div> -->
 	<!-- {/if} -->
 </div>
+
+<Modal bind:open={modalOpen}>
+	Sign In
+	<div class="pt-4 flex flex-col gap-2">
+		<!-- <FormGroup>
+			<Label>Email</Label>
+			<Input type="email" bind:value={email} />
+		</FormGroup>
+		<Button block on:click={loginWithEmail}>Sign In</Button>
+		<Divider>Or</Divider> -->
+		<Button block on:click={loginWithGithub}>Sign In With Github</Button>
+		<Button block on:click={cancel} variant="ghost">Cancel</Button>
+	</div>
+</Modal>
