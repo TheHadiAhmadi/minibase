@@ -145,7 +145,7 @@
 		<Label>Table Name</Label>
 		<Input bordered shadow bind:value={editingTable.name} />
 	</FormGroup>
-	<Checkbox class="mt-2" bind:value={editingTable.public}>Public</Checkbox>
+	<Checkbox class="mt-2" bind:checked={editingTable.public}>Public</Checkbox>
 
 	<FormGroup class="">
 		<div class="flex items-center justify-between">

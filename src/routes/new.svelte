@@ -17,6 +17,7 @@
 	let request = {};
 
 	async function onSubmit(e) {
+		console.log(request);
 		const result = await post('/', request);
 		console.log('submit', result);
 
@@ -57,7 +58,7 @@
 			<Label>Description</Label>
 			<Input type="text" bind:value={request.description} />
 		</FormGroup>
-		<Checkbox bind:value={request.public}>Public</Checkbox>
+		<Checkbox bind:checked={request.public}>Public</Checkbox>
 
 		<Button
 			type="submit"
