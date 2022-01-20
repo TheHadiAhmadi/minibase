@@ -33,6 +33,7 @@
 			const result = await get('/' + $page.params.app);
 			console.log(result);
 			tables = result?.data.tables ?? [];
+			apiKey = result?.data.apiKey ?? '';
 		} catch (err) {
 			console.log(err);
 		}
@@ -40,6 +41,7 @@
 
 	loadTables();
 
+	let apiKey = '';
 	let tables = [];
 
 	let app_name = $page.params.app;
@@ -136,7 +138,12 @@
 				{/each}
 			</Card>
 		</TabPane>
-		<TabPane name="settings">Settings</TabPane>
+		<TabPane name="settings">
+			<FormGroup>
+				<Label>ApiKey</Label>
+				<Input readonly value={apiKey} />
+			</FormGroup>
+		</TabPane>
 	</TabContent>
 </div>
 
