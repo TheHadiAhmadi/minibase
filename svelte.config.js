@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from 'svelte-adapter-deno-mini';
 import preprocess from 'svelte-preprocess';
 import windicss from 'vite-plugin-windicss';
 import path from 'path';
@@ -10,7 +10,9 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			server: path.resolve('server/server.js')
+		}),
 
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
