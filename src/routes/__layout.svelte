@@ -1,3 +1,16 @@
+<!-- <script lang="ts" context="module">
+import { useFetch } from "$lib/useFetch";
+
+	export async function load({fetch}) {
+		return {
+			stuff: {
+				apps: useFetch([], () => get('/').then((result: {data: any[]}) => result.data),
+				tables: useFetch([], (app) => get(`/${app}`).then((result: {data: any[]}) => result.data),
+				data: useFetch([], (app, data) => get(`/${app}/${data}`).then((result: {data: any[]}) => result.data),
+			}
+		}
+	}
+</script> -->
 <script>
 	import '@ubeac/svelte-components/styles.css';
 	import 'virtual:windi.css';
@@ -53,14 +66,13 @@
 	}
 
 	async function loginWithEmail() {
-		modalOpen = false;
-		const result = await supabase.auth.signIn({
-			email: email
-		});
-
-		if (result.data) {
-			alert('Email sent! Please check your inbox');
-		}
+		// modalOpen = false;
+		// const result = await supabase.auth.signIn({
+		// 	email: email
+		// });
+		// if (result.data) {
+		// 	alert('Email sent! Please check your inbox');
+		// }
 	}
 
 	function cancel() {
