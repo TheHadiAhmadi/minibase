@@ -10,11 +10,13 @@ in this project and [minibase-api](https://github.com/TheHadiAhmadi/minibase-api
 
 ## todo
 * Authentication using JWT tokens
+* cache data in backend
 * realtime events with WebSocket
 * client side and server side SDKs
 * reports and logging for dashboard
 * write self hosting guide
 * maybe graphql support
+* vscode extension
 * and many more.... 
 
 ## usage
