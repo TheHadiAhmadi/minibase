@@ -11,7 +11,13 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			server: path.resolve('server/server.js')
+			serverFile: path.resolve('server/server.js'),
+			out: './server/build',
+			filesPrefix: './build',
+			esbuild: (defaultOptions) => ({
+				...defaultOptions,
+				external: ['mongodb']
+			})
 		}),
 
 		// hydrate the <div id="svelte"> element in src/app.html

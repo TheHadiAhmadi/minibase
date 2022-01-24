@@ -104,10 +104,6 @@
 
 	onMount(() => {
 		title.set(app_name);
-		// sidebar.set({
-		// 	title: 'Tables of ' + app_name,
-		// 	items: tables
-		// });
 	});
 </script>
 
@@ -117,9 +113,11 @@
 			<Card>
 				<CardTitle slot="title" class="flex items-center justify-between">
 					Tables
-					<Button size="sm" circle on:click={addTable}>
-						<Icon name="fas-plus" />
-					</Button>
+					{#if $session}
+						<Button size="sm" circle on:click={addTable}>
+							<Icon name="fas-plus" />
+						</Button>
+					{/if}
 				</CardTitle>
 				{#each tables as table}
 					<div
@@ -127,23 +125,27 @@
 					>
 						<a sveltekit:prefetch href="./{app_name}/{table.name}">{table.name}</a>
 						<div class="flex space-x-1">
-							<Button on:click={() => updateTable(table)} size="xs" square variant="info">
-								<Icon size="sm" name="fas-edit" />
-							</Button>
-							<Button on:click={() => removeTable(table)} size="xs" square variant="error">
-								<Icon size="sm" name="fas-trash-alt" />
-							</Button>
+							{#if $session}
+								<Button on:click={() => updateTable(table)} size="xs" square variant="info">
+									<Icon size="sm" name="fas-edit" />
+								</Button>
+								<Button on:click={() => removeTable(table)} size="xs" square variant="error">
+									<Icon size="sm" name="fas-trash-alt" />
+								</Button>
+							{/if}
 						</div>
 					</div>
 				{/each}
 			</Card>
 		</TabPane>
-		<TabPane name="settings">
-			<FormGroup>
-				<Label>ApiKey</Label>
-				<Input readonly value={apiKey} />
-			</FormGroup>
-		</TabPane>
+		{#if $session}
+			<TabPane name="settings">
+				<FormGroup>
+					<Label>ApiKey</Label>
+					<Input readonly value={apiKey} />
+				</FormGroup>
+			</TabPane>
+		{/if}
 	</TabContent>
 </div>
 

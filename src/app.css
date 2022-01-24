@@ -1,0 +1,8 @@
+td {
+	white-space: nowrap !important;
+	max-width: 500px;
+	min-width: 100px;
+	overflow: hidden;
+	padding-left: 16px !important;
+	padding-right: 16px !important;
+}

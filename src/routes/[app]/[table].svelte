@@ -27,6 +27,7 @@
 		Card,
 		CardTitle,
 		Cell,
+		Checkbox,
 		FormGroup,
 		Icon,
 		Input,
@@ -36,7 +37,9 @@
 		ModalActions,
 		Table,
 		TableHeader,
-		TableRow
+		TableRow,
+		TextArea,
+		Toggle
 	} from '@ubeac/svelte-components';
 	import { onMount } from 'svelte/internal';
 	import { get } from '$lib/api';
@@ -197,8 +200,24 @@
 <Modal bind:open={modalOpen}>
 	{#each rows as row}
 		<FormGroup>
-			<Label>{row.name}</Label>
-			<Input bordered shadow size="sm" bind:value={editingData[row.name]} />
+			<!-- TODO: create Object editor form (as another project) -->
+			<!-- support all primary data types, file, uuid, ... by plugins -->
+			{#if row.type === 'boolean'}
+				<Checkbox bind:checked={editingData[row.name]}>Done</Checkbox>
+			{:else if row.type === 'number'}
+				<Label>{row.name}</Label>
+				<Input type="number" bordered shadow size="sm" bind:value={editingData[row.name]} />
+			{:else if row.type === 'array'}
+				{#each editingData[row.name] as arrayItem}
+					{JSON.stringify(arrayItem)}
+				{/each}
+			{:else if row.type === 'object'}
+				<Label>{row.name}</Label>
+				<TextArea class="h-32 " readonly value={JSON.stringify(editingData[row.name], null, 2)} />
+			{:else}
+				<Label>{row.name}</Label>
+				<Input bordered shadow size="sm" bind:value={editingData[row.name]} />
+			{/if}
 		</FormGroup>
 	{/each}
 

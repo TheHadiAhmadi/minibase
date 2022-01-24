@@ -14,6 +14,7 @@ import { useFetch } from "$lib/useFetch";
 <script>
 	import '@ubeac/svelte-components/styles.css';
 	import 'virtual:windi.css';
+	import '../app.css';
 
 	import supabase from '$lib/supabase';
 	import { onMount } from 'svelte';
