@@ -165,7 +165,7 @@
 		</div>
 		{#if editingTable.rows}
 			{#each editingTable.rows as row, index}
-				<div class="flex items-center gap-2">
+				<div class="flex items-center gap-2 mt-1">
 					<Button
 						size="xs"
 						square
