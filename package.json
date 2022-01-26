@@ -5,10 +5,9 @@
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
 		"package": "svelte-kit package",
-		"preview": "svelte-kit preview",    
+		"preview": "svelte-kit preview",
 		"predeploy": "npm run build",
-		"deploy": "cd dist; git commit -am \"update\"; git push origin main; cd ..",
-	
+		"deploy": "cd server; git commit -am \"update\"; git push origin main; cd ..",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
