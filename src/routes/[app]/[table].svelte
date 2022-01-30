@@ -131,6 +131,7 @@
 	function insert() {
 		modalOpen = true;
 		editingData = {};
+		editDataId = '';
 
 		rows.map((row) => {
 			editingData[row.name] = '';

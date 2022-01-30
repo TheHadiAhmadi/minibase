@@ -1,5 +1,6 @@
 <script>
 	import { page, session } from '$app/stores';
+	import ApiKeyEditor from '$components/ApiKeyEditor.svelte';
 	import { del, get, post, put } from '$lib/api';
 	import sidebar from '$lib/sidebar';
 	import title from '$lib/title';
@@ -33,7 +34,7 @@
 			const result = await get('/' + $page.params.app);
 			console.log(result);
 			tables = result?.data.tables ?? [];
-			apiKey = result?.data.apiKey ?? '';
+			apiKeys = result?.data.apiKeys ?? [];
 		} catch (err) {
 			console.log(err);
 		}
@@ -41,7 +42,7 @@
 
 	loadTables();
 
-	let apiKey = '';
+	let apiKeys = [];
 	let tables = [];
 
 	let app_name = $page.params.app;
@@ -140,10 +141,7 @@
 		</TabPane>
 		{#if $session}
 			<TabPane name="settings">
-				<FormGroup>
-					<Label>ApiKey</Label>
-					<Input readonly value={apiKey} />
-				</FormGroup>
+				<ApiKeyEditor {apiKeys}/>
 			</TabPane>
 		{/if}
 	</TabContent>
