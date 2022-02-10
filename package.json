@@ -7,7 +7,7 @@
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
 		"predeploy": "npm run build",
-		"deploy": "cd server; git commit -am \"update\"; git push origin main; cd ..",
+		"deploy": "cd server; git add .; git commit -m \"update\"; git push origin main; cd ..",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
@@ -30,6 +30,7 @@
 	"dependencies": {
 		"@supabase/supabase-js": "^1.29.3",
 		"@ubeac/svelte-components": "^0.0.23",
+		"svelte-adapter-deno-deploy": "^0.5.8",
 		"uuid": "^8.3.2"
 	}
 }

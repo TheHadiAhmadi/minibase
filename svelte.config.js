@@ -1,4 +1,4 @@
-import adapter from 'svelte-adapter-deno-mini';
+import adapter from 'svelte-adapter-deno-deploy';
 import preprocess from 'svelte-preprocess';
 import windicss from 'vite-plugin-windicss';
 import path from 'path';
@@ -11,13 +11,13 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			serverFile: path.resolve('server/server.js'),
-			out: './server/build',
-			filesPrefix: './build',
-			esbuild: (defaultOptions) => ({
-				...defaultOptions,
-				external: ['mongodb']
-			})
+			// serverFile: path.resolve('server/server.js'),
+			// out: './server/build',
+			// filesPrefix: './build',
+			// esbuild: (defaultOptions) => ({
+			// 	...defaultOptions,
+			// 	external: ['mongodb']
+			// })
 		}),
 
 		// hydrate the <div id="svelte"> element in src/app.html

@@ -46,14 +46,14 @@
 	import { baseUrl } from '$lib';
 	// import { path } from '$app/navigation';
 
-	let apiKey = '';
+	let apiKeys = [];
 
 	let api = {
 		get: async (url) => {
 			return await fetch(baseUrl + url, {
 				headers: {
 					'Content-Type': 'application/json',
-					apiKey: apiKey
+					apiKey: apiKeys[0].apiKey
 				}
 			}).then((res) => res.json());
 		},
@@ -62,7 +62,7 @@
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					apiKey: apiKey
+					apiKey: apiKeys[0].apiKey
 				},
 				body: JSON.stringify(data)
 			}).then((res) => res.json());
@@ -72,7 +72,7 @@
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
-					apiKey: apiKey
+					apiKey: apiKeys[0].apiKey
 				},
 				body: JSON.stringify(data)
 			}).then((res) => res.json());
@@ -82,7 +82,7 @@
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
-					apiKey: apiKey
+					apiKey: apiKeys[0].apiKey
 				}
 			}).then((res) => res.json());
 		}
@@ -97,17 +97,11 @@
 
 	async function submit() {
 		modalOpen = false;
-		if (editDataId) {
-			const result = await api.put(
-				`/${$page.params.app}/${$page.params.table}/${editDataId}`,
-				editingData
-			);
-			console.log(result);
+		if (editDataId !== '') {
+			await api.put(`/${$page.params.app}/${$page.params.table}/${editDataId}`, editingData);
 			// put
 		} else {
-			const result = await api.post(`/${$page.params.app}/${$page.params.table}`, editingData);
-
-			console.log(result);
+			await api.post(`/${$page.params.app}/${$page.params.table}`, editingData);
 		}
 
 		loadData();
@@ -119,7 +113,7 @@
 
 	async function loadApp() {
 		const result = await get('/' + $page.params.app);
-		apiKey = result.data.apiKey ?? '';
+		apiKeys = result.data.apiKeys ?? [];
 		rows = result.data.tables.find((table) => table.name === $page.params.table).rows;
 	}
 
@@ -145,8 +139,7 @@
 	}
 
 	async function remove(data) {
-		const result = await api.del(`/${$page.params.app}/${$page.params.table}/${data.id}`);
-		console.log(result);
+		await api.del(`/${$page.params.app}/${$page.params.table}/${data.id}`);
 	}
 
 	onMount(async () => {
