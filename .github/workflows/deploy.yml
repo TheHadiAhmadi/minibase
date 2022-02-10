@@ -21,6 +21,10 @@ jobs:
         run: npm install
 
       - name: Build site
+        env:
+          VITE_MONGODB: ${{ secrets.VITE_MONGODB }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_KEY }}
         run: npm run build
 
       - name: Remove node_modules
