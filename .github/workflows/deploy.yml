@@ -1,0 +1,34 @@
+name: Deploy
+
+on: [push]
+
+jobs:
+  deploy: 
+    name: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read 
+      
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Running npm install
+        run: npm install
+
+      - name: Build site
+        run: npm run build
+
+      - name: Remove node_modules
+        run: rm -rf node_modules
+
+      - name: Deploy to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: "minibase"
+          entrypoint: "build/server.js" # same as `out` option in config
+          root: "build"
