@@ -92,12 +92,10 @@
 				<Spinner size="sm" />
 			</div>
 		{:else}
-			<div class="p-2">
-				<slot />
-			</div>
+			<slot />
 		{/if}
 		<!-- </div> -->
 
-		<slot name="sidebar" slot="sidebar" />
+		<!-- <slot name="sidebar" slot="sidebar" /> -->
 	</Layout>
 </div>

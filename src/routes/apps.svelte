@@ -4,7 +4,7 @@
 	import { AppCard, Page } from '$lib/components';
 	import { get } from '$lib/api';
 	import { sidebar } from '$lib/stores';
-	import { Button } from '@ubeac/svelte-components';
+	import { Button, Icon } from '@ubeac/svelte-components';
 	import { onMount } from 'svelte';
 
 	let apps = [];
@@ -27,7 +27,10 @@
 </script>
 
 <Page title="Apps">
-	<Button slot="actions" on:click={() => goto('/new')}>Add App</Button>
+	<Button size="sm" slot="actions" on:click={() => goto('/new')}>
+		<Icon icon="fa-solid:plus" />
+		Add App
+	</Button>
 	<div slot="body" class="grid gap-4 grid-cols-1 mx-auto md:grid-cols-2 xl:grid-cols-3">
 		{#each apps as app}
 			<AppCard {...app} />

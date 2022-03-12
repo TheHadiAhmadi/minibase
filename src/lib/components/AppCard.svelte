@@ -9,7 +9,7 @@
 </script>
 
 <Link hover href="/apps/{name}">
-	<Card shadow class="h-30 min-w-60">
+	<Card shadow class="min-w-60">
 		<CardBody>
 			<CardTitle class="mx-0 pb-0 flex items-center gap-2">
 				{#if !isPublic}

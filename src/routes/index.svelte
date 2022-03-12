@@ -16,7 +16,9 @@
 	});
 </script>
 
-<div class="w-full pt-16 opacity-80 text-8xl flex flex-col items-center justify-center">
+<div
+	class="h-full text-shadow-xl bg-gradient-to-tr from-gray-200 to-blue-100 opacity-80 text-6xl flex flex-col items-center justify-center"
+>
 	MiniBase
-	<span class="text-xl pt-2">Minimal Database & Authentication provider</span>
+	<span class="text-sm pt-2">Minimal Database & Authentication provider</span>
 </div>

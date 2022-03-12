@@ -8,8 +8,8 @@
 	export let title;
 </script>
 
-<div class="flex h-full flex-col" class:justify-center={center} class:items-center={center}>
-	<Card class={size ? `w-full max-w-${size}` : ''}>
+<div class="p-2 flex flex-col" class:justify-center={center} class:items-center={center}>
+	<Card shadow class={size ? `w-full max-w-${size}` : 'h-full'}>
 		<CardHeader class="flex items-center justify-between ">
 			{title}
 			<div class="flex items-center justify-end">

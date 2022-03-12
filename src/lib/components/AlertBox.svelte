@@ -1,20 +1,19 @@
 <script>
 	import { alert } from '$lib/stores';
 
-	import { Alert, Button, Icon } from '@ubeac/svelte-components';
+	import { Alert } from '@ubeac/svelte-components';
 
-	function close() {
-		$alert = null;
+	$: {
+		$alert;
+
+		setTimeout(() => ($alert = null), 5000);
 	}
 </script>
 
-<div class="absolute bottom-2 right-2 w-1/2">
+<div class="absolute bottom-2 z-50 right-2 left-2 md:left-auto md:w-1/2">
 	{#if $alert}
-		<Alert variant={$alert.variant} bind:open={$alert.open}>
+		<Alert class="!flex-row" variant={$alert.variant} open>
 			{$alert.text}
-			<Button slot="action" variant={$alert.variant} on:click={close} size="sm" circle>
-				<Icon icon="fa-solid:times" />
-			</Button>
 		</Alert>
 	{/if}
 </div>
