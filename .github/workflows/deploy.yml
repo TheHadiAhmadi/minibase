@@ -32,4 +32,4 @@ jobs:
         with:
           project: 'minibase'
           entrypoint: './server.js' # same as `out` option in config
-          root: 'build'
+          root: 'output'
