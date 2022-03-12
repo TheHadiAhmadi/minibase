@@ -1,5 +1,7 @@
 .DS_Store
 .vercel_build_output/
+.vscode
+output/build
 node_modules
 /build
 /.svelte-kit
