@@ -1,1 +1,2 @@
-export { default as Dashboard } from './Dashboard.svelte';
+export { default as DashboardLayout } from './DashboardLayout.svelte';
+export { default as LoginSignupLayout } from './LoginSignupLayout.svelte';

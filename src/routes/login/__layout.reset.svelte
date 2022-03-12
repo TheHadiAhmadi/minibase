@@ -1,8 +1,7 @@
 <script>
-import { AlertBox } from "$lib/components";
+	import { LoginSignupLayout } from 'src/layouts';
 </script>
-<AlertBox />
 
-<div class="h-screen p-2">
+<LoginSignupLayout>
 	<slot />
-</div>
+</LoginSignupLayout>
