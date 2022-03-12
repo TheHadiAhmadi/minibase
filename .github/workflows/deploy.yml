@@ -3,13 +3,13 @@ name: Deploy
 on: [push]
 
 jobs:
-  deploy: 
+  deploy:
     name: deploy
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: read 
-      
+      contents: read
+
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
@@ -22,17 +22,14 @@ jobs:
 
       - name: Build site
         env:
-          VITE_MONGODB: ${{ secrets.VITE_MONGODB }}
+          VITE_MONGODB_URL: ${{ secrets.VITE_MONGODB_URL }}
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_KEY }}
         run: npm run build
 
-      - name: Remove node_modules
-        run: rm -rf node_modules
-
       - name: Deploy to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "minibase"
-          entrypoint: "build/server.js" # same as `out` option in config
-          root: "build"
+          project: 'minibase'
+          entrypoint: './server.js' # same as `out` option in config
+          root: 'build'
