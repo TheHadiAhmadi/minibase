@@ -16,16 +16,11 @@ const config = {
 		adapter: adapter({
 			serverFile: path.resolve('server/server.js'),
 			out: './output/build',
-			filesPrefix: './build',
+			filesPrefix: './build/',
 			imports: {
 				jsonwebtoken: 'https://dev.jspm.io/jsonwebtoken',
 				crypto: 'https://deno.land/std/node/crypto.ts'
-			},
-			esbuild: (defaultOptions) => ({
-				...defaultOptions,
-
-				external: ['jsonwebtoken', 'crypto']
-			})
+			}
 		}),
 		vite: {
 			plugins: [windicss()],
