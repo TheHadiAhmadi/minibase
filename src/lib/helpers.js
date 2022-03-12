@@ -1,5 +1,5 @@
 // export const baseUrl = 'https://api-minibase.deno.dev';
-export const baseUrl = 'http://minibase.deno.dev';
+export const baseUrl = 'https://minibase.deno.dev';
 // export const baseUrl = '/api';
 export function generateApiKey() {
 	const result = Array.from({ length: 32 }, () => {
