@@ -1,5 +1,5 @@
 <script>
-	import { LoginSignupLayout } from 'src/layouts';
+	import { LoginSignupLayout } from '$lib/layouts';
 </script>
 
 <LoginSignupLayout>

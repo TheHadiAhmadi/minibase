@@ -27,7 +27,14 @@
 </script>
 
 <div class="h-screen overflow-hidden">
-	<Layout title={$title} {sidebarColor} {sidebarMode} {navbarMode} {navbarColor}>
+	<Layout
+		themeButton={false}
+		title={$title}
+		{sidebarColor}
+		{sidebarMode}
+		{navbarMode}
+		{navbarColor}
+	>
 		<Breadcrumb slot="navbar-start">
 			<BreadcrumbItem href="/">
 				<Icon icon="fa:database" class="mr-2 text-2xl" />

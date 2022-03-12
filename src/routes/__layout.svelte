@@ -6,7 +6,7 @@
 	import { onMount } from 'svelte';
 
 	import { session } from '$app/stores';
-	import { Dashboard } from '../layouts';
+	import { DashboardLayout } from '$lib/layouts';
 	import { AlertBox } from '$lib/components';
 
 	onMount(() => {
@@ -14,10 +14,9 @@
 	});
 </script>
 
-<AlertBox />
-
 <div class="h-screen overflow-hidden">
-	<Dashboard session={$session}>
+	<AlertBox />
+	<DashboardLayout session={$session}>
 		<slot />
-	</Dashboard>
+	</DashboardLayout>
 </div>
