@@ -10,6 +10,7 @@ console.log(`server is running at ${hostname}:${port}`);
 
 for await (const conn of server) {
 	for await (const { request, respondWith } of Deno.serveHttp(conn)) {
+		console.log(request.url);
 		respondWith(handler(request, platform));
 	}
 }

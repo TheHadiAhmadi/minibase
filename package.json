@@ -18,7 +18,7 @@
 		"prettier": "^2.4.1",
 		"prettier-plugin-svelte": "^2.4.0",
 		"svelte": "^3.46.1",
-		"svelte-adapter-deno-deploy": "^0.6.4",
+		"svelte-adapter-deno-deploy": "^0.6.5",
 		"svelte-check": "^2.2.6",
 		"svelte-preprocess": "^4.9.4",
 		"tslib": "^2.3.1",
