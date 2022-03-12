@@ -18,19 +18,18 @@
 		"prettier": "^2.4.1",
 		"prettier-plugin-svelte": "^2.4.0",
 		"svelte": "^3.46.1",
-		"svelte-adapter-deno-mini": "0.5.6",
+		"svelte-adapter-deno-deploy": "^0.6.4",
 		"svelte-check": "^2.2.6",
 		"svelte-preprocess": "^4.9.4",
 		"tslib": "^2.3.1",
 		"typescript": "^4.4.3",
-		"vite-plugin-windicss": "^1.6.1",
-		"windicss": "^3.4.0"
+		"vite-plugin-windicss": "^1.6.1"
 	},
 	"type": "module",
 	"dependencies": {
-		"@supabase/supabase-js": "^1.29.3",
-		"@ubeac/svelte-components": "^0.0.23",
-		"svelte-adapter-deno-deploy": "^0.5.8",
-		"uuid": "^8.3.2"
+		"@ubeac/svelte-components": "^0.0.40",
+		"jsonwebtoken": "^8.5.1",
+		"uuid": "^8.3.2",
+		"windicss": "^3.5.1"
 	}
 }

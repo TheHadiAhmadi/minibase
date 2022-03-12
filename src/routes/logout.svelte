@@ -1,10 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import supabase from '$lib/supabase';
+	import { session } from '$app/stores';
 
 	onMount(async () => {
-		supabase.auth.signOut();
+		localStorage.removeItem('mb-session');
+		$session = null;
 		goto('/');
 	});
 </script>

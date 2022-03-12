@@ -1,5 +1,7 @@
+// import adapter from '@sveltejs/adapter-node';
 import adapter from 'svelte-adapter-deno-deploy';
 import preprocess from 'svelte-preprocess';
+import replace from 'esbuild-plugin-text-replace';
 import windicss from 'vite-plugin-windicss';
 import path from 'path';
 
@@ -10,18 +12,21 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
+		// adapter: adapter(),
 		adapter: adapter({
-			// serverFile: path.resolve('server/server.js'),
-			// out: './server/build',
-			// filesPrefix: './build',
-			// esbuild: (defaultOptions) => ({
-			// 	...defaultOptions,
-			// 	external: ['mongodb']
-			// })
-		}),
+			serverFile: path.resolve('server/server.js'),
+			out: './output/build',
+			filesPrefix: './build',
+			imports: {
+				jsonwebtoken: 'https://dev.jspm.io/jsonwebtoken',
+				crypto: 'https://deno.land/std/node/crypto.ts'
+			},
+			esbuild: (defaultOptions) => ({
+				...defaultOptions,
 
-		// hydrate the <div id="svelte"> element in src/app.html
-		target: '#svelte',
+				external: ['jsonwebtoken', 'crypto']
+			})
+		}),
 		vite: {
 			plugins: [windicss()],
 			resolve: {

@@ -1,6 +1,6 @@
 # minibase - minimal clone of firebase
 
-in this project and [minibase-api](https://github.com/TheHadiAhmadi/minibase-api) I want to recreate some basic features of firebase using deno(server) and svelte(dashboard)
+in this project I want to recreate some basic features of firebase using sveltekit
 
 
 ## features
