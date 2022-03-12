@@ -1,175 +1,114 @@
 <script>
-	import { TableEditorForm, ApiKeyEditor } from '$lib/components';
-
-	import { invalidate } from '$app/navigation';
-
-	import { page, session } from '$app/stores';
+	import { page } from '$app/stores';
 	import { del, get, post, put } from '$lib/api';
-	import { title } from '$lib/stores';
+	import { Button, Icon, Modal } from '@ubeac/svelte-components';
+	import { ApiKeyEditor, TableCard, Page, TableEditorForm } from '$lib/components';
 
-	import {
-		Button,
-		Checkbox,
-		Dropdown,
-		Link,
-		Table,
-		TableRow,
-		Cell,
-		TableHeader,
-		Menu,
-		MenuItem,
-		TabContent,
-		TabPane,
-		Card,
-		CardTitle,
-		Icon,
-		Modal,
-		FormGroup,
-		Input,
-		ModalActions,
-		Label,
-		CardBody
-	} from '@ubeac/svelte-components';
-	import { Page } from '$lib/components';
 	import { onMount } from 'svelte';
-	import { showAlert } from '$lib/errors';
 
-	let apiKeys = [];
+	let model = {};
+
+	let access = true;
+	let app = $page.params.app;
 	let tables = [];
-	let access = false;
+	let apiKeys = [];
 
-	let app_name = $page.params.app;
+	let updateModalOpen = false;
+	let addModalOpen = false;
+	let apiKeysModalOpen = false;
 
 	async function loadTables() {
-		console.log('loadTables()');
-		const result = await get(`/apps/${app_name}.json`);
-
-		console.log({ result });
-		if (result.status >= 400) {
-			showAlert(result.message, 'error');
-		}
+		const result = await get(`/apps/${app}.json`);
 		apiKeys = result.apiKeys;
 		tables = result.tables;
 		access = result.access;
 	}
 
-	onMount(() => {
+	async function add({ detail }) {
+		console.log(detail);
+		await post(`/apps/${app}.json`, detail);
 		loadTables();
-		title.set(app_name);
-	});
+		cancel();
+	}
 
-	let editTableName = '';
-
-	let editingTable = {
-		rows: [],
-		public: true
-	};
-
-	let modalOpen = false;
-
-	async function submit() {
-		modalOpen = false;
-
-		if (editTableName) {
-			// update table
-			const result = await put(
-				'/apps/' + $page.params.app + '/' + editTableName + '.json',
-				editingTable
-			);
-			console.log('Update successfully', result);
-		} else {
-			// create new table
-			const result = await post('/apps/' + $page.params.app + '.json', editingTable);
-			console.log(result);
-		}
+	async function update({ detail }) {
+		await put(`/apps/${app}/${detail.name}.json`, detail);
 		loadTables();
-	}
-	async function cancel() {
-		modalOpen = false;
+		cancel();
 	}
 
-	const rowTypes = ['string', 'number', 'boolean', 'object', 'array'];
-
-	function addRow() {
-		editingTable.rows = [...(editingTable.rows ?? []), { name: '', type: rowTypes[0] }];
+	function openApiKeys() {
+		apiKeysModalOpen = true;
 	}
 
-	function addTable() {
-		modalOpen = true;
-		editingTable = {
-			public: true,
-			rows: [],
-			name: ''
-		};
+	function cancel() {
+		updateModalOpen = false;
+		addModalOpen = false;
 	}
 
 	function updateTable(table) {
-		editTableName = table.name;
-		modalOpen = true;
-		editingTable = table;
-		loadTables();
+		model = table;
+		updateModalOpen = true;
 	}
 
 	async function removeTable(table) {
-		console.log('prompt before delete');
-		const result = await del('/' + $page.params.app + '/' + table.name);
-		console.log('Delete', result);
+		await del(`/apps/${app}/${table.name}.json`);
 		loadTables();
 	}
+	function addTable() {
+		model = {
+			name: '',
+			public: false,
+			rows: []
+		};
+		addModalOpen = true;
+	}
+
+	onMount(() => {
+		loadTables();
+	});
 </script>
 
-<TabContent class="p-0" boxed>
-	<TabPane class="p-0" name="Data">
-		<Page title="{app_name} / Tables">
-			<svelte:fragment slot="actions">
-				{#if access}
-					<Button size="sm" circle on:click={addTable}>
-						<Icon icon="fa-solid:plus" />
-					</Button>
-				{/if}
-			</svelte:fragment>
+<Page title="Tables">
+	<svelte:fragment slot="actions">
+		<Button class="mr-2 border border-base-300" variant="ghost" size="sm" on:click={openApiKeys}>
+			<Icon slot="prefix" class="mr-2" icon="fa-solid:key" />
+			Api Keys
+		</Button>
 
-			<svelte:fragment slot="body">
-				{#each tables as table}
-					<div
-						class="p-4 mt-2 shadow-lg flex items-center justify-between rounded-lg bg-info border border-info border-opacity-25 shadow bg-opacity-10 "
-					>
-						<a sveltekit:prefetch href="./{app_name}/{table.name}">{table.name}</a>
-						<div class="flex space-x-1">
-							{#if access}
-								<Button on:click={() => updateTable(table)} size="xs" square variant="info">
-									<Icon size="sm" icon="fa-solid:edit" />
-								</Button>
-								<Button on:click={() => removeTable(table)} size="xs" square variant="error">
-									<Icon size="sm" icon="fa-solid:trash-alt" />
-								</Button>
-							{/if}
-						</div>
-					</div>
-				{/each}
-			</svelte:fragment>
-		</Page>
-	</TabPane>
+		<Button size="sm" on:click={addTable}>
+			<Icon slot="prefix" class="mr-2" icon="fa-solid:plus" />
+			Add
+		</Button>
+	</svelte:fragment>
+	<svelte:fragment slot="body">
+		{#each tables as table}
+			<TableCard
+				{app}
+				{table}
+				{access}
+				on:update={() => updateTable(table)}
+				on:remove={() => removeTable(table)}
+			/>
+		{/each}
+	</svelte:fragment>
+</Page>
 
-	{#if $session}
-		<TabPane class="p-0" name="settings">
-			<Page title="{app_name} / Settings">
-				<svelte:fragment slot="body">
-					{#if access}
-						<ApiKeyEditor {apiKeys} />
-					{:else}
-						<p>You don't have access to read/manage ApiKeys</p>
-					{/if}
-				</svelte:fragment>
-			</Page>
-		</TabPane>
-	{/if}
-</TabContent>
+<Modal class="p-0" bind:open={addModalOpen}>
+	<TableEditorForm title="Add Table" on:submit={add} on:cancel={cancel} />
+</Modal>
 
-<Modal bind:open={modalOpen}>
-	<TableEditorForm />
-	<ModalActions end class="mt-4">
-		<Button size="sm" variant="ghost" on:click={cancel}>Cancel</Button>
-		<Button size="sm" on:click={submit}>Submit</Button>
-	</ModalActions>
+<Modal class="p-0" bind:open={updateModalOpen}>
+	<TableEditorForm
+		title="Edit Title"
+		bind:name={model.name}
+		bind:rows={model.rows}
+		bind:public={model.public}
+		on:submit={update}
+		on:cancel={cancel}
+	/>
+</Modal>
+
+<Modal class="p-0" bind:open={apiKeysModalOpen}>
+	<ApiKeyEditor {apiKeys} />
 </Modal>

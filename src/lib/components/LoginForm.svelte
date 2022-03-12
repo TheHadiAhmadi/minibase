@@ -29,7 +29,7 @@
 	}
 </script>
 
-<Page center size="md" title="Login">
+<Page noPadding title="Login">
 	<Form slot="body" on:submit={submit}>
 		<FormInput label="Username" type="text" bind:value={username} />
 		<FormInput label="Password" type="password" bind:value={password} />

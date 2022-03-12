@@ -3,6 +3,7 @@
 
 	import { Button, Card, CardActions, CardBody, FormInput, Link } from '@ubeac/svelte-components';
 	import { createEventDispatcher } from 'svelte';
+	import AlertBox from './AlertBox.svelte';
 	import Form from './Form.svelte';
 	import Page from './Page.svelte';
 
@@ -32,7 +33,7 @@
 	}
 </script>
 
-<Page center size="md" title="Sign Up">
+<Page noPadding title="Sign Up">
 	<Form slot="body" on:submit={submit}>
 		<FormInput label="Username" type="text" bind:value={username} />
 		<FormInput label="Email" type="email" bind:value={email} />

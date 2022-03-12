@@ -5,10 +5,17 @@
 
 	export let size = undefined;
 
+	export let noPadding = false;
+
 	export let title;
 </script>
 
-<div class="p-2 flex flex-col" class:justify-center={center} class:items-center={center}>
+<div
+	class="flex flex-col"
+	class:p-2={!noPadding}
+	class:justify-center={center}
+	class:items-center={center}
+>
 	<Card shadow class={size ? `w-full max-w-${size}` : 'h-full'}>
 		<CardHeader class="flex items-center justify-between ">
 			{title}
