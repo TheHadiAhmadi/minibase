@@ -2,11 +2,6 @@
 
 import type { getUser } from '$lib/services/auth';
 
-interface ImportMetaEnv {
-	VITE_ACCESS_TOKEN_SECRET?: string;
-	VITE_REFERSH_TOKEN_SECRET?: string;
-}
-
 declare namespace App {
 	interface Locals {}
 

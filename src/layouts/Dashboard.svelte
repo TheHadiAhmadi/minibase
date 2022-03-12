@@ -66,6 +66,7 @@
 				</Dropdown>
 			{:else}
 				<Button
+					size="sm"
 					variant="neutral"
 					on:click={() => {
 						goto('/login');
@@ -74,6 +75,7 @@
 					Log In
 				</Button>
 				<Button
+					size="sm"
 					variant="primary"
 					on:click={() => {
 						goto('/signup');

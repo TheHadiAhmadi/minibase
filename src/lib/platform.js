@@ -50,5 +50,6 @@ export default {
 			});
 			return true;
 		}
-	}
+	},
+	secret: import.meta.env.VITE_ACCESS_TOKEN_SECRET
 };

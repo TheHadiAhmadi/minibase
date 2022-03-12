@@ -1,7 +1,6 @@
 // import adapter from '@sveltejs/adapter-node';
 import adapter from 'svelte-adapter-deno-deploy';
 import preprocess from 'svelte-preprocess';
-import replace from 'esbuild-plugin-text-replace';
 import windicss from 'vite-plugin-windicss';
 import path from 'path';
 
@@ -14,9 +13,9 @@ const config = {
 	kit: {
 		// adapter: adapter(),
 		adapter: adapter({
-			serverFile: path.resolve('server/server.js'),
+			serverFile: path.resolve('output/server.js'),
 			out: './output/build',
-			filesPrefix: './build/',
+			filesPrefix: './build',
 			imports: {
 				jsonwebtoken: 'https://dev.jspm.io/jsonwebtoken',
 				crypto: 'https://deno.land/std/node/crypto.ts'

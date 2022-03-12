@@ -16,8 +16,9 @@ export async function handle({ event, resolve }) {
 
 	const authorization = event.request.headers.get('authorization');
 	const token = getToken(authorization);
+	const secret = event.platform.secret || 'dev-secret';
 
-	const authService = new AuthService(event.platform.db, token);
+	const authService = new AuthService(event.platform.db, token, secret);
 
 	let body = {};
 

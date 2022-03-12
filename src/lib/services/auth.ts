@@ -14,23 +14,6 @@ export type User = {
 	email: string;
 };
 
-async function createRefreshToken(user: User): Promise<string> {
-	try {
-		return jwt.sign({ user }, import.meta.env.VITE_REFRESH_TOKEN_SECRET, { expiresIn: '10d' });
-	} catch (err) {
-		console.log(err);
-		return;
-	}
-}
-async function createAccessToken(user: User): Promise<string> {
-	try {
-		return jwt.sign({ user }, import.meta.env.VITE_ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
-	} catch (err) {
-		console.log(err);
-		return;
-	}
-}
-
 async function hashPassword(str: string): Promise<string> {
 	if (str) {
 		return crypto.createHash('sha256').update(str).digest('hex');
@@ -45,14 +28,25 @@ export function uuid() {
 export default class AuthService {
 	db = null;
 	token = null;
-	constructor(db, token) {
+	secret = null;
+	constructor(db, token, secret) {
 		this.db = db;
 		this.token = token;
+		this.secret = secret;
+	}
+
+	async createAccessToken(user: User): Promise<string> {
+		try {
+			return jwt.sign({ user }, this.secret, { expiresIn: '60m' });
+		} catch (err) {
+			console.log(err);
+			return;
+		}
 	}
 
 	async getUser() {
 		try {
-			const payload = await jwt.verify(this.token, import.meta.env.VITE_ACCESS_TOKEN_SECRET);
+			const payload = await jwt.verify(this.token, this.secret);
 
 			if (payload.user) return payload.user;
 			console.log(payload);
@@ -90,7 +84,7 @@ export default class AuthService {
 			password: await hashPassword(password)
 		});
 
-		const access_token = await createAccessToken(user);
+		const access_token = await this.createAccessToken(user);
 
 		return {
 			access_token,
@@ -121,7 +115,7 @@ export default class AuthService {
 			email: users[0].email
 		};
 
-		const access_token = await createAccessToken(payload);
+		const access_token = await this.createAccessToken(payload);
 
 		return {
 			access_token,

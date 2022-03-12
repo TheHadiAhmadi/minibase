@@ -1,4 +1,5 @@
 import initializeDB from './database.ts';
+import { env } from './deps.ts';
 
 export default {
 	db: {
@@ -29,5 +30,6 @@ export default {
 			await db.insert(collection, data);
 			return true;
 		}
-	}
+	},
+	secret: env.ACCESS_TOKEN_SECRET
 };

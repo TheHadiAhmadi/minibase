@@ -16,6 +16,7 @@
 	});
 </script>
 
-<div class="w-full h-full flex items-center justify-center">
-	<Button on:click={() => goto('/login')}>Sign In</Button>
+<div class="w-full pt-16 opacity-80 text-8xl flex flex-col items-center justify-center">
+	MiniBase
+	<span class="text-xl pt-2">Minimal Database & Authentication provider</span>
 </div>
