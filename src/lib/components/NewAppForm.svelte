@@ -1,7 +1,7 @@
 <script>
 	import { post } from '$lib/api';
 
-	import { Button, Checkbox, FormInput } from '@ubeac/svelte-components';
+	import { Button, CardActions, Checkbox, FormInput } from '@ubeac/svelte-components';
 	import { createEventDispatcher } from 'svelte';
 
 	import Form from './Form.svelte';
@@ -53,6 +53,8 @@
 		<div class="h-2" />
 		<Checkbox bind:checked={request.public}>Public</Checkbox>
 
-		<Button type="submit" disabled={!valid} classd="w-full ml-auto mt-8">Create</Button>
+		<CardActions position="end">
+			<Button type="submit" disabled={!valid} classd="w-full ml-auto mt-8">Create</Button>
+		</CardActions>
 	</Form>
 </Page>

@@ -1,5 +1,10 @@
 import { generateApiKey } from '$lib';
-import { errorBadRequest, errorNotFound, errorResourceExists } from '$lib/errors';
+import {
+	errorBadRequest,
+	errorNotAuthorized,
+	errorNotFound,
+	errorResourceExists
+} from '$lib/errors';
 
 export default class AppService {
 	db = null;
@@ -68,8 +73,6 @@ export default class AppService {
 			this.db.get('apps', { name: appName })
 		]);
 
-		console.log(apiKeys, apps);
-
 		if (apps.length === 0 || apiKeys.length === 0) {
 			return [];
 		}
@@ -86,14 +89,31 @@ export default class AppService {
 
 		if (!appName) throw errorBadRequest();
 
-		const [tables, apps] = await Promise.all([
-			this.db.get('tables', { appName }),
-			this.db.get('apps', { name: appName })
-		]);
+		try {
+			const user = await this.auth.getUser();
 
-		if (apps.length === 0) throw errorNotFound('App does not exists');
+			const [tables, apiKeys] = await Promise.all([
+				this.db.get('tables', { ownerId: user.id, appName }),
+				this.getApiKeys(appName)
+			]);
 
-		return tables;
+			return {
+				tables,
+				apiKeys
+			};
+		} catch (err) {
+			// check if public
+			const [apps, tables] = await Promise.all([
+				this.db.get('apps', { name: appName, public: true }),
+				this.db.get('tables', { appName, public: true })
+			]);
+
+			if (apps.length > 0) {
+				return {
+					tables
+				};
+			} else throw errorNotAuthorized('this app does not exist or is not public');
+		}
 	}
 
 	editApp({ userId, name, description, isPublic }) {

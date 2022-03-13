@@ -12,7 +12,9 @@ export default class TableService {
 
 	async getTable(name) {
 		const tables = await this.db.get('tables', { appName: this.appName, name });
-		if (tables.length === 0) throw errorNotFound('table not found');
+		if (tables.length === 0) {
+			throw errorNotFound('table not found');
+		}
 		return tables[0];
 	}
 

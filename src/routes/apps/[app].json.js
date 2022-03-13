@@ -8,10 +8,7 @@ export async function get({ platform, params, locals }) {
 
 	const appService = new AppService(db, auth);
 
-	const [apiKeys, tables] = await Promise.all([
-		appService.getApiKeys(name),
-		appService.getTables(name)
-	]);
+	const { tables, apiKeys } = await appService.getTables(name);
 
 	return {
 		status: 200,
@@ -19,7 +16,7 @@ export async function get({ platform, params, locals }) {
 			data: {
 				tables: tables,
 				apiKeys: apiKeys,
-				access: apiKeys.length > 0 // TODO: better solution
+				access: apiKeys?.length > 0
 			}
 		}
 	};

@@ -1,6 +1,4 @@
 <script>
-	import { mode } from '$app/env';
-
 	import { Button, Cell, Icon, Modal, Table, TableRow } from '@ubeac/svelte-components';
 	import { createEventDispatcher } from 'svelte';
 	import DataCell from './DataCell.svelte';

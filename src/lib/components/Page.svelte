@@ -11,7 +11,7 @@
 </script>
 
 <div
-	class="flex flex-col"
+	class="flex h-full flex-col"
 	class:p-2={!noPadding}
 	class:justify-center={center}
 	class:items-center={center}
@@ -31,7 +31,7 @@
 			</CardBody>
 		</slot>
 		{#if $$slots['footer:actions']}
-			<CardActions>
+			<CardActions position="end">
 				<slot name="footer:actions" />
 			</CardActions>
 		{/if}
