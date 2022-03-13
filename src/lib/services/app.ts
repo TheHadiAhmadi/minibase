@@ -1,5 +1,5 @@
 import { generateApiKey } from '$lib';
-import { errorBadRequest, errorResourceExists } from '$lib/errors';
+import { errorBadRequest, errorNotFound, errorResourceExists } from '$lib/errors';
 
 export default class AppService {
 	db = null;
@@ -47,6 +47,7 @@ export default class AppService {
 				remove: 'everyone'
 			}
 		};
+		await this.db.insert('keys', apiKey);
 
 		return {
 			data: {
@@ -85,7 +86,12 @@ export default class AppService {
 
 		if (!appName) throw errorBadRequest();
 
-		const tables = await this.db.get('tables', { appName });
+		const [tables, apps] = await Promise.all([
+			this.db.get('tables', { appName }),
+			this.db.get('apps', { name: appName })
+		]);
+
+		if (apps.length === 0) throw errorNotFound('App does not exists');
 
 		return tables;
 	}

@@ -10,6 +10,12 @@ export default class TableService {
 		this.appName = appName;
 	}
 
+	async getTable(name) {
+		const tables = await this.db.get('tables', { appName: this.appName, name });
+		if (tables.length === 0) throw errorNotFound('table not found');
+		return tables[0];
+	}
+
 	async addTable({ name, isPublic, rows }) {
 		const appName = this.appName;
 		const user = await this.auth.getUser();

@@ -7,7 +7,7 @@
 
 	export let noPadding = false;
 
-	export let title;
+	export let title = undefined;
 </script>
 
 <div
@@ -17,12 +17,14 @@
 	class:items-center={center}
 >
 	<Card shadow class={size ? `w-full max-w-${size}` : 'h-full'}>
-		<CardHeader class="flex items-center justify-between ">
-			{title}
-			<div class="flex items-center justify-end">
-				<slot name="actions" />
-			</div>
-		</CardHeader>
+		{#if title}
+			<CardHeader class="flex items-center justify-between ">
+				{title}
+				<div class="flex items-center justify-end">
+					<slot name="actions" />
+				</div>
+			</CardHeader>
+		{/if}
 		<slot>
 			<CardBody>
 				<slot name="body" />

@@ -23,7 +23,6 @@ export async function post({ platform, locals }) {
 
 	const { name, description = '', public: isPublic = false } = body;
 
-	console.log('getApps');
 	const appService = new AppService(db, auth);
 
 	const data = await appService.addApp({

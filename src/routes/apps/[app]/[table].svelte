@@ -1,222 +1,123 @@
-<!-- <script context="module" lang="ts">
-	import { get } from '$lib/api';
+<script>
+	import { page } from '$app/stores';
+	import { baseUrl } from '$lib';
+	import { showAlert } from '$lib/errors';
 
-	import { baseUrl } from '$lib/helpers';
+	import { Button, FormInput, Icon, Modal } from '@ubeac/svelte-components';
+	import { Page, DataTable } from '$lib/components';
 
-	export async function load({ fetch, params, session, stuff }) {
-		const { app, table } = params;
+	let api = Api('');
 
-		const tables = await get<{ data: any[] }>(`/${app}/${table}`).then(({ data }) => data);
-		const allTables = await get<{ data: any[] }>(`/${app}`).then(({ data }) => data);
-
+	function Api(apiKey) {
 		return {
-			props: {
-				tables,
-				table_name: table,
-				rows: allTables.find((tabl) => tabl.name === table).rows ?? []
+			get: async (url) => {
+				return await fetch(baseUrl + url, {
+					headers: {
+						'Content-Type': 'application/json',
+						apiKey
+					}
+				}).then((res) => res.json());
 			},
-			status: 200
+			post: async (url, data) => {
+				return await fetch(baseUrl + url, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						apiKey
+					},
+					body: JSON.stringify(data)
+				}).then((res) => res.json());
+			},
+			put: async (url, data) => {
+				return await fetch(baseUrl + url, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+						apiKey
+					},
+					body: JSON.stringify(data)
+				}).then((res) => res.json());
+			},
+			del: async (url, data) => {
+				return await fetch(baseUrl + url, {
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+						apiKey
+					}
+				}).then((res) => res.json());
+			}
 		};
 	}
-</script> -->
-<script>
-	import { page, session } from '$app/stores';
 
-	import {
-		Button,
-		Card,
-		CardTitle,
-		Cell,
-		Checkbox,
-		FormGroup,
-		Icon,
-		Input,
-		Label,
-		Link,
-		Modal,
-		ModalActions,
-		Table,
-		TableHeader,
-		TableRow,
-		TextArea,
-		Toggle
-	} from '@ubeac/svelte-components';
-	import { onMount } from 'svelte/internal';
-	import { get } from '$lib/api';
-	import { baseUrl } from '$lib';
-	// import { path } from '$app/navigation';
+	$: app = $page.params.app;
+	$: table = $page.params.table;
 
-	let apiKeys = [];
+	let apiKeyModalOpen = true;
+	let apiKey = '';
+	let bindApiKey = '';
+	let values = [];
 
-	let api = {
-		get: async (url) => {
-			return await fetch(baseUrl + url, {
-				headers: {
-					'Content-Type': 'application/json',
-					apiKey: apiKeys?.[0]?.apiKey
-				}
-			}).then((res) => res.json());
-		},
-		post: async (url, data) => {
-			return await fetch(baseUrl + url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					apiKey: apiKeys[0].apiKey
-				},
-				body: JSON.stringify(data)
-			}).then((res) => res.json());
-		},
-		put: async (url, data) => {
-			return await fetch(baseUrl + url, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					apiKey: apiKeys[0].apiKey
-				},
-				body: JSON.stringify(data)
-			}).then((res) => res.json());
-		},
-		del: async (url, data) => {
-			return await fetch(baseUrl + url, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					apiKey: apiKeys[0].apiKey
-				}
-			}).then((res) => res.json());
-		}
-	};
+	$: api = Api(apiKey);
 
-	let data = [];
-	let rows = [];
+	let rows = [
+		{ name: 'test', type: 'string' },
+		{ name: 'another', type: 'number' }
+	];
 
-	let editDataId = '';
-	let modalOpen = false;
-	let editingData = {};
+	$: if (api && apiKey) load(apiKey);
 
-	async function submit() {
-		modalOpen = false;
-		if (editDataId !== '') {
-			await api.put(`/${$page.params.app}/${$page.params.table}/${editDataId}.json`, editingData);
-			// put
+	async function load(apiKey) {
+		const res = await Api(apiKey).get(`/apps/${app}/${table}.json`);
+
+		console.log('inside load', res);
+		if (res.status === 200) {
+			values = res.data.values;
+			rows = res.data.rows;
 		} else {
-			await api.post(`/${$page.params.app}/${$page.params.table}.json`, editingData);
+			showAlert(res.message);
 		}
-
-		loadData();
-	}
-	async function cancel() {
-		modalOpen = false;
-		console.log('cancel	');
 	}
 
-	async function loadApp() {
-		const result = await get('/apps' + $page.params.app + '.json');
-		apiKeys = result.apiKeys ?? [];
-		rows = result.tables.find((table) => table.name === $page.params.table).rows;
+	$: console.log({ rows, values });
+
+	async function create({ detail }) {
+		const res = await api.post(`/apps/${app}/${table}.json`, detail);
 	}
 
-	async function loadData() {
-		const result = await api.get(`/${$page.params.app}/${$page.params.table}.json`);
-		data = result.data;
+	async function update({ detail }) {
+		console.log('update', detail);
 	}
-
-	function insert() {
-		modalOpen = true;
-		editingData = {};
-		editDataId = '';
-
-		rows.map((row) => {
-			editingData[row.name] = '';
-		});
+	async function remove({ detail }) {
+		console.log('remove', detail);
 	}
-
-	function edit(data) {
-		modalOpen = true;
-		editDataId = data.id;
-		editingData = data;
-	}
-
-	async function remove(data) {
-		await api.del(`/${$page.params.app}/${$page.params.table}/${data.id}`);
-	}
-
-	onMount(async () => {
-		await loadApp();
-
-		loadData();
-	});
 </script>
 
-<Card>
-	<CardTitle class="flex items-center justify-between" slot="title">
-		<h1>
-			<Link href="/{$page.params.app}">{$page.params.app}</Link> / <Link>{$page.params.table}</Link>
-		</h1>
-		{#if $session}
-			<Button on:click={insert} circle size="sm">
-				<Icon icon="fas-plus" />
-			</Button>
-		{/if}
-	</CardTitle>
+<Page title=" {app} / {table}">
+	<svelte:fragment slot="actions">
+		<Button
+			variant="ghost"
+			class="border border-base-300"
+			on:click={() => (apiKeyModalOpen = true)}
+			size="sm"
+		>
+			<Icon class="mr-2" icon="fa-solid:key" />
+			Api Key
+		</Button>
+	</svelte:fragment>
+	<svelte:fragment slot="body">
+		<DataTable on:create={create} on:update={update} on:remove={remove} {rows} {values} />
+	</svelte:fragment>
+</Page>
 
-	<Table>
-		<TableHeader>
-			{#each rows as row}
-				<Cell>{row.name}</Cell>
-			{/each}
-			{#if $session}
-				<Cell>Actions</Cell>
-			{/if}
-		</TableHeader>
-
-		{#each data as item}
-			<TableRow>
-				{#each rows as row}
-					<Cell>{item[row.name]}</Cell>
-				{/each}
-				{#if $session}
-					<Cell>
-						<Button on:click={() => edit(item)} square size="xs" compact>
-							<Icon size="sm" name="fas-edit" />
-						</Button>
-						<Button variant="error" on:click={() => remove(item)} square size="xs" compact>
-							<Icon size="sm" name="fas-trash-alt" />
-						</Button>
-					</Cell>
-				{/if}
-			</TableRow>
-		{/each}
-	</Table>
-</Card>
-
-<Modal bind:open={modalOpen}>
-	{#each rows as row}
-		<FormGroup>
-			<!-- TODO: create Object editor form (as another project) -->
-			<!-- support all primary data types, file, uuid, ... by plugins -->
-			{#if row.type === 'boolean'}
-				<Checkbox bind:checked={editingData[row.name]}>Done</Checkbox>
-			{:else if row.type === 'number'}
-				<Label>{row.name}</Label>
-				<Input type="number" bordered shadow size="sm" bind:value={editingData[row.name]} />
-			{:else if row.type === 'array'}
-				{#each editingData[row.name] as arrayItem}
-					{JSON.stringify(arrayItem)}
-				{/each}
-			{:else if row.type === 'object'}
-				<Label>{row.name}</Label>
-				<TextArea class="h-32 " readonly value={JSON.stringify(editingData[row.name], null, 2)} />
-			{:else}
-				<Label>{row.name}</Label>
-				<Input bordered shadow size="sm" bind:value={editingData[row.name]} />
-			{/if}
-		</FormGroup>
-	{/each}
-
-	<ModalActions end class="mt-2">
-		<Button size="sm" on:click={cancel} variant="ghost">Cancel</Button>
-		<Button size="sm" on:click={submit}>Submit</Button>
-	</ModalActions>
+<Modal bind:open={apiKeyModalOpen}>
+	<div class="flex items-end gap-2">
+		<FormInput placeholder="paste a valid ApiKey here..." label="Api Key" bind:value={bindApiKey} />
+		<Button
+			on:click={() => {
+				apiKeyModalOpen = false;
+				apiKey = bindApiKey;
+			}}>Ok</Button
+		>
+	</div>
 </Modal>

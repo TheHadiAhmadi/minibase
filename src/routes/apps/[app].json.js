@@ -14,10 +14,13 @@ export async function get({ platform, params, locals }) {
 	]);
 
 	return {
+		status: 200,
 		body: {
-			tables: tables,
-			apiKeys: apiKeys,
-			access: true // TODO: better solution
+			data: {
+				tables: tables,
+				apiKeys: apiKeys,
+				access: apiKeys.length > 0 // TODO: better solution
+			}
 		}
 	};
 }
