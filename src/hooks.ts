@@ -28,7 +28,13 @@ export async function handle({ event, resolve }) {
 	event.locals.body = body;
 
 	try {
-		return await resolve(event);
+		const response = await resolve(event);
+		
+		response.headers.set('Access-Control-Allow-Origin','*')
+		response.headers.set('Access-Control-Allow-Headers', 'Authorization, Content-Type, ApiKey')
+		response.headers.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT')
+
+		return response
 	} catch (err) {
 		const response = {
 			status: err.status,
