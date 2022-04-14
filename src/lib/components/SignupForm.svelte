@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
-	import { Button, Card, CardActions, CardBody, FormInput, Link } from '@ubeac/svelte-components';
+	import { Button, ButtonList, CardFooter, FormInput } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import AlertBox from './AlertBox.svelte';
 	import Form from './Form.svelte';
@@ -38,9 +38,9 @@
 		<FormInput label="Username" type="text" bind:value={username} />
 		<FormInput label="Email" type="email" bind:value={email} />
 		<FormInput label="Password" type="password" bind:value={password} />
-		<CardActions class="justify-between">
-			<Link href="/login" hover>alerady have account?</Link>
-			<Button size="sm" type="submit">Sign Up</Button>
-		</CardActions>
 	</Form>
+		<ButtonList slot="footer:actions">
+			<Button href="/login">alerady have account?</Button>
+			<Button size="sm" variant="primary" type="submit">Sign Up</Button>
+		</ButtonList>
 </Page>

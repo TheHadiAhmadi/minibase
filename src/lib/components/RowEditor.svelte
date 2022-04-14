@@ -1,5 +1,5 @@
 <script>
-	import { Button, CardActions, FormInput } from '@ubeac/svelte-components';
+	import { Button, CardFooter, FormInput } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { Page } from '.';
 
@@ -23,9 +23,9 @@
 			<FormInput label={name} bind:value={value[name]} />
 		{/each}
 
-		<CardActions position="end">
+	</svelte:fragment>
+		<CardFooter slot="footer:actions">
 			<Button on:click={cancel} size="sm" variant="ghost">Cancel</Button>
 			<Button on:click={submit} size="sm">Submit</Button>
-		</CardActions>
-	</svelte:fragment>
+		</CardFooter>
 </Page>

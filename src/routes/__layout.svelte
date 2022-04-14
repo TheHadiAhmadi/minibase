@@ -1,5 +1,5 @@
 <script>
-	import '@ubeac/svelte-components/styles.css';
+	// import '@ubeac/svelte-components/styles.css';
 	import '@svind/css/dist/index.css';
 	import 'virtual:windi.css';
 	import '../app.css';
@@ -17,7 +17,7 @@
 
 <div class="h-screen overflow-hidden">
 	<AlertBox />
-	<DashboardLayout session={$session}>
+	<!-- <DashboardLayout session={$session}> -->
 		<slot />
-	</DashboardLayout>
+	<!-- </DashboardLayout> -->
 </div>

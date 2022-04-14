@@ -5,14 +5,18 @@
 		Avatar,
 		Breadcrumb,
 		BreadcrumbItem,
-		Button,
 		Dropdown,
-		Icon,
 		Menu,
 		MenuItem,
 		MenuTitle,
 		Spinner
 	} from '@ubeac/svelte-components';
+	import {
+		Button,
+		Icon,
+
+	} from '@svind/svelte'
+	
 	import { default as Layout } from '@ubeac/svelte-components/layouts/Dashboard.svelte';
 	import { navigating } from '$app/stores';
 	import { title } from '$lib/stores';

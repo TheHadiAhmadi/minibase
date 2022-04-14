@@ -3,7 +3,7 @@
 	import { baseUrl } from '$lib';
 	import { showAlert } from '$lib/errors';
 
-	import { Button, FormInput, Icon, Modal } from '@ubeac/svelte-components';
+	import { Button, FormInput, Icon, Modal } from '@svind/svelte';
 	import { Page, DataTable } from '$lib/components';
 
 	let api = Api('');

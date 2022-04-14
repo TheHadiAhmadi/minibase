@@ -4,7 +4,7 @@
 	import { AppCard, Page } from '$lib/components';
 	import { get } from '$lib/api';
 	import { sidebar } from '$lib/stores';
-	import { Button, Icon } from '@ubeac/svelte-components';
+	import { Button, Icon } from '@svind/svelte';
 	import { onMount } from 'svelte';
 
 	let apps = [];

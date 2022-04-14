@@ -1,5 +1,7 @@
 <script>
-	import { Button, Cell, Icon, Modal, Table, TableRow } from '@ubeac/svelte-components';
+	import { Button, Icon} from '@svind/svelte'
+	import Modal from '@svind/svelte/components/modal/Modal.svelte'
+	import { Cell, Table, TableRow } from '@ubeac/svelte-components';
 	import { createEventDispatcher } from 'svelte';
 	import DataCell from './DataCell.svelte';
 	import RowEditor from './RowEditor.svelte';
