@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 
 	import { session } from '$app/stores';
-	import { Button } from '@ubeac/svelte-components';
 	import { onMount } from 'svelte';
 
 	onMount(() => {

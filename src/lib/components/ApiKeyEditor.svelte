@@ -1,5 +1,5 @@
 <script>
-	import { Button, FormGroup, FormInput, Icon, Input, Label } from '@ubeac/svelte-components';
+	import { Button, FormInput, Icon } from '@svind/svelte';
 	import Page from './Page.svelte';
 	export let apiKeys;
 
@@ -12,7 +12,7 @@
 
 <Page noPadding title="Api Keys">
 	<Button slot="actions" size="sm" on:click={add}>
-		<Icon slot="prefix" class="mr-2" icon="fa-solid:plus" />
+		<Icon slot="prefix" icon="fa-solid:plus" />
 		Add
 	</Button>
 	<svelte:fragment slot="body">

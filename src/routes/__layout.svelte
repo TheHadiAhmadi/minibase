@@ -1,5 +1,6 @@
 <script>
 	import '@ubeac/svelte-components/styles.css';
+	import '@svind/css/dist/index.css';
 	import 'virtual:windi.css';
 	import '../app.css';
 

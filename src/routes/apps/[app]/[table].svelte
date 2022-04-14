@@ -82,6 +82,7 @@
 	$: console.log({ rows, values });
 
 	async function create({ detail }) {
+		console.log('create', detail)
 		const res = await api.post(`/apps/${app}/${table}.json`, detail);
 	}
 

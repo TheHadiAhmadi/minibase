@@ -27,6 +27,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@svind/css": "^0.0.4",
+		"@svind/svelte": "^0.0.4",
 		"@ubeac/svelte-components": "^0.0.40",
 		"jsonwebtoken": "^8.5.1",
 		"uuid": "^8.3.2",

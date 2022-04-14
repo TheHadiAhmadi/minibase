@@ -1,4 +1,4 @@
-import { DataService } from '$lib/services';
+import { DataService, TableService } from '$lib/services';
 
 export async function get({ platform, request, params }) {
 	const { app, table } = params;
@@ -37,4 +37,24 @@ export async function post({ platform, locals, request, params }) {
 			data: result
 		}
 	};
+}
+
+
+export async function del({platform, locals, params}) {
+	const appName = params.app
+	const tableName = params.table
+	const auth = locals.auth
+	const db = platform.db
+
+	console.log('delete')
+
+	const tableService = new TableService(db, auth, appName)
+	await tableService.removeTable(tableName)
+
+	return {
+		status: 200,
+		body: {
+			data: {message: true}
+		}
+	}
 }

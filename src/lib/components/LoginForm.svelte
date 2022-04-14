@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Card, CardActions, CardBody, FormInput, Link } from '@ubeac/svelte-components';
+	import { Button, ButtonList, Card, CardFooter, CardBody, FormInput } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Form from './Form.svelte';
 	import Page from './Page.svelte';
@@ -30,12 +30,18 @@
 </script>
 
 <Page noPadding title="Login">
-	<Form slot="body" on:submit={submit}>
-		<FormInput label="Username" type="text" bind:value={username} />
-		<FormInput label="Password" type="password" bind:value={password} />
-		<CardActions class="justify-between">
-			<Link href="/signup" hover>don't have account?</Link>
-			<Button size="sm" type="submit">log in</Button>
-		</CardActions>
-	</Form>
+	<CardBody>
+
+		<Form  on:submit={submit}>
+			<FormInput label="Username" type="text" bind:value={username} />
+			<FormInput label="Password" type="password" bind:value={password} />
+		</Form>
+	</CardBody>
+
+	<CardFooter position="end">
+		<ButtonList>
+			<Button href="/signup" size="sm">don't have account?</Button>
+			<Button variant="primary" size="sm" type="submit">log in</Button>
+		</ButtonList>
+	</CardFooter>
 </Page>

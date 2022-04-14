@@ -22,7 +22,7 @@ export async function handle({ event, resolve }) {
 
 	let body = {};
 
-	if (event.request.method !== 'GET') body = await event.request.json();
+	if (event.request.method !== 'GET' && event.request.method !== 'DELETE') body = await event.request.json();
 
 	event.locals.auth = authService;
 	event.locals.body = body;

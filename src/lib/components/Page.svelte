@@ -1,5 +1,5 @@
 <script>
-	import { Card, CardActions, CardBody, CardHeader } from '@ubeac/svelte-components';
+	import { Card, CardFooter, CardBody, CardHeader } from '@svind/svelte';
 
 	export let center = false;
 
@@ -16,12 +16,17 @@
 	class:justify-center={center}
 	class:items-center={center}
 >
-	<Card shadow class={size ? `w-full max-w-${size}` : 'h-full'}>
+<div class={size ? `w-full max-w-${size}` : 'h-full'}>
+
+	<Card>
 		{#if title}
-			<CardHeader class="flex items-center justify-between ">
-				{title}
-				<div class="flex items-center justify-end">
-					<slot name="actions" />
+			<CardHeader>
+				<div class="flex items-center justify-between">
+
+					{title}
+					<div class="flex items-center justify-end">
+						<slot name="actions" />
+					</div>
 				</div>
 			</CardHeader>
 		{/if}
@@ -31,9 +36,11 @@
 			</CardBody>
 		</slot>
 		{#if $$slots['footer:actions']}
-			<CardActions position="end">
+			<CardFooter position="end">
 				<slot name="footer:actions" />
-			</CardActions>
+			</CardFooter>
 		{/if}
 	</Card>
+</div>
+
 </div>
