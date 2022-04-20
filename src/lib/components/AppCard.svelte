@@ -8,7 +8,7 @@
 	export let description;
 </script>
 
-<a class="hover:bg-gray-100" href="/{name}">
+<a class="hover:bg-gray-100 hover:bg-gray-800" href="/{name}">
 	<Card class="min-w-60">
 		<CardBody>
 			<div class="mx-0 pb-0 flex items-center gap-2">
