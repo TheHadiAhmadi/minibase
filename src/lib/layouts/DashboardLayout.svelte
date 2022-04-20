@@ -56,7 +56,7 @@
 </Modal>
 
 <Page dark>
-	<Header color="light">
+	<Header color="auto">
 		<NavBrand>Minibase</NavBrand>
 		<Avatar>HA</Avatar>
 		<Nav>
