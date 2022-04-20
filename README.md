@@ -2,33 +2,34 @@
 
 in this project I want to recreate some basic features of firebase using sveltekit
 
-
 ## features
-* you can create unlimited public and private app/database and tables
-* manage data from easy to use dashboard
-* CRUD operation for all tables using JSON api
+
+- you can create unlimited public and private app/database and tables
+- manage data from easy to use dashboard
+- CRUD operation for all tables using JSON api
 
 ## todo
-* Authentication using JWT tokens
-* cache data in backend
-* realtime events with WebSocket
-* client side and server side SDKs
-* reports and logging for dashboard
-* write self hosting guide
-* maybe graphql support
-* vscode extension
-* and many more.... 
+
+- Authentication using JWT tokens
+- cache data in backend
+- realtime events with WebSocket
+- client side and server side SDKs
+- reports and logging for dashboard
+- write self hosting guide
+- maybe graphql support
+- vscode extension
+- and many more....
 
 ## usage
 
 > YOU SHOULD ONLY USE FOR TESTING AND SMALL PROJECTS
 
-you can use rest api to access/modify data of your tables. 
+you can use rest api to access/modify data of your tables.
 
 here is link to dashboard: https://minibase.vercel.app
 
 for exaxmple you can use this url to get list of users as JSON https://minibase.deno.dev/api/jsonplaceholder/users.
-for modifying data or accessing private data you need to provide ApiKey header like below example: 
+for modifying data or accessing private data you need to provide ApiKey header like below example:
 
 ```js
 fetch('https://minibase.deno.dev/jsonplaceholder/users/2', {
@@ -43,9 +44,10 @@ fetch('https://minibase.deno.dev/jsonplaceholder/users/2', {
 }
 
 ```
-# routes
-https://minibase.deno.dev
 
+# routes
+
+https://minibase.deno.dev
 
 | method | route                        | description                                |
 | ------ | ---------------------------- | ------------------------------------------ |
@@ -59,13 +61,13 @@ https://minibase.deno.dev
 | PUT    | /api/:appName/:tableName/:id | update data with this id (any object)      |
 | DELETE | /api/:appName/:tableName/:id | remove single item from table              |
 
-
 # contribution
+
 contributions are welcome, you can create issue for bugs or new features
 
-# licence 
-MIT
+# licence
 
+MIT
 
 # create-svelte
 

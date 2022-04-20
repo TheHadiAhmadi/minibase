@@ -7,6 +7,8 @@
 	import Form from './Form.svelte';
 	import Page from './Page.svelte';
 
+	export let full = false;
+
 	let username;
 	let email;
 	let password;
@@ -14,7 +16,7 @@
 	const dispatch = createEventDispatcher();
 
 	async function submit() {
-		const response = await fetch('/api-signup', {
+		const response = await fetch('/signup.json', {
 			method: 'POST',
 			headers: {
 				accept: 'application/json',
@@ -33,14 +35,14 @@
 	}
 </script>
 
-<Page noPadding title="Sign Up">
+<Page {full} title="Sign Up">
 	<Form slot="body" on:submit={submit}>
 		<FormInput label="Username" type="text" bind:value={username} />
 		<FormInput label="Email" type="email" bind:value={email} />
 		<FormInput label="Password" type="password" bind:value={password} />
 	</Form>
-		<ButtonList slot="footer:actions">
-			<Button href="/login">alerady have account?</Button>
-			<Button size="sm" variant="primary" type="submit">Sign Up</Button>
-		</ButtonList>
+	<ButtonList slot="footer:actions">
+		<Button href="/login">alerady have account?</Button>
+		<Button on:click={submit} size="sm" variant="primary" type="submit">Sign Up</Button>
+	</ButtonList>
 </Page>

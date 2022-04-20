@@ -4,4 +4,3 @@
 
 <div>Profile Page</div>
 <div>Your email is: {$session.user.email}</div>
-	

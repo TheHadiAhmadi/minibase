@@ -1,5 +1,5 @@
 <script>
-	import { Button, CardFooter, FormInput } from '@svind/svelte';
+	import { Button, ButtonList, FormInput } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { Page } from '.';
 
@@ -17,15 +17,14 @@
 	}
 </script>
 
-<Page noPadding>
+<Page>
 	<svelte:fragment slot="body">
 		{#each rows as { name, type }}
 			<FormInput label={name} bind:value={value[name]} />
 		{/each}
-
 	</svelte:fragment>
-		<CardFooter slot="footer:actions">
-			<Button on:click={cancel} size="sm" variant="ghost">Cancel</Button>
-			<Button on:click={submit} size="sm">Submit</Button>
-		</CardFooter>
+	<ButtonList slot="footer:actions">
+		<Button on:click={cancel} size="sm">Cancel</Button>
+		<Button on:click={submit} size="sm" variant="primary">Submit</Button>
+	</ButtonList>
 </Page>

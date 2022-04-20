@@ -1,14 +1,9 @@
 <script>
-	import {
-		Button,
-		Divider,
-		Dropdown,
-		FormGroup,
-		Icon,
-		Input,
-		Label,
-		Menu
-	} from '@ubeac/svelte-components';
+	// Divider,
+	// Dropdown,
+	// Menu
+
+	import { Button, FormGroup, Icon, Input, Label } from '@svind/svelte';
 
 	export let rows;
 
@@ -26,12 +21,12 @@
 </script>
 
 <FormGroup>
-	<Label class="flex py-2 items-center justify-between">
-		Rows
-		<Button on:click={addRow} size="sm" circle>
+	<div class="flex py-2 items-center justify-between">
+		<Label for="">Rows</Label>
+		<Button variant="primary" on:click={addRow} size="xs" circle>
 			<Icon icon="fa-solid:plus" />
 		</Button>
-	</Label>
+	</div>
 	{#each rows as row}
 		<div class="flex items-center gap-2 mt-1">
 			<Button
@@ -40,10 +35,10 @@
 				variant="error"
 				on:click={() => (rows = rows.filter((r) => r !== row))}
 			>
-				<Icon variant="error" icon="fa-solid:times" />
+				<Icon icon="fa-solid:times" />
 			</Button>
-			<Input shadow size="sm" placeholder="field name..." bind:value={row.name} />
-			<Dropdown position="top" end>
+			<Input size="sm" placeholder="field name..." bind:value={row.name} />
+			<!-- <Dropdown position="top" end>
 				<Button size="sm" variant="ghost" class="w-24 border border-base-300" slot="title">
 					{row.type}
 				</Button>
@@ -54,7 +49,7 @@
 						</li>
 					{/each}
 				</Menu>
-			</Dropdown>
+			</Dropdown> -->
 		</div>
 	{/each}
 </FormGroup>

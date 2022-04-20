@@ -4,13 +4,15 @@
 	import Form from './Form.svelte';
 	import Page from './Page.svelte';
 
+	export let full = false;
+
 	let username;
 	let password;
 
 	const dispatch = createEventDispatcher();
 
 	async function submit() {
-		const response = await fetch('/api-login', {
+		const response = await fetch('/login.json', {
 			method: 'POST',
 			headers: {
 				accept: 'application/json',
@@ -29,19 +31,18 @@
 	}
 </script>
 
-<Page noPadding title="Login">
-	<CardBody>
-
-		<Form  on:submit={submit}>
+<Page {full} title="Login">
+	<Form on:submit={submit}>
+		<CardBody>
 			<FormInput label="Username" type="text" bind:value={username} />
 			<FormInput label="Password" type="password" bind:value={password} />
-		</Form>
-	</CardBody>
+		</CardBody>
 
-	<CardFooter position="end">
-		<ButtonList>
-			<Button href="/signup" size="sm">don't have account?</Button>
-			<Button variant="primary" size="sm" type="submit">log in</Button>
-		</ButtonList>
-	</CardFooter>
+		<CardFooter position="end">
+			<ButtonList>
+				<Button href="/signup" size="sm">don't have account?</Button>
+				<Button variant="primary" size="sm" type="submit">log in</Button>
+			</ButtonList>
+		</CardFooter>
+	</Form>
 </Page>

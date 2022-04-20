@@ -1,12 +1,16 @@
 <script>
 	import { goto } from '$app/navigation';
 
-	import { AppCard, Page } from '$lib/components';
+	import { AppCard, NewAppForm, Page } from '$lib/components';
 	import { get } from '$lib/api';
 	import { sidebar } from '$lib/stores';
 	import { Button, Icon } from '@svind/svelte';
 	import { onMount } from 'svelte';
+	import Modal from '@svind/svelte/components/modal/Modal.svelte';
+	import { showAlert } from '$lib/errors';
 
+	let newAppModalOpen = false;
+	let loading = false;
 	let apps = [];
 
 	// $title = 'apps';
@@ -21,13 +25,28 @@
 		};
 	}
 
+	function openNewAppModal() {
+		newAppModalOpen = true;
+	}
+
+	async function newAppAdded({ detail }) {
+		console.log('Detail: ', detail);
+
+		showAlert(detail.message, 'success');
+
+		await loadApps();
+		loading = false;
+
+		newAppModalOpen = false;
+	}
+
 	onMount(() => {
 		loadApps();
 	});
 </script>
 
-<Page title="Apps">
-	<Button size="sm" slot="actions" on:click={() => goto('/new')}>
+<Page full title="Apps">
+	<Button size="sm" slot="actions" on:click={openNewAppModal}>
 		<Icon icon="fa-solid:plus" />
 		Add App
 	</Button>
@@ -39,3 +58,7 @@
 		{/each}
 	</div>
 </Page>
+
+<Modal bind:open={newAppModalOpen}>
+	<NewAppForm bind:loading on:success={newAppAdded} on:error={console.log} />
+</Modal>

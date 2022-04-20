@@ -1,5 +1,5 @@
 <script>
-	import { Card, CardTitle, CardBody, Icon, Link } from '@ubeac/svelte-components';
+	import { Card, CardTitle, CardBody, Icon, Button } from '@svind/svelte';
 
 	let isPublic = false;
 	export { isPublic as public };
@@ -8,18 +8,20 @@
 	export let description;
 </script>
 
-<Link hover href="/apps/{name}">
-	<Card shadow class="min-w-60">
+<a class="hover:bg-gray-100" href="/{name}">
+	<Card class="min-w-60">
 		<CardBody>
-			<CardTitle class="mx-0 pb-0 flex items-center gap-2">
+			<div class="mx-0 pb-0 flex items-center gap-2">
 				{#if !isPublic}
-					<Icon class="text-lg" icon="fa-solid:lock" />
+					<Icon icon="fa-solid:lock" />
 				{:else}
-					<Icon class="text-lg" icon="fa-solid:database" />
+					<Icon icon="fa-solid:database" />
 				{/if}
-				{name}
-			</CardTitle>
+				<CardTitle>
+					{name}
+				</CardTitle>
+			</div>
 			{description}
 		</CardBody>
 	</Card>
-</Link>
+</a>

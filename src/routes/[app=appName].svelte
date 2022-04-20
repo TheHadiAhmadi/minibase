@@ -2,7 +2,7 @@
 	import { del, get, post, put } from '$lib/api';
 
 	export async function load({ params }) {
-		const result = await get(`/apps/${params.app}.json`);
+		const result = await get(`/${params.app}.json`);
 
 		return {
 			props: {
@@ -11,6 +11,9 @@
 				apiKeys: result.data?.apiKeys ?? [],
 				tables: result.data?.tables ?? [],
 				access: result.data?.access ?? false
+			},
+			stuff: {
+				apiKeys: result.data?.apiKeys ?? []
 			}
 		};
 	}
@@ -18,14 +21,16 @@
 
 <script>
 	import { page } from '$app/stores';
-	import { Button, Icon, Modal } from '@ubeac/svelte-components';
+	import { Button, Icon, Modal } from '@svind/svelte';
 	import { ApiKeyEditor, TableCard, Page, TableEditorForm } from '$lib/components';
 
 	import { onMount } from 'svelte';
 	import { invalidate } from '$app/navigation';
 	import Error from '$lib/components/Error.svelte';
+	import { ButtonList } from '@svind/svelte';
 
 	let model = {};
+	let editingTableName;
 	let app = $page.params.app;
 
 	export let status;
@@ -40,18 +45,19 @@
 	let apiKeysModalOpen = false;
 
 	async function loadTables() {
-		invalidate(`/apps/${app}`);
+		console.log('Load Tables');
+		tables = (await get(`/${app}.json`)).data.tables;
 	}
 
 	async function add({ detail }) {
 		console.log(detail);
-		await post(`/apps/${app}.json`, detail);
+		await post(`/${app}.json`, detail);
 		loadTables();
 		cancel();
 	}
 
 	async function update({ detail }) {
-		await put(`/apps/${app}/${detail.name}.json`, detail);
+		await put(`/${app}/${editingTableName}.json`, detail);
 		loadTables();
 		cancel();
 	}
@@ -68,10 +74,11 @@
 	function updateTable(table) {
 		model = table;
 		updateModalOpen = true;
+		editingTableName = table.name;
 	}
 
 	async function removeTable(table) {
-		await del(`/apps/${app}/${table.name}.json`);
+		await del(`/${app}/${table.name}.json`);
 		loadTables();
 	}
 	function addTable() {
@@ -91,18 +98,19 @@
 {#if status !== 200}
 	<Error {status} {message} />
 {:else}
-	<Page title="Tables">
-		<svelte:fragment slot="actions">
-			<Button class="mr-2 border border-base-300" variant="ghost" size="sm" on:click={openApiKeys}>
-				<Icon slot="prefix" class="mr-2" icon="fa-solid:key" />
+	<Page full title="Tables">
+		<ButtonList slot="actions">
+			<Button size="sm" on:click={openApiKeys}>
+				<Icon icon="fa-solid:key" />
 				Api Keys
 			</Button>
 
-			<Button size="sm" on:click={addTable}>
-				<Icon slot="prefix" class="mr-2" icon="fa-solid:plus" />
+			<Button variant="primary" size="sm" on:click={addTable}>
+				<Icon icon="fa-solid:plus" />
 				Add
 			</Button>
-		</svelte:fragment>
+		</ButtonList>
+
 		<svelte:fragment slot="body">
 			{#each tables as table}
 				<TableCard
@@ -117,11 +125,11 @@
 	</Page>
 {/if}
 
-<Modal class="p-0" bind:open={addModalOpen}>
+<Modal bind:open={addModalOpen}>
 	<TableEditorForm title="Add Table" on:submit={add} on:cancel={cancel} />
 </Modal>
 
-<Modal class="p-0" bind:open={updateModalOpen}>
+<Modal bind:open={updateModalOpen}>
 	<TableEditorForm
 		title="Edit Title"
 		bind:name={model.name}
@@ -132,6 +140,6 @@
 	/>
 </Modal>
 
-<Modal class="p-0" bind:open={apiKeysModalOpen}>
+<Modal bind:open={apiKeysModalOpen}>
 	<ApiKeyEditor {apiKeys} />
 </Modal>

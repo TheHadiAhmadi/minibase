@@ -1,5 +1,5 @@
 <script>
-	import { Button, CardActions, CardBody, Checkbox, FormInput } from '@ubeac/svelte-components';
+	import { Button, CardBody, Checkbox, FormInput, ButtonList } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 
 	import { Page } from '.';
@@ -24,17 +24,17 @@
 	}
 </script>
 
-<Page noPadding {title}>
+<Page {title}>
 	<CardBody>
 		<FormInput label="Table Name" bind:value={name} />
 		<div class="mt-4" />
-		<Checkbox class="-ml-0.5" bind:checked={isPublic}>Public</Checkbox>
+		<Checkbox bind:value={isPublic}>Public</Checkbox>
 		{#if rows}
 			<RowsEditor bind:rows />
 		{/if}
-		<CardActions>
-			<Button variant="ghost" on:click={cancel}>Cancel</Button>
-			<Button on:click={submit}>Submit</Button>
-		</CardActions>
 	</CardBody>
+	<ButtonList slot="footer:actions">
+		<Button on:click={cancel}>Cancel</Button>
+		<Button variant="primary" on:click={submit}>Submit</Button>
+	</ButtonList>
 </Page>

@@ -22,20 +22,22 @@ export async function handle({ event, resolve }) {
 
 	let body = {};
 
-	if (event.request.method !== 'GET' && event.request.method !== 'DELETE') body = await event.request.json();
+	if (event.request.method !== 'GET' && event.request.method !== 'DELETE')
+		body = await event.request.json();
 
 	event.locals.auth = authService;
 	event.locals.body = body;
 
 	try {
 		const response = await resolve(event);
-		
-		response.headers.set('Access-Control-Allow-Origin','*')
-		response.headers.set('Access-Control-Allow-Headers', 'Authorization, Content-Type, ApiKey')
-		response.headers.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT')
 
-		return response
+		response.headers.set('Access-Control-Allow-Origin', '*');
+		response.headers.set('Access-Control-Allow-Headers', 'Authorization, Content-Type, ApiKey');
+		response.headers.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+
+		return response;
 	} catch (err) {
+		console.log(err);
 		const response = {
 			status: err.status,
 			message: err.message

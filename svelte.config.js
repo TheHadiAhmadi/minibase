@@ -23,10 +23,9 @@ const config = {
 		}),
 		vite: {
 			plugins: [windicss()],
-			resolve: {
-				alias: {
-					$components: path.resolve('src/components')
-				}
+			test: {
+				globals: true,
+				environment: 'jsdom'
 			}
 		}
 	}

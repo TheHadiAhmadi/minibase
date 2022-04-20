@@ -3,7 +3,7 @@
 	import { baseUrl } from '$lib';
 	import { showAlert } from '$lib/errors';
 
-	import { Button, FormInput, Icon, Modal } from '@svind/svelte';
+	import { Button, Card, CardBody, Col, FormInput, Icon, Modal, Row } from '@svind/svelte';
 	import { Page, DataTable } from '$lib/components';
 
 	let api = Api('');
@@ -60,18 +60,15 @@
 
 	$: api = Api(apiKey);
 
-	let rows = [
-		{ name: 'test', type: 'string' },
-		{ name: 'another', type: 'number' }
-	];
+	let rows = [];
 
 	$: if (api && apiKey) load(apiKey);
 
 	async function load(apiKey) {
-		const res = await Api(apiKey).get(`/apps/${app}/${table}.json`);
+		const res = await Api(apiKey).get(`/${app}/${table}.json`);
 
 		console.log('inside load', res);
-		if (res.status === 200) {
+		if (res.status < 300) {
 			values = res.data.values;
 			rows = res.data.rows;
 		} else {
@@ -82,8 +79,9 @@
 	$: console.log({ rows, values });
 
 	async function create({ detail }) {
-		console.log('create', detail)
-		const res = await api.post(`/apps/${app}/${table}.json`, detail);
+		console.log('create', detail);
+		const res = await api.post(`/${app}/${table}.json`, detail);
+		load(apiKey);
 	}
 
 	async function update({ detail }) {
@@ -92,17 +90,16 @@
 	async function remove({ detail }) {
 		console.log('remove', detail);
 	}
+	function updateApiKey() {
+		apiKey = bindApiKey;
+		apiKeyModalOpen = false;
+	}
 </script>
 
-<Page title=" {app} / {table}">
+<Page full title=" {app} / {table}">
 	<svelte:fragment slot="actions">
-		<Button
-			variant="ghost"
-			class="border border-base-300"
-			on:click={() => (apiKeyModalOpen = true)}
-			size="sm"
-		>
-			<Icon class="mr-2" icon="fa-solid:key" />
+		<Button on:click={() => (apiKeyModalOpen = true)} size="sm">
+			<Icon icon="fa-solid:key" />
 			Api Key
 		</Button>
 	</svelte:fragment>
@@ -112,13 +109,19 @@
 </Page>
 
 <Modal bind:open={apiKeyModalOpen}>
-	<div class="flex items-end gap-2">
-		<FormInput placeholder="paste a valid ApiKey here..." label="Api Key" bind:value={bindApiKey} />
-		<Button
-			on:click={() => {
-				apiKeyModalOpen = false;
-				apiKey = bindApiKey;
-			}}>Ok</Button
-		>
-	</div>
+	<Card class="bg-light dark:bg-dark flex items-end gap-2">
+		<CardBody>
+			<Row>
+				<FormInput
+					col="10"
+					placeholder="paste a valid ApiKey here..."
+					label="Api Key"
+					bind:value={bindApiKey}
+				/>
+				<div class="col-2">
+					<Button block on:click={updateApiKey}>Ok</Button>
+				</div>
+			</Row>
+		</CardBody>
+	</Card>
 </Modal>

@@ -2,19 +2,22 @@
 	import { goto } from '$app/navigation';
 	import { session } from '$app/stores';
 
+	import { SignupForm } from '$lib/components';
 	import { showAlert } from '$lib/errors';
 
-	import { LoginForm } from '$lib/components';
-
-	export function updateSession(sess) {
+	function updateSession(sess) {
 		localStorage.setItem('mb-session', JSON.stringify(sess));
 		$session = sess;
 	}
 
-	function login({ detail }) {
+	function handleError({ detail }) {
+		showAlert(detail.message);
+	}
+
+	function signup({ detail }) {
 		updateSession(detail);
-		goto('/apps');
+		goto('/');
 	}
 </script>
 
-<LoginForm on:login={login} on:error={({ detail }) => showAlert(detail.message)} />
+<SignupForm full on:signup={signup} on:error={handleError} />

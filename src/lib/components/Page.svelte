@@ -1,29 +1,33 @@
 <script>
-	import { Card, CardFooter, CardBody, CardHeader } from '@svind/svelte';
+	import { Card, CardFooter, CardBody, CardHeader, CardTitle, Col } from '@svind/svelte';
 
-	export let center = false;
+	// export let center = false;
 
-	export let size = undefined;
+	// export let size = undefined;
 
-	export let noPadding = false;
+	// export let noPadding = false;
 
+	export let full = false;
 	export let title = undefined;
+
+	$: colOptions = full
+		? { col: 12 }
+		: {
+				col: 12,
+				sm: 8,
+				md: 6,
+				lg: 4
+		  };
 </script>
 
-<div
-	class="flex h-full flex-col"
-	class:p-2={!noPadding}
-	class:justify-center={center}
-	class:items-center={center}
->
-<div class={size ? `w-full max-w-${size}` : 'h-full'}>
-
-	<Card>
-		{#if title}
+<Col {...colOptions}>
+	<Card class="bg-white dark:bg-dark">
+		{#if title || $$slots['actions']}
 			<CardHeader>
 				<div class="flex items-center justify-between">
-
-					{title}
+					<CardTitle>
+						{title}
+					</CardTitle>
 					<div class="flex items-center justify-end">
 						<slot name="actions" />
 					</div>
@@ -41,6 +45,4 @@
 			</CardFooter>
 		{/if}
 	</Card>
-</div>
-
-</div>
+</Col>

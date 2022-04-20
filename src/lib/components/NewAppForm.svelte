@@ -1,13 +1,14 @@
 <script>
 	import { post } from '$lib/api';
 
-
-	import { Button, CardFooter, Checkbox, FormInput } from '@svind/svelte';
+	import { Button, CardFooter, Checkbox, FormInput, Modal } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 
 	import Form from './Form.svelte';
 
 	import Page from './Page.svelte';
+
+	export let loading = false;
 
 	let request = {};
 
@@ -15,6 +16,7 @@
 
 	async function onSubmit(e) {
 		console.log(request);
+		loading = true;
 		const result = await post('/apps.json', request);
 
 		if (result.status >= 400) {
@@ -46,14 +48,15 @@
 	}
 </script>
 
-<Page center size="sm" title="Create New App">
+<Page title="Create New App">
 	<Form slot="body" on:submit={onSubmit}>
 		<FormInput label="App Name" bind:value={request.name} />
 		<div class="text-sm text-gray-500">{nameFeedback}</div>
 		<FormInput label="Description" bind:value={request.description} />
 		<div class="h-2" />
-		<Checkbox bind:checked={request.public}>Public</Checkbox>
-
+		<Checkbox bind:value={request.public}>Public</Checkbox>
 	</Form>
-		<Button slot="footer:actions" variant="primary" type="submit" disabled={!valid} classd="w-full ml-auto mt-8">Create</Button>
+	<Button on:click={onSubmit} slot="footer:actions" variant="primary" disabled={!valid || loading}
+		>Create</Button
+	>
 </Page>

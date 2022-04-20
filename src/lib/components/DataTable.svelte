@@ -1,6 +1,6 @@
 <script>
-	import { Button, Icon} from '@svind/svelte'
-	import Modal from '@svind/svelte/components/modal/Modal.svelte'
+	import { Button, Icon } from '@svind/svelte';
+	import Modal from '@svind/svelte/components/modal/Modal.svelte';
 	import { Cell, Table, TableRow } from '@ubeac/svelte-components';
 	import { createEventDispatcher } from 'svelte';
 	import DataCell from './DataCell.svelte';
@@ -64,7 +64,7 @@
 </script>
 
 <Button on:click={addData} size="sm">
-	<Icon class="mr-2" icon="fa-solid:plus" />
+	<Icon icon="fa-solid:plus" />
 	Insert
 </Button>
 <Table>
@@ -80,10 +80,10 @@
 				<DataCell type={row.type} value={value[row.name]} />
 			{/each}
 			<Cell>
-				<Button size="sm" circle on:click={() => update(index)}>
+				<Button variant="info" size="sm" circle on:click={() => update(index)}>
 					<Icon icon="fa-solid:edit" />
 				</Button>
-				<Button size="sm" circle on:click={() => remove(index)}>
+				<Button variant="error" size="sm" circle on:click={() => remove(index)}>
 					<Icon icon="fa-solid:trash-alt" />
 				</Button>
 			</Cell>
@@ -91,8 +91,6 @@
 	{/each}
 </Table>
 
-{#if activeIndex >= 0}
-	<Modal class="p-0" bind:open={updateModalOpen}>
-		<RowEditor {rows} value={values[activeIndex]} on:submit={submit} on:cancel={cancel} />
-	</Modal>
-{/if}
+<Modal bind:open={updateModalOpen}>
+	<RowEditor {rows} value={values[activeIndex]} on:submit={submit} on:cancel={cancel} />
+</Modal>

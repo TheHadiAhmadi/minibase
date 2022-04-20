@@ -30,6 +30,7 @@ export async function post({ params, platform, locals }) {
 
 	const tableService = new TableService(db, auth, appName);
 
+	console.log(name, isPublic, rows);
 	const result = await tableService.addTable({ name, isPublic, rows });
 
 	return {
