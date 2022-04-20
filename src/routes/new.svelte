@@ -1,18 +1,18 @@
 <script>
 	import { goto } from '$app/navigation';
 
-	import { showAlert } from '$lib/errors';
+	import { showSuccess, showError } from '$lib/alerts';
 
 	import { NewAppForm } from '$lib/components';
 	import { Modal } from '@svind/svelte';
 
 	function handleError({ detail }) {
-		showAlert(detail.message, 'error');
+		showError(detail.message);
 	}
 
 	function handleSuccess({ detail }) {
 		console.log('detail: ', detail);
-		showAlert(detail.message, 'success');
+		showSuccess(detail.message);
 		goto('/');
 	}
 </script>

@@ -1,5 +1,5 @@
 import { browser } from '$app/env';
-import { baseUrl } from '$lib';
+import { baseUrl } from '$lib/helpers';
 
 function getToken() {
 	const session = browser && JSON.parse(localStorage.getItem('mb-session'));
@@ -9,6 +9,21 @@ function getToken() {
 	}
 	return null;
 }
+
+if(import.meta.vitest) {
+	describe('getToken', () => {
+		it('should return null or a string', () => {
+			const token = getToken()
+			if(token) {
+				expect(token).toBeTypeOf('string')
+				expect(token).toContain('Bearer ')
+			} else {
+				expect(token).toBeNull()
+			}
+		})
+	})
+}
+
 
 async function send(method, path, data) {
 	const opts: any = {

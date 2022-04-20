@@ -3,7 +3,7 @@
 	import { session } from '$app/stores';
 
 	import { SignupForm } from '$lib/components';
-	import { showAlert } from '$lib/errors';
+	import { showInfo, showError } from '$lib/alerts';
 
 	function updateSession(sess) {
 		localStorage.setItem('mb-session', JSON.stringify(sess));
@@ -11,10 +11,11 @@
 	}
 
 	function handleError({ detail }) {
-		showAlert(detail.message);
+		showError(detail.message);
 	}
-
+	
 	function signup({ detail }) {
+		showInfo("Welcome USER");
 		updateSession(detail);
 		goto('/');
 	}

@@ -16,10 +16,9 @@
 
 	import { AppCard, NewAppForm, Page } from '$lib/components';
 	import { get } from '$lib/api';
-	import { sidebar } from '$lib/stores';
 	import { Button, Icon } from '@svind/svelte';
 	import Modal from '@svind/svelte/components/modal/Modal.svelte';
-	import { showAlert } from '$lib/errors';
+	import { showSuccess } from '$lib/alerts';
 
 	let newAppModalOpen = false;
 	let loading = false;
@@ -31,10 +30,6 @@
 
 		console.log(res);
 		apps = res.apps ?? [];
-		$sidebar = {
-			title: 'apps',
-			items: apps.map((app) => ({ href: '/' + app.name, name: app.name }))
-		};
 	}
 
 	function openNewAppModal() {
@@ -44,7 +39,7 @@
 	async function newAppAdded({ detail }) {
 		console.log('Detail: ', detail);
 
-		showAlert(detail.message, 'success');
+		showSuccess(detail.message, 'success');
 
 		await loadApps();
 		loading = false;

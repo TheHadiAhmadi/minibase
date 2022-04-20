@@ -1,6 +1,8 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
-		"types": ["vitest/types"]
+		"target": "esnext",
+		"module": "esnext",
+		"types": ["vitest/types", "vitest/importMeta"]
 	}
 }

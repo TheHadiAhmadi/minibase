@@ -6,7 +6,7 @@ import {
 	errorNotFound,
 	errorNotImplemented,
 	errorResourceExists
-} from '../errors';
+} from './errors';
 
 export type User = {
 	id: string;

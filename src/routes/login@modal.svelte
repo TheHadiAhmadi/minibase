@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { session } from '$app/stores';
 
-	import { showAlert } from '$lib/errors';
+	import { showError } from '$lib/alerts';
 
 	import { LoginForm } from '$lib/components';
 
@@ -17,4 +17,4 @@
 	}
 </script>
 
-<LoginForm full on:login={login} on:error={({ detail }) => showAlert(detail.message)} />
+<LoginForm full on:login={login} on:error={({ detail }) => showError(detail.message)} />

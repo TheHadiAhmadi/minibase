@@ -10,3 +10,16 @@ export function generateApiKey() {
 	}).join('');
 	return result;
 }
+
+if(import.meta.vitest) {
+	const {describe, it, expect} = import.meta.vitest
+	describe("helpers", () => {
+
+		it('should generate 32 character random string', () => {
+			const key1 = generateApiKey()
+			const key2 = generateApiKey()
+			expect(key1).not.toBe(key2);
+			expect(key1.length).toBe(32)
+		})
+	})
+}

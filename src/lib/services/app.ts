@@ -4,7 +4,7 @@ import {
 	errorNotAuthorized,
 	errorNotFound,
 	errorResourceExists
-} from '$lib/errors';
+} from '$lib/services/errors';
 
 export default class AppService {
 	db = null;

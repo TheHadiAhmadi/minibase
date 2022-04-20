@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { baseUrl } from '$lib';
-	import { showAlert } from '$lib/errors';
+	import { showError } from '$lib/alerts';
 
 	import { Button, Card, CardBody, Col, FormInput, Icon, Modal, Row } from '@svind/svelte';
 	import { Page, DataTable } from '$lib/components';
@@ -72,7 +72,7 @@
 			values = res.data.values;
 			rows = res.data.rows;
 		} else {
-			showAlert(res.message);
+			showError(res.message);
 		}
 	}
 

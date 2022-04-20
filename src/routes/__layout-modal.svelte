@@ -1,7 +1,6 @@
 <script>
-	import { alert } from '$lib';
+	import { alerts } from '$lib';
 	import { Modal } from '@svind/svelte';
-	import { Card } from '@svind/svelte';
 
 	import { Alert } from '@ubeac/svelte-components';
 </script>
@@ -12,10 +11,10 @@
 		on:click|stopPropagation
 	>
 		<slot />
-		{#if $alert}
-			<Alert class="!flex-row" variant={$alert.variant} open>
-				{$alert.text}
+		{#each $alerts as alert}
+			<Alert class="!flex-row" variant={alert.type} open>
+				{alert.text}
 			</Alert>
-		{/if}
+		{/each}
 	</div>
 </Modal>

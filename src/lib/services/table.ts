@@ -1,4 +1,4 @@
-import { errorBadRequest, errorNotFound, errorResourceExists } from '$lib/errors';
+import { errorBadRequest, errorNotFound, errorResourceExists } from '$lib/services/errors';
 
 export default class TableService {
 	db = null;

@@ -1,4 +1,4 @@
-import { errorNotAuthorized, errorNotFound } from '$lib/errors';
+import { errorNotAuthorized, errorNotFound } from '$lib/services/errors';
 
 export default class DataService {
 	db = null;

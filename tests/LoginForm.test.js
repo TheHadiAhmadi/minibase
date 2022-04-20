@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/svelte';
-import Hello from '$lib/components/TableEditorForm.svelte';
+import Hello from '$lib/components/Error.svelte';
 
 describe('Hello.svelte', () => {
 	// TODO: @testing-library/svelte claims to add this automatically but it doesn't work without explicit afterEach

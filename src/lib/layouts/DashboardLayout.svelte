@@ -14,7 +14,7 @@
 		Modal
 	} from '@svind/svelte';
 
-	import { showAlert } from '$lib/errors';
+	import { showError } from '$lib/alerts';
 	import { LoginForm } from '$lib/components';
 
 	let signupOpen = false;
@@ -26,7 +26,7 @@
 	}
 
 	function handleError({ detail }) {
-		showAlert(detail.message);
+		showError(detail.message);
 	}
 
 	function signup({ detail }) {
