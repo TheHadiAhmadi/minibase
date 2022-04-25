@@ -66,7 +66,12 @@
 
 <Page {dark}>
 	<Header>
-		<NavBrand>Minibase</NavBrand>
+		<div class="navbar-brand items-center flex gap-3">
+			<Icon icon="fa:database" class="mr-2 text-2xl" />
+			<!-- Minibase -->
+			TODO
+		</div>
+
 		<div class="flex items-center">
 
 			<Button circle size="sm" on:click={toggleTheme}>
@@ -118,74 +123,8 @@
 	</PageWrapper>
 </Page>
 
-<!-- <script>
-	import { createEventDispatcher, onMount } from 'svelte';
 
-	import {
-		Breadcrumb,
-		BreadcrumbItem,
-		Dropdown,
-		Menu,
-		MenuItem,
-		MenuTitle,
-		Spinner
-	} from '@ubeac/svelte-components';
-	import { Avatar, Button, Icon } from '@svind/svelte';
-
-	import { default as Layout } from '@ubeac/svelte-components/layouts/Dashboard.svelte';
-	import { navigating } from '$app/stores';
-	import { title } from '$lib/stores';
-	import { goto } from '$app/navigation';
-
-	export let session;
-
-	let sidebarMode = 'open'; // open | close | mini
-	let navbarMode = 'wide'; // wide | tight
-	let navbarColor = 'neutral'; // base | neutral | primary
-	let sidebarColor = 'base'; // base | neutral | primary
-</script>
-
-<div class="h-screen overflow-hidden">
-	<Layout
-		themeButton={false}
-		title={$title}
-		{sidebarColor}
-		{sidebarMode}
-		{navbarMode}
-		{navbarColor}
-	>
-	<Breadcrumb slot="navbar-start">
-			<BreadcrumbItem href="/">
-				<Icon icon="fa:database" class="mr-2 text-2xl" />
-				Minibase
-			</BreadcrumbItem>
-		</Breadcrumb>
-	<svelte:fragment slot="navbar-end">
-	{#if session}
-		
-	{:else}
-		<Button
-			size="sm"
-			variant="neutral"
-			on:click={() => {
-				goto('/login');
-			}}
-		>
-			Log In
-		</Button>
-		<Button
-			size="sm"
-			variant="primary"
-			on:click={() => {
-				goto('/signup');
-			}}
-		>
-			Sign Up
-		</Button>
-	{/if}
-	</svelte:fragment>
-
-	<div class="w-full mx-auto p-2 container">
+<!-- 
 	{#if $navigating}
 		<div class="w-full h-full -mt-24 flex items-center justify-center">
 			<Spinner size="sm" />

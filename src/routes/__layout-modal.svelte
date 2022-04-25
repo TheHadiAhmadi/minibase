@@ -2,7 +2,6 @@
 	import { alerts } from '$lib';
 	import { Modal } from '@svind/svelte';
 
-	import { Alert } from '@ubeac/svelte-components';
 </script>
 
 <Modal static open>
@@ -12,9 +11,10 @@
 	>
 		<slot />
 		{#each $alerts as alert}
-			<Alert class="!flex-row" variant={alert.type} open>
+		TODO
+			<!-- <Alert class="!flex-row" variant={alert.type} open>
 				{alert.text}
-			</Alert>
+			</Alert> -->
 		{/each}
 	</div>
 </Modal>

@@ -1,7 +1,6 @@
 <script>
 	import { Button, Icon } from '@svind/svelte';
 	import Modal from '@svind/svelte/components/modal/Modal.svelte';
-	import { Cell, Table, TableRow } from '@ubeac/svelte-components';
 	import { createEventDispatcher } from 'svelte';
 	import DataCell from './DataCell.svelte';
 	import RowEditor from './RowEditor.svelte';
@@ -67,7 +66,8 @@
 	<Icon icon="fa-solid:plus" />
 	Insert
 </Button>
-<Table>
+<div>Table TODO</div>
+<!-- <Table>
 	<svelte:fragment slot="header">
 		{#each rows as row}
 			<Cell>{row.name}</Cell>
@@ -89,7 +89,7 @@
 			</Cell>
 		</TableRow>
 	{/each}
-</Table>
+</Table> -->
 
 <Modal bind:open={updateModalOpen}>
 	<RowEditor {rows} value={values[activeIndex]} on:submit={submit} on:cancel={cancel} />
