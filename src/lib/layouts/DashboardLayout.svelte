@@ -4,14 +4,18 @@
 	import {
 		Button,
 		ButtonList,
+		Dropdown,
 		Header,
+		Menu,
+		MenuItem,
+		MenuTitle,
 		NavBrand,
-		Nav,
 		PageWrapper,
 		Page,
 		PageBody,
 		Avatar,
-		Modal
+		Modal,
+		Icon
 	} from '@svind/svelte';
 
 	import { showError } from '$lib/alerts';
@@ -45,6 +49,11 @@
 	function openSignup() {
 		signupOpen = true;
 	}
+
+	let dark = false
+	function toggleTheme() {
+		dark = !dark;
+	}
 </script>
 
 <Modal bind:open={loginOpen}>
@@ -55,42 +64,52 @@
 	<SignupForm on:signup={signup} on:error={handleError} />
 </Modal>
 
-<Page dark>
-	<Header color="auto">
+<Page {dark}>
+	<Header>
 		<NavBrand>Minibase</NavBrand>
-		<Avatar>HA</Avatar>
-		<Nav>
+		<div class="flex items-center">
+
+			<Button circle size="sm" on:click={toggleTheme}>
+				{#if dark}
+				<Icon icon="fa-solid:sun" />
+				{:else}
+				<Icon icon="fa-solid:moon" />
+				{/if}
+
+			</Button>
+			
 			{#if $session}
-				<!-- <Dropdown end>
-				<Icon slot="title" name="la:bars" />
-				<Avatar size="sm" slot="title" class="shadow rounded-full hover:shadow-lg" src="/avatar.png" />
-				<Menu compact class="border border-base-300 bg-base-100 text-base-content" rounded>
-								<MenuTitle>{session.user?.username}</MenuTitle>
-								<MenuItem href="/profile">
-									<Icon slot="prefix" icon="la:user" />
-									Profile
-								</MenuItem>
-								<MenuItem href="/new">
-									<Icon slot="prefix" class="text-xl" icon="la:plus" />
-									New App
-								</MenuItem>
-								<MenuItem href="/settings">
-									<Icon slot="prefix" class="text-xl" icon="la:cog" />
-									Settings
-								</MenuItem>
-								<MenuItem href="/logout">
-									<Icon slot="prefix" class="text-xl" icon="la:sign-out-alt" />
-									Logout
-								</MenuItem>
-							</Menu>
-				</Dropdown> -->
-			{:else}
-				<ButtonList>
-					<Button on:click={openLogin}>Log In</Button>
-					<Button on:click={openSignup} variant="primary">Sign Up</Button>
-				</ButtonList>
-			{/if}
-		</Nav>
+			<Dropdown align="end">
+				<Avatar slot="target" size="sm" src="/avatar.png" />
+				<div class="bg-gray-200 dark:bg-gray-800">
+					<Menu>
+						<MenuTitle>{session.user?.username}</MenuTitle>
+						<MenuItem href="/profile">
+							<Icon slot="prefix" icon="la:user" />
+							Profile
+						</MenuItem>
+						<MenuItem href="/new">
+							<Icon slot="prefix" class="text-xl" icon="la:plus" />
+							New App
+						</MenuItem>
+						<MenuItem href="/settings">
+							<Icon slot="prefix" class="text-xl" icon="la:cog" />
+							Settings
+						</MenuItem>
+						<MenuItem href="/logout">
+							<Icon slot="prefix" class="text-xl" icon="la:sign-out-alt" />
+							Logout
+						</MenuItem>
+					</Menu>
+				</div>
+			</Dropdown>
+		{:else}
+			<ButtonList>
+				<Button on:click={openLogin}>Log In</Button>
+				<Button on:click={openSignup} variant="primary">Sign Up</Button>
+			</ButtonList>
+		{/if}
+	</div>
 	</Header>
 	<PageWrapper>
 		<PageBody>

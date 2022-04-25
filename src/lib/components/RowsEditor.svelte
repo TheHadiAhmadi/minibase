@@ -3,7 +3,7 @@
 	// Dropdown,
 	// Menu
 
-	import { Button, FormGroup, Icon, Input, Label } from '@svind/svelte';
+	import { Button, FormGroup, Dropdown, Menu, Icon, Input, Label } from '@svind/svelte';
 
 	export let rows;
 
@@ -38,18 +38,19 @@
 				<Icon icon="fa-solid:times" />
 			</Button>
 			<Input size="sm" placeholder="field name..." bind:value={row.name} />
-			<!-- <Dropdown position="top" end>
-				<Button size="sm" variant="ghost" class="w-24 border border-base-300" slot="title">
+			<Dropdown position="top" align="end">
+				<Button size="sm" variant="ghost" class="w-24 border border-base-300" slot="target">
 					{row.type}
 				</Button>
-				<Menu shadow class="bg-base-200 border border-base-300">
-					{#each rowTypes as type}
-						<li on:click={() => (row.type = type)}>
-							<a on:click|preventDefault href="/" class="!py-1">{type}</a>
-						</li>
-					{/each}
-				</Menu>
-			</Dropdown> -->
+				<div class="bg-gray-200 bg-gray-800 border border-gray-300">
+
+					<Menu>
+						{#each rowTypes as type}
+							<li class="menu-item" on:click={() => (row.type = type)}>{type}</li>
+						{/each}
+					</Menu>
+				</div>
+			</Dropdown>
 		</div>
 	{/each}
 </FormGroup>
