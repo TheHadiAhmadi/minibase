@@ -1,4 +1,4 @@
-import handler from './build/handler.js';
+import handler from './build/hanwdler.js';
 import platform from './platform.ts';
 
 const port = Deno.env.get('PORT') ?? 3000;
