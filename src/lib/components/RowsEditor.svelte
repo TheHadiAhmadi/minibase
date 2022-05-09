@@ -38,18 +38,15 @@
 				<Icon icon="fa-solid:times" />
 			</Button>
 			<Input size="sm" placeholder="field name..." bind:value={row.name} />
-			<Dropdown position="top" align="end">
+			<Dropdown position="top" align="end" autoClose>
 				<Button size="sm" variant="ghost" class="w-24 border border-base-300" slot="target">
 					{row.type}
 				</Button>
-				<div class="bg-gray-200 bg-gray-800 border border-gray-300">
-
-					<Menu>
-						{#each rowTypes as type}
-							<li class="menu-item" on:click={() => (row.type = type)}>{type}</li>
-						{/each}
-					</Menu>
-				</div>
+				<Menu>
+					{#each rowTypes as type}
+						<li class="menu-item" on:click={() => (row.type = type)}>{type}</li>
+					{/each}
+				</Menu>
 			</Dropdown>
 		</div>
 	{/each}

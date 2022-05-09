@@ -1,43 +1,51 @@
 import { browser } from '$app/env';
+import { parse } from 'cookie';
 import { AuthService } from '$lib/services';
 import platform from '$lib/platform.js';
-
-function getToken(authorization) {
-	if (!authorization) {
-		return null;
-	}
-	return authorization.split(' ')[1];
-}
+import type { User } from '$lib/services/auth';
 
 export async function handle({ event, resolve }) {
 	if (typeof event.platform === 'undefined') {
 		event.platform = platform;
 	}
 
-	const authorization = event.request.headers.get('authorization');
-	const token = getToken(authorization);
+	const cookies = parse(event.request.headers.get('cookie') || '');
+
+	const token = cookies.token ?? null;
+	
 	const secret = event.platform.secret || 'dev-secret';
-
+	
 	const authService = new AuthService(event.platform.db, token, secret);
+	try {
+		const user = await authService.getUser();
 
-	let body = {};
+		if(user) {
 
-	if (event.request.method !== 'GET' && event.request.method !== 'DELETE')
-		body = await event.request.json();
+			event.locals.user = {
+				username: user.username,
+				email: user.email
+			}
+		}
+	} catch(err) {
+		// console.log("ERROR", err)
+	}
+
+
+	if (event.request.method !== 'GET' && event.request.method !== 'DELETE') {
+		event.locals.body = await event.request.json();
+	}
 
 	event.locals.auth = authService;
-	event.locals.body = body;
 
 	try {
-		const response = await resolve(event);
+		const response = await resolve(event, { ssr: () => false });
 
 		response.headers.set('Access-Control-Allow-Origin', '*');
-		response.headers.set('Access-Control-Allow-Headers', 'Authorization, Content-Type, ApiKey');
+		response.headers.set('Access-Control-Allow-Headers', 'Content-Type, ApiKey');
 		response.headers.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
 
 		return response;
 	} catch (err) {
-		console.log(err);
 		const response = {
 			status: err.status,
 			message: err.message
@@ -47,4 +55,10 @@ export async function handle({ event, resolve }) {
 			status: response.status
 		});
 	}
+}
+
+export async function getSession(event) {
+	const { user } = event.locals;
+
+	return { user };
 }

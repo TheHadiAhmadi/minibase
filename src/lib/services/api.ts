@@ -1,5 +1,5 @@
 // import { browser } from '$app/env';
-import { baseUrl } from '$lib';
+import { baseUrl } from '$lib/helpers';
 
 // function getToken() {
 // 	const session = browser && JSON.parse(localStorage.getItem('mb-session'));
@@ -27,11 +27,10 @@ export default class ApiService {
 				Accept: 'application/json'
 			}
 		};
-		console.log('send', this.apiKey, this.baseUrl, this.token, method, path, data);
 
-		if (this.token) {
-			opts.headers.Authorization = this.token;
-		}
+		// if (this.token) {
+		// 	opts.headers.Authorization = this.token;
+		// }
 
 		if (this.apiKey) {
 			opts.headers.ApiKey = this.apiKey;

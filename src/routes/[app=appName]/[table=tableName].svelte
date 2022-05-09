@@ -1,17 +1,39 @@
+<script context="module">
+	export async function load({ fetch, stuff, params }) {
+		const result = await fetch(`/${params.app}/${params.table}.json`, {
+			headers: {
+				apiKey: stuff.apiKey ?? ''
+			}
+		}).then((res) => res.json());
+
+		const props = {
+			apiKey: stuff?.apiKey ?? '',
+			rows: result.rows,
+			values: result.values
+		};
+
+		return {
+			props
+		};
+	}
+</script>
+
 <script>
 	import { page } from '$app/stores';
-	import { baseUrl } from '$lib';
+	import { baseUrl } from '$lib/helpers';
 	import { showError } from '$lib/alerts';
 
 	import { Button, Card, CardBody, Col, FormInput, Icon, Modal, Row } from '@svind/svelte';
 	import { Page, DataTable } from '$lib/components';
+import { invalidate } from '$app/navigation';
 
-	let api = Api('');
+	export let rows = [];
+	export let values = [];
 
 	function Api(apiKey) {
 		return {
 			get: async (url) => {
-				return await fetch(baseUrl + url, {
+				return await fetch(baseUrl + url + '.json', {
 					headers: {
 						'Content-Type': 'application/json',
 						apiKey
@@ -19,7 +41,7 @@
 				}).then((res) => res.json());
 			},
 			post: async (url, data) => {
-				return await fetch(baseUrl + url, {
+				return await fetch(baseUrl + url + '.json', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -29,7 +51,7 @@
 				}).then((res) => res.json());
 			},
 			put: async (url, data) => {
-				return await fetch(baseUrl + url, {
+				return await fetch(baseUrl + url + '.json', {
 					method: 'PUT',
 					headers: {
 						'Content-Type': 'application/json',
@@ -39,7 +61,7 @@
 				}).then((res) => res.json());
 			},
 			del: async (url, data) => {
-				return await fetch(baseUrl + url, {
+				return await fetch(baseUrl + url + '.json', {
 					method: 'DELETE',
 					headers: {
 						'Content-Type': 'application/json',
@@ -50,38 +72,20 @@
 		};
 	}
 
+	let apiKeyModalOpen = false;
+	
+	let bindApiKey = $page.stuff.apiKey ?? '';
+
 	$: app = $page.params.app;
 	$: table = $page.params.table;
-
-	let apiKeyModalOpen = true;
-	let apiKey = '';
-	let bindApiKey = '';
-	let values = [];
-
+	$: apiKey = $page.stuff.apiKey ?? '';
 	$: api = Api(apiKey);
-
-	let rows = [];
-
-	$: if (api && apiKey) load(apiKey);
-
-	async function load(apiKey) {
-		const res = await Api(apiKey).get(`/${app}/${table}.json`);
-
-		console.log('inside load', res);
-		if (res.status < 300) {
-			values = res.data.values;
-			rows = res.data.rows;
-		} else {
-			showError(res.message);
-		}
-	}
-
-	$: console.log({ rows, values });
 
 	async function create({ detail }) {
 		console.log('create', detail);
 		const res = await api.post(`/${app}/${table}.json`, detail);
-		load(apiKey);
+		invalidate(`/{app}/${table}.json`)
+		// load(apiKey);
 	}
 
 	async function update({ detail }) {
@@ -90,11 +94,13 @@
 	async function remove({ detail }) {
 		console.log('remove', detail);
 	}
+
 	function updateApiKey() {
 		apiKey = bindApiKey;
 		apiKeyModalOpen = false;
 	}
 </script>
+
 
 <Page full title=" {app} / {table}">
 	<svelte:fragment slot="actions">
@@ -109,7 +115,7 @@
 </Page>
 
 <Modal bind:open={apiKeyModalOpen}>
-	<Card class="bg-light dark:bg-dark flex items-end gap-2">
+	<Card class=" flex items-end gap-2">
 		<CardBody>
 			<Row>
 				<FormInput

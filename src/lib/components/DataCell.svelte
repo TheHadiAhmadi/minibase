@@ -3,7 +3,10 @@
 	export let type = 'string';
 </script>
 
-TODO
+<!-- TODO -->
+<td>
+	{value}
+</td>
 <!-- <Cell> -->
-	<!-- {value} -->
+<!-- {value} -->
 <!-- </Cell> -->

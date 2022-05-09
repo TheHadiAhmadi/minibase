@@ -1,23 +1,30 @@
+<script context="module">
+	/** @type {import('./').Load} */
+	export async function load({ session }) {
+		// console.log("__LAYOUT LOAD: ", {session})
+		return {
+			props: {
+				user: session?.user ?? null
+			}
+		};
+	}
+</script>
+
 <script>
 	import '@svind/css/dist/index.css';
 
 	import 'virtual:windi.css';
 	import '../app.css';
+	import '../app.d.ts';
 
-	import { onMount } from 'svelte';
-
-	import { session } from '$app/stores';
 	import { DashboardLayout } from '$lib/layouts';
 	import { AlertBox } from '$lib/components';
 
-	onMount(() => {
-		$session = JSON.parse(localStorage.getItem('mb-session'));
-	});
+	export let user;
+
 </script>
 
-<!-- <div class="h-screen overflow-hidden"> -->
 <AlertBox />
-<DashboardLayout>
+<DashboardLayout {user}>
 	<slot />
 </DashboardLayout>
-<!-- </div> -->

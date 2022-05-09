@@ -8,7 +8,7 @@
 	export let access = false;
 </script>
 
-<Card>
+<Card class="mb-2 hover:bg-[#efefef] dark:hover:bg-[#404040]">
 	<div class="flex flex-row items-center pr-4">
 		<a sveltekit:prefetch class="p-4 flex-1" href="./{app}/{table.name}">{table.name}</a>
 		<div class="flex space-x-1">

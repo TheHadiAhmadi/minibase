@@ -1,19 +1,15 @@
 <script context="module">
-	import { del, get, post, put } from '$lib/api';
-
-	export async function load({ params }) {
-		const result = await get(`/${params.app}.json`);
+	export async function load({ fetch, params, props }) {
+		const result = await fetch(`/${params.app}.json`).then(res => res.json())
 
 		return {
 			props: {
-				status: result.status ?? 200,
-				message: result.message ?? 'ok',
-				apiKeys: result.data?.apiKeys ?? [],
-				tables: result.data?.tables ?? [],
-				access: result.data?.access ?? false
+				tables: result.tables,
+				apiKeys: result.apiKeys,
+				access: result.access,
 			},
 			stuff: {
-				apiKeys: result.data?.apiKeys ?? []
+				apiKeys: result.apiKeys ?? []
 			}
 		};
 	}
@@ -23,34 +19,33 @@
 	import { page } from '$app/stores';
 	import { Button, Icon, Modal } from '@svind/svelte';
 	import { ApiKeyEditor, TableCard, Page, TableEditorForm } from '$lib/components';
+	import { del, get, post, put } from '$lib/api';
 
 	import { onMount } from 'svelte';
-	import { invalidate } from '$app/navigation';
 	import Error from '$lib/components/Error.svelte';
 	import { ButtonList } from '@svind/svelte';
+	import { invalidate } from '$app/navigation';
+
+	export let tables = [];
+	export let apiKeys = [];
+	export let access = true;
+
+	let status = 200;
+	let message;
 
 	let model = {};
 	let editingTableName;
 	let app = $page.params.app;
-
-	export let status;
-	export let message;
-
-	export let access = true;
-	export let tables = [];
-	export let apiKeys = [];
 
 	let updateModalOpen = false;
 	let addModalOpen = false;
 	let apiKeysModalOpen = false;
 
 	async function loadTables() {
-		console.log('Load Tables');
-		tables = (await get(`/${app}.json`)).data.tables;
+		invalidate(`/${app}.json`)
 	}
 
 	async function add({ detail }) {
-		console.log(detail);
 		await post(`/${app}.json`, detail);
 		loadTables();
 		cancel();
@@ -81,6 +76,7 @@
 		await del(`/${app}/${table.name}.json`);
 		loadTables();
 	}
+
 	function addTable() {
 		model = {
 			name: '',
@@ -89,10 +85,6 @@
 		};
 		addModalOpen = true;
 	}
-
-	onMount(() => {
-		loadTables();
-	});
 </script>
 
 {#if status !== 200}

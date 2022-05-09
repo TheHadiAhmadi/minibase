@@ -1,4 +1,4 @@
-import { generateApiKey } from '$lib';
+import { generateApiKey } from '$lib/helpers';
 import {
 	errorBadRequest,
 	errorNotAuthorized,

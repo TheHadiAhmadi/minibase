@@ -6,13 +6,7 @@
 
 	import { LoginForm } from '$lib/components';
 
-	export function updateSession(sess) {
-		localStorage.setItem('mb-session', JSON.stringify(sess));
-		$session = sess;
-	}
-
 	function login({ detail }) {
-		updateSession(detail);
 		goto('/');
 	}
 </script>

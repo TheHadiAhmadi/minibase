@@ -9,7 +9,11 @@
 
 <div class="absolute bottom-2 z-50 right-2 left-2 md:left-auto md:w-1/2">
 	{#each $alerts as alert}
-	<div>TODO</div>
+		{JSON.stringify(alert)}
+		<div class="m-4">
+			{alert.text}
+		</div>
+		<div>TODO</div>
 		<!-- <Alert class="!flex-row" variant={alert.type} open>
 			{alert.text}
 		</Alert> -->

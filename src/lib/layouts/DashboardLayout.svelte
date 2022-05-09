@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import SignupForm from '$lib/components/SignupForm.svelte';
 	import { session } from '$app/stores';
 	import {
@@ -20,109 +20,81 @@
 
 	import { showError } from '$lib/alerts';
 	import { LoginForm } from '$lib/components';
+	import { onMount } from 'svelte';
+	import { invalidate } from '$app/navigation';
+	import AvatarDropdown from '$lib/components/AvatarDropdown.svelte';
+	import ThemeButton from '$lib/components/ThemeButton.svelte';
 
-	let signupOpen = false;
-	let loginOpen = false;
+	let modalOpen = false;
+	let modalMode: 'signup' | 'login' = 'signup';
 
-	export function updateSession(sess) {
-		localStorage.setItem('mb-session', JSON.stringify(sess));
-		$session = sess;
-	}
+	export let user = null;
+	export let token = '';
 
 	function handleError({ detail }) {
 		showError(detail.message);
 	}
 
 	function signup({ detail }) {
-		updateSession(detail);
-		signupOpen = false;
+		invalidate('/');
+		modalOpen = false;
 	}
 	function login({ detail }) {
-		updateSession(detail);
-		loginOpen = false;
+		modalOpen = false;
 	}
 
 	function openLogin() {
-		loginOpen = true;
+		modalMode = 'login';
+		modalOpen = true;
 	}
 
 	function openSignup() {
-		signupOpen = true;
+		modalMode = 'signup';
+		modalOpen = true;
 	}
 
-	let dark = false
+	let dark = false;
 	function toggleTheme() {
 		dark = !dark;
 	}
 </script>
 
-<Modal bind:open={loginOpen}>
-	<LoginForm on:login={login} on:error={handleError} />
-</Modal>
-
-<Modal bind:open={signupOpen}>
-	<SignupForm on:signup={signup} on:error={handleError} />
+<Modal bind:open={modalOpen}>
+	{#if modalMode === 'login'}
+		<LoginForm on:login={login} on:change={() => (modalMode = 'signup')} on:error={handleError} />
+	{:else}
+		<SignupForm on:signup={signup} on:change={() => (modalMode = 'login')} on:error={handleError} />
+	{/if}
 </Modal>
 
 <Page {dark}>
 	<Header>
 		<div class="navbar-brand items-center flex gap-3">
 			<Icon icon="fa:database" class="mr-2 text-2xl" />
-			<!-- Minibase -->
-			TODO
+			Minibase
+			<!-- TODO -->
 		</div>
 
-		<div class="flex items-center">
-
-			<Button circle size="sm" on:click={toggleTheme}>
-				{#if dark}
-				<Icon icon="fa-solid:sun" />
-				{:else}
-				<Icon icon="fa-solid:moon" />
-				{/if}
-
-			</Button>
-			
-			{#if $session}
-			<Dropdown align="end">
-				<Avatar slot="target" size="sm" src="/avatar.png" />
-				<div class="bg-gray-200 dark:bg-gray-800">
-					<Menu>
-						<MenuTitle>{session.user?.username}</MenuTitle>
-						<MenuItem href="/profile">
-							<Icon slot="prefix" icon="la:user" />
-							Profile
-						</MenuItem>
-						<MenuItem href="/new">
-							<Icon slot="prefix" class="text-xl" icon="la:plus" />
-							New App
-						</MenuItem>
-						<MenuItem href="/settings">
-							<Icon slot="prefix" class="text-xl" icon="la:cog" />
-							Settings
-						</MenuItem>
-						<MenuItem href="/logout">
-							<Icon slot="prefix" class="text-xl" icon="la:sign-out-alt" />
-							Logout
-						</MenuItem>
-					</Menu>
-				</div>
-			</Dropdown>
+		{#if user}
+			<div class="flex gap-2">
+				<ThemeButton bind:dark />
+				<AvatarDropdown {user} />
+			</div>
 		{:else}
 			<ButtonList>
 				<Button on:click={openLogin}>Log In</Button>
 				<Button on:click={openSignup} variant="primary">Sign Up</Button>
 			</ButtonList>
 		{/if}
-	</div>
 	</Header>
-	<PageWrapper>
-		<PageBody>
-			<slot />
-		</PageBody>
-	</PageWrapper>
+	<div class="bg-base	h-full">
+		<PageWrapper>
+			<PageBody>
+				<slot />
+			</PageBody>
+		</PageWrapper>
+	</div>
 </Page>
-
 
 <!-- 
 	{#if $navigating}

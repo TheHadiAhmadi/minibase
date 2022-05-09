@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { session } from '$app/stores';
+
 	import { Button, ButtonList, Card, CardFooter, CardBody, FormInput } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Form from './Form.svelte';
@@ -26,6 +28,13 @@
 		if (response.status >= 400) {
 			dispatch('error', res);
 		} else {
+			$session = {
+				user: {
+					username: res.user.username,
+					email: res.user.email
+				}
+			};
+
 			dispatch('login', res);
 		}
 	}

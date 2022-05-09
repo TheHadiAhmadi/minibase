@@ -66,7 +66,37 @@
 	<Icon icon="fa-solid:plus" />
 	Insert
 </Button>
-<div>Table TODO</div>
+<!-- <div>Table TODO</div> -->
+<table class="w-full">
+	<thead>
+
+		<tr>
+		{#each rows as row}
+			<th class="text-left px-4">{row.name}</th>
+			{/each}
+			<th class="text-left px-4 max-w-4">Actions</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		{#each values as value, index}
+		<tr class="border-b py-1 border-gray-300 dark:border-[#505050]">
+			{#each rows as row}
+				<DataCell type={row.type} value={value[row.name]} />
+			{/each}
+		<td class="max-w-4 flex py-2 gap-2">
+			<Button variant="info" size="xs" square on:click={() => update(index)}>
+				<Icon icon="fa-solid:edit" />
+			</Button>
+			<Button variant="error" size="xs" square on:click={() => remove(index)}>
+				<Icon icon="fa-solid:trash-alt" />
+			</Button>
+		</td>
+		</tr>
+		{/each}
+
+	</tbody>
+</table>
 <!-- <Table>
 	<svelte:fragment slot="header">
 		{#each rows as row}
@@ -76,21 +106,13 @@
 	</svelte:fragment>
 	{#each values as value, index}
 		<TableRow>
-			{#each rows as row}
-				<DataCell type={row.type} value={value[row.name]} />
-			{/each}
-			<Cell>
-				<Button variant="info" size="sm" circle on:click={() => update(index)}>
-					<Icon icon="fa-solid:edit" />
-				</Button>
-				<Button variant="error" size="sm" circle on:click={() => remove(index)}>
-					<Icon icon="fa-solid:trash-alt" />
-				</Button>
-			</Cell>
+			
 		</TableRow>
 	{/each}
 </Table> -->
 
 <Modal bind:open={updateModalOpen}>
-	<RowEditor {rows} value={values[activeIndex]} on:submit={submit} on:cancel={cancel} />
+	{#if values[activeIndex]}
+		<RowEditor {rows} value={values[activeIndex]} on:submit={submit} on:cancel={cancel} />
+	{/if}
 </Modal>

@@ -7,6 +7,11 @@ export async function post({ locals }) {
 
 	return {
 		status: 201,
-		body: result
+		body: result,
+		headers: {
+			'set-cookie': [
+				`token=${result.access_token};Path=/; HttpOnly;`,
+			],
+		}
 	};
 }

@@ -10,20 +10,19 @@ function getToken() {
 	return null;
 }
 
-if(import.meta.vitest) {
+if (import.meta.vitest) {
 	describe('getToken', () => {
 		it('should return null or a string', () => {
-			const token = getToken()
-			if(token) {
-				expect(token).toBeTypeOf('string')
-				expect(token).toContain('Bearer ')
+			const token = getToken();
+			if (token) {
+				expect(token).toBeTypeOf('string');
+				expect(token).toContain('Bearer ');
 			} else {
-				expect(token).toBeNull()
+				expect(token).toBeNull();
 			}
-		})
-	})
+		});
+	});
 }
-
 
 async function send(method, path, data) {
 	const opts: any = {
@@ -33,14 +32,9 @@ async function send(method, path, data) {
 		}
 	};
 
-	const token = getToken();
-
-	if (token) {
-		opts.headers.Authorization = token;
-	}
-
 	if (['POST', 'PUT', 'DELETE'].includes(method)) {
 		opts.method = method;
+		opts.body = {}; // default body for non-get methods
 	}
 
 	if (data) {

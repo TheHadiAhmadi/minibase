@@ -13,11 +13,10 @@ export async function get({ platform, params, locals }) {
 	return {
 		status: 200,
 		body: {
-			data: {
-				tables: tables,
-				apiKeys: apiKeys,
-				access: apiKeys?.length > 0
-			}
+			status: 200,
+			tables: tables,
+			apiKeys: apiKeys,
+			access: apiKeys?.length > 0
 		}
 	};
 }
@@ -30,7 +29,6 @@ export async function post({ params, platform, locals }) {
 
 	const tableService = new TableService(db, auth, appName);
 
-	console.log(name, isPublic, rows);
 	const result = await tableService.addTable({ name, isPublic, rows });
 
 	return {

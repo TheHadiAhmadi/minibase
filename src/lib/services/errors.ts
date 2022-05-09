@@ -1,4 +1,3 @@
-
 export function createError(status = 500, message = 'Internal Server Error') {
 	return {
 		status,
@@ -36,7 +35,7 @@ export function errorNotImplemented(message = 'This functionality is not impleme
 	return createError(600, message);
 }
 
-export function errorJWT(err = {name: '', message: 'JWT Error'}) {
+export function errorJWT(err = { name: '', message: 'JWT Error' }) {
 	if (err.name === 'TokenExpiredError') {
 		return errorNotAuthorized('Token is expired, please login again');
 	}

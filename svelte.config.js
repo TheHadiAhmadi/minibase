@@ -26,7 +26,7 @@ const config = {
 			test: {
 				globals: true,
 				environment: 'jsdom',
-				includeSource:  ['src/**/*.{js,ts,svelte}']
+				includeSource: ['src/**/*.{js,ts,svelte}']
 			}
 		}
 	}

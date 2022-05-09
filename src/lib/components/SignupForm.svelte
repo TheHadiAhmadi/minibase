@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+import { session } from '$app/stores';
 
 	import { Button, ButtonList, CardFooter, FormInput } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
@@ -26,10 +27,20 @@
 		});
 
 		const res = await response.json();
+		console.log({res})
+
+		
+		
 
 		if (response.status >= 400) {
 			dispatch('error', res);
 		} else {
+			$session = {
+			user: {
+				username: res.user.username,
+				email: res.user.email,
+			}
+		}
 			dispatch('signup', res);
 		}
 	}
@@ -42,7 +53,7 @@
 		<FormInput label="Password" type="password" bind:value={password} />
 	</Form>
 	<ButtonList slot="footer:actions">
-		<Button href="/login">alerady have account?</Button>
+		<Button href="/login" size="sm">alerady have account?</Button>
 		<Button on:click={submit} size="sm" variant="primary" type="submit">Sign Up</Button>
 	</ButtonList>
 </Page>

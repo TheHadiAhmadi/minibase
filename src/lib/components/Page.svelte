@@ -21,10 +21,10 @@
 </script>
 
 <Col {...colOptions}>
-	<Card class="bg-white dark:bg-dark">
+	<Card class="bg-base">
 		{#if title || $$slots['actions']}
 			<CardHeader>
-				<div class="flex items-center justify-between">
+				<div class="w-full flex items-center justify-between">
 					<CardTitle>
 						{title}
 					</CardTitle>

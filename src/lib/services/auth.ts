@@ -27,8 +27,8 @@ export function uuid() {
 
 export default class AuthService {
 	db = null;
-	token = null;
-	secret = null;
+	token: string = null;
+	secret: string = null;
 	constructor(db, token, secret) {
 		this.db = db;
 		this.token = token;
@@ -39,22 +39,23 @@ export default class AuthService {
 		try {
 			return jwt.sign({ user }, this.secret, { expiresIn: '60m' });
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 			return;
 		}
 	}
 
-	async getUser() {
+	async getUser() : Promise<User> {
 		try {
+			if(!this.token) return null
 			const payload = await jwt.verify(this.token, this.secret);
 
 			if (payload.user) return payload.user;
-			console.log(payload);
+			// console.log(payload);
 
 			if (payload)
 				return {
-					username: payload.username,
 					id: payload.id,
+					username: payload.username,
 					email: payload.email
 				};
 			return null;

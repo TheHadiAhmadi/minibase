@@ -15,9 +15,8 @@
 	const dispatch = createEventDispatcher();
 
 	async function onSubmit(e) {
-		console.log(request);
 		loading = true;
-		const result = await post('/apps.json', request);
+		const result = await post('/.json', request);
 
 		if (result.status >= 400) {
 			dispatch('error', result);

@@ -35,7 +35,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@svind/svelte": "^0.0.16",
+		"@svind/svelte": "^0.0.18",
+		"cookie": "^0.5.0",
 		"jsonwebtoken": "^8.5.1",
 		"uuid": "^8.3.2",
 		"windicss": "^3.5.1"
