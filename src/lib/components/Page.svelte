@@ -1,12 +1,6 @@
 <script>
 	import { Card, CardFooter, CardBody, CardHeader, CardTitle, Col } from '@svind/svelte';
 
-	// export let center = false;
-
-	// export let size = undefined;
-
-	// export let noPadding = false;
-
 	export let full = false;
 	export let title = undefined;
 

@@ -9,9 +9,10 @@
 </script>
 
 <a href="/{name}">
-	<Card class="min-w-60 hover:bg-[#efefef] dark:hover:bg-[#404040]">
+	<!-- TODO: Card transition and hoverable + shadow -->
+	<Card class="min-w-60 transition hover:bg-[#efefef] dark:hover:bg-[#404040]">
 		<CardBody>
-			<div class="mx-0 pb-0 flex items-center gap-2">
+			<div class=" text-lg flex items-center gap-3">
 				{#if !isPublic}
 					<Icon icon="fa-solid:lock" />
 				{:else}
@@ -21,7 +22,9 @@
 					{name}
 				</CardTitle>
 			</div>
-			{description}
+			<div class="text-muted pt-2">
+				{description}
+			</div>
 		</CardBody>
 	</Card>
 </a>

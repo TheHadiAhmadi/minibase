@@ -29,6 +29,7 @@
 
 	let valid = true;
 
+	// TODO: use validation library
 	$: {
 		valid = true;
 		nameFeedback = '';

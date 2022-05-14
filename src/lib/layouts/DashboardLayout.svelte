@@ -1,26 +1,18 @@
 <script lang="ts">
-	import SignupForm from '$lib/components/SignupForm.svelte';
-	import { session } from '$app/stores';
 	import {
 		Button,
 		ButtonList,
-		Dropdown,
 		Header,
-		Menu,
-		MenuItem,
-		MenuTitle,
 		NavBrand,
 		PageWrapper,
 		Page,
 		PageBody,
-		Avatar,
 		Modal,
 		Icon
 	} from '@svind/svelte';
 
 	import { showError } from '$lib/alerts';
-	import { LoginForm } from '$lib/components';
-	import { onMount } from 'svelte';
+	import { SignupLoginForm } from '$lib/components';
 	import { invalidate } from '$app/navigation';
 	import AvatarDropdown from '$lib/components/AvatarDropdown.svelte';
 	import ThemeButton from '$lib/components/ThemeButton.svelte';
@@ -40,6 +32,7 @@
 		modalOpen = false;
 	}
 	function login({ detail }) {
+		invalidate('/');
 		modalOpen = false;
 	}
 
@@ -54,30 +47,24 @@
 	}
 
 	let dark = false;
-	function toggleTheme() {
-		dark = !dark;
-	}
+
 </script>
 
 <Modal bind:open={modalOpen}>
-	{#if modalMode === 'login'}
-		<LoginForm on:login={login} on:change={() => (modalMode = 'signup')} on:error={handleError} />
-	{:else}
-		<SignupForm on:signup={signup} on:change={() => (modalMode = 'login')} on:error={handleError} />
-	{/if}
+	<SignupLoginForm on:login={login} on:signup={signup} on:error={handleError} />
 </Modal>
 
 <slot name="sidebar"/>
 <Page {dark}>
 	<Header>
 		<div class="navbar-brand items-center flex gap-3">
-			<Icon icon="fa:database" class="mr-2 text-2xl" />
+			<Icon icon="fa:database"/>
 			Minibase
 			<!-- TODO -->
 		</div>
 
 		{#if user}
-			<div class="flex gap-2">
+			<div class="flex items-center gap-3">
 				<ThemeButton bind:dark />
 				<AvatarDropdown {user} />
 			</div>
@@ -96,17 +83,3 @@
 		</PageWrapper>
 	</div>
 </Page>
-
-<!-- 
-	{#if $navigating}
-		<div class="w-full h-full -mt-24 flex items-center justify-center">
-			<Spinner size="sm" />
-		</div>
-	{:else}
-		<slot />
-	{/if}
-	</div>
-
-	<slot name="sidebar" slot="sidebar" />
-	</Layout>
-</div> -->

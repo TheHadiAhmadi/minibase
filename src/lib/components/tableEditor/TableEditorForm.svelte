@@ -2,7 +2,7 @@
 	import { Button, CardBody, Checkbox, FormInput, ButtonList } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 
-	import { Form, Page } from '.';
+	import { Form, Page } from '..';
 	import RowsEditor from './RowsEditor.svelte';
 
 	export let title = 'Add Table';

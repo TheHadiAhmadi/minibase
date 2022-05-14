@@ -28,8 +28,8 @@
 	{@const disabled = row.name === 'id'}
 		<div class="flex items-center gap-2 mt-1">
 				<Button
-					size="xs"
-					square
+					size="sm"
+					circle
 					{disabled}
 					variant="error"
 					on:click={() => (rows = rows.filter((r) => r !== row))}
@@ -38,7 +38,7 @@
 				</Button>
 			<Input size="sm" {disabled} placeholder="field name..." bind:value={row.name} />
 			<Dropdown position="top" align="end" autoClose>
-				<Button {disabled} size="sm" variant="ghost" class="w-24 border border-base-300" slot="target">
+				<Button {disabled} size="sm" slot="target">
 					{row.type}
 				</Button>
 				<Menu>

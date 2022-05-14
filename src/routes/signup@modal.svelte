@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { session } from '$app/stores';
 
-	import { SignupForm } from '$lib/components';
+	import { SignupLoginForm } from '$lib/components';
 	import { showInfo, showError } from '$lib/alerts';
 
 	function handleError({ detail }) {
@@ -11,9 +11,9 @@
 	}
 
 	function signup({ detail }) {
-		showInfo('Welcome USER');
+		showInfo(`Welcome ${detail.user.username}`);
 		goto('/');
 	}
 </script>
 
-<SignupForm full on:signup={signup} on:error={handleError} />
+<SignupLoginForm mode="signup" full on:login={() => goto('/login')} on:signup={signup} on:error={handleError} />
