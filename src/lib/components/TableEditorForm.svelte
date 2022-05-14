@@ -7,7 +7,9 @@
 
 	export let title = 'Add Table';
 
-	export let rows = [];
+	export let rows = [
+		{name: 'id', type: 'string'}
+	];
 	export let name = '';
 	let isPublic = false;
 	export { isPublic as public };
@@ -25,7 +27,10 @@
 		dispatch('cancel');
 		name = ''
 		isPublic = false
-		rows = []
+		rows = [
+			{name: 'id', type: 'string'}
+
+		]
 	}
 </script>
 

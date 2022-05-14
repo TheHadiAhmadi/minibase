@@ -10,7 +10,7 @@
 		}).then((res) => res.json());
 
 		const props = {
-			columns: [{name: 'id', type: 'string', hidden: true}, ...response.rows],
+			columns: response.rows,
 			values: response.values,
 			apiKey,
 		};

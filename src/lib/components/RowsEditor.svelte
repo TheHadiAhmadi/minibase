@@ -1,8 +1,5 @@
 <script>
 	// Divider,
-	// Dropdown,
-	// Menu
-
 	import { Button, FormGroup, Dropdown, Menu, Icon, Input, Label } from '@svind/svelte';
 
 	export let rows;
@@ -28,18 +25,20 @@
 		</Button>
 	</div>
 	{#each rows as row}
+	{@const disabled = row.name === 'id'}
 		<div class="flex items-center gap-2 mt-1">
-			<Button
-				size="xs"
-				square
-				variant="error"
-				on:click={() => (rows = rows.filter((r) => r !== row))}
-			>
-				<Icon icon="fa-solid:times" />
-			</Button>
-			<Input size="sm" placeholder="field name..." bind:value={row.name} />
+				<Button
+					size="xs"
+					square
+					{disabled}
+					variant="error"
+					on:click={() => (rows = rows.filter((r) => r !== row))}
+				>
+					<Icon icon="fa-solid:times" />
+				</Button>
+			<Input size="sm" {disabled} placeholder="field name..." bind:value={row.name} />
 			<Dropdown position="top" align="end" autoClose>
-				<Button size="sm" variant="ghost" class="w-24 border border-base-300" slot="target">
+				<Button {disabled} size="sm" variant="ghost" class="w-24 border border-base-300" slot="target">
 					{row.type}
 				</Button>
 				<Menu>

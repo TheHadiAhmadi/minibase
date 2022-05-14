@@ -20,13 +20,13 @@
 <!-- {JSON.stringify({value, columns})} -->
 <Page>
 	<svelte:fragment slot="body">
-		{#each columns as { name, type, readonly, hidden }}
+		{#each columns as { name, type }}
 		<!-- TODO: FormInput should support hidden and readonly -->
 		<!-- TODO: Checkbox:checked should be visible in light mode -->
 		<!-- TODO: Dropdown should close automatically sometimes -->
 		<!-- TODO: MenuItems in header sould be left aligned -->
 		<!-- TODO: Move Alert and Table components in svind -->
-		{#if !hidden}
+		{#if name !== 'id'}
 			<FormInput label={name} {type} bind:value={value[name]} />
 		{/if}
 		{/each}
