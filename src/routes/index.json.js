@@ -8,7 +8,6 @@ export async function get({ platform, locals }) {
 
 
 	const apps = await appService.getApps();
-	console.log('backend', { apps });
 
 	return {
 		status: 200,
@@ -23,13 +22,9 @@ export async function post({ platform, locals }) {
 	const body = locals.body;
 	const db = platform.db;
 
-	console.log({auth}, await auth.getUser())
-
 	const { name, description = '', public: isPublic = false } = body;
 
 	const appService = new AppService(db, auth);
-
-	console.log('adding app', { name, description, isPublic });
 
 	const data = await appService.addApp({
 		name,

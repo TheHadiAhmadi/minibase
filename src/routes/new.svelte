@@ -11,7 +11,6 @@
 	}
 
 	function handleSuccess({ detail }) {
-		console.log('detail: ', detail);
 		showSuccess(detail.message);
 		goto('/');
 	}

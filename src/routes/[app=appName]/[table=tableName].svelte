@@ -1,15 +1,18 @@
 <script context="module">
 	export async function load({ fetch, stuff, params }) {
-		const result = await fetch(`/${params.app}/${params.table}.json`, {
+		const apiKey =  stuff.apiKeys?.[0]?.apiKey ?? ''
+
+		console.log({apiKey,  stuff})
+		const response = await fetch(`/${params.app}/${params.table}.json`, {
 			headers: {
-				apiKey: stuff.apiKey ?? ''
+				apiKey
 			}
 		}).then((res) => res.json());
 
 		const props = {
-			apiKey: stuff?.apiKey ?? '',
-			rows: result.rows,
-			values: result.values
+			columns: [{name: 'id', type: 'string', hidden: true}, ...response.rows],
+			values: response.values,
+			apiKey,
 		};
 
 		return {
@@ -25,109 +28,50 @@
 
 	import { Button, Card, CardBody, Col, FormInput, Icon, Modal, Row } from '@svind/svelte';
 	import { Page, DataTable } from '$lib/components';
-import { invalidate } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
+	import { put, post, del } from '$lib/api';
 
-	export let rows = [];
+	export let columns = [];
 	export let values = [];
-
-	function Api(apiKey) {
-		return {
-			get: async (url) => {
-				return await fetch(baseUrl + url + '.json', {
-					headers: {
-						'Content-Type': 'application/json',
-						apiKey
-					}
-				}).then((res) => res.json());
-			},
-			post: async (url, data) => {
-				return await fetch(baseUrl + url + '.json', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						apiKey
-					},
-					body: JSON.stringify(data)
-				}).then((res) => res.json());
-			},
-			put: async (url, data) => {
-				return await fetch(baseUrl + url + '.json', {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json',
-						apiKey
-					},
-					body: JSON.stringify(data)
-				}).then((res) => res.json());
-			},
-			del: async (url, data) => {
-				return await fetch(baseUrl + url + '.json', {
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-						apiKey
-					}
-				}).then((res) => res.json());
-			}
-		};
-	}
-
-	let apiKeyModalOpen = false;
-	
-	let bindApiKey = $page.stuff.apiKey ?? '';
+	export let apiKey = '';
 
 	$: app = $page.params.app;
 	$: table = $page.params.table;
-	$: apiKey = $page.stuff.apiKey ?? '';
-	$: api = Api(apiKey);
 
-	async function create({ detail }) {
-		console.log('create', detail);
-		const res = await api.post(`/${app}/${table}.json`, detail);
-		invalidate(`/{app}/${table}.json`)
-		// load(apiKey);
+	async function insert({ detail }) {
+		// console.log('insert', detail);
+		const res = await post(`/${app}/${table}.json`, detail, { apiKey });
+
+		reload()
+	}
+	
+	function reload() {
+		invalidate(`/${app}/${table}.json`);
 	}
 
-	async function update({ detail }) {
-		console.log('update', detail);
-	}
-	async function remove({ detail }) {
-		console.log('remove', detail);
-	}
+	function update({ detail }) {
+		let id = detail.id;
+		// console.log('update', detail);
+		
+		put(`/${app}/${table}/${id}.json`, detail, {apiKey});
 
-	function updateApiKey() {
-		apiKey = bindApiKey;
-		apiKeyModalOpen = false;
+		// showError(res.message);
+	}
+	function remove({ detail }) {
+		const id = detail.id
+		// console.log('remove', detail);
+		del(`/${app}/${table}/${id}.json`, {apiKey});
 	}
 </script>
 
-
 <Page full title=" {app} / {table}">
-	<svelte:fragment slot="actions">
-		<Button on:click={() => (apiKeyModalOpen = true)} size="sm">
-			<Icon icon="fa-solid:key" />
-			Api Key
-		</Button>
-	</svelte:fragment>
-	<svelte:fragment slot="body">
-		<DataTable on:create={create} on:update={update} on:remove={remove} {rows} {values} />
-	</svelte:fragment>
+	<Button on:click={reload} slot="actions">Reload</Button>
+	<DataTable
+		slot="body"
+		rows={values}
+		{columns}
+		on:insert={insert}
+		on:update={update}
+		on:remove={remove}
+	/>
 </Page>
-
-<Modal bind:open={apiKeyModalOpen}>
-	<Card class=" flex items-end gap-2">
-		<CardBody>
-			<Row>
-				<FormInput
-					col="10"
-					placeholder="paste a valid ApiKey here..."
-					label="Api Key"
-					bind:value={bindApiKey}
-				/>
-				<div class="col-2">
-					<Button block on:click={updateApiKey}>Ok</Button>
-				</div>
-			</Row>
-		</CardBody>
-	</Card>
-</Modal>

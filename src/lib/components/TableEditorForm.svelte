@@ -2,7 +2,7 @@
 	import { Button, CardBody, Checkbox, FormInput, ButtonList } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 
-	import { Page } from '.';
+	import { Form, Page } from '.';
 	import RowsEditor from './RowsEditor.svelte';
 
 	export let title = 'Add Table';
@@ -15,12 +15,17 @@
 	const dispatch = createEventDispatcher();
 
 	function submit() {
-		console.log(rows, name, isPublic);
 		dispatch('submit', { rows, name, public: isPublic });
+		name = ''
+		isPublic = false
+		rows = []
 	}
 
 	function cancel() {
 		dispatch('cancel');
+		name = ''
+		isPublic = false
+		rows = []
 	}
 </script>
 

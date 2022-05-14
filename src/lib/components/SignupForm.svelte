@@ -10,9 +10,9 @@ import { session } from '$app/stores';
 
 	export let full = false;
 
-	let username;
-	let email;
-	let password;
+	let username = 'test';
+	let email = 'test@gmail.com';
+	let password = '123';
 
 	const dispatch = createEventDispatcher();
 

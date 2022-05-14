@@ -26,5 +26,6 @@
 
 <AlertBox />
 <DashboardLayout {user}>
+	<slot name="sidebar" slot="sidebar"/>
 	<slot />
 </DashboardLayout>

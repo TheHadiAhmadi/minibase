@@ -24,9 +24,10 @@ if (import.meta.vitest) {
 	});
 }
 
-async function send(method, path, data) {
+async function send(method, path, data, headers) {
 	const opts: any = {
 		headers: {
+			...headers,
 			'Content-Type': 'application/json',
 			Accept: 'application/json'
 		}
@@ -41,22 +42,27 @@ async function send(method, path, data) {
 		opts.body = JSON.stringify(data);
 	}
 
-	const res = await fetch(baseUrl + path, opts);
-	return res.json();
+	try {
+
+		const res = await fetch(baseUrl + path, opts);
+		return res.json();
+	} catch(err) {
+		console.log('CAUGHT', err)
+	}
 }
 
-export function get<T>(url): Promise<T> {
+export function get<T>(url, headers): Promise<T> {
 	return send('GET', url, null);
 }
 
-export function post<T>(url, data): Promise<T> {
-	return send('POST', url, data);
+export function post<T>(url, data, headers): Promise<T> {
+	return send('POST', url, data, headers);
 }
 
-export function put<T>(url, data): Promise<T> {
-	return send('PUT', url, data);
+export function put<T>(url, data, headers): Promise<T> {
+	return send('PUT', url, data, headers);
 }
 
-export function del<T>(url): Promise<T> {
-	return send('DELETE', url, null);
+export function del<T>(url, headers): Promise<T> {
+	return send('DELETE', url, null, headers);
 }

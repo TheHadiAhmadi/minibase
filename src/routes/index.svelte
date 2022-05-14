@@ -19,8 +19,6 @@
 
 	export let apps = [];
 
-	$: console.log({ apps });
-
 	let newAppModalOpen = false;
 	let loading = false;
 
@@ -33,8 +31,6 @@
 	}
 
 	async function newAppAdded({ detail }) {
-		console.log('Detail: ', detail);
-
 		showSuccess(detail.message, 'success');
 
 		await loadApps();

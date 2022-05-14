@@ -67,6 +67,7 @@
 	{/if}
 </Modal>
 
+<slot name="sidebar"/>
 <Page {dark}>
 	<Header>
 		<div class="navbar-brand items-center flex gap-3">
