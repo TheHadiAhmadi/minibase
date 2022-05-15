@@ -1,16 +1,26 @@
 <script lang="ts">
 	import { session } from '$app/stores';
 
-	import { Button, ButtonList, Card, CardFooter, CardBody, FormInput } from '@svind/svelte';
+	import {
+		Button,
+		ButtonList,
+		Card,
+		CardFooter,
+		CardBody,
+		FormInput,
+		Input,
+		Row,
+		Col
+	} from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Form from './Form.svelte';
 	import Page from './Page.svelte';
 
 	export let full = false;
 
-	export let mode: 'login' | 'signup' = 'login'
+	export let mode: 'login' | 'signup' = 'login';
 
-	let model: {username: string, password: string, email?: string} = {
+	let model: { username: string; password: string; email?: string } = {
 		username: '',
 		password: ''
 	};
@@ -18,7 +28,6 @@
 	const dispatch = createEventDispatcher();
 
 	async function submit() {
-
 		const response = await fetch(`/${mode}.json`, {
 			method: 'POST',
 			headers: {
@@ -48,21 +57,35 @@
 <Page {full} title={mode === 'login' ? 'Login' : 'Signup'}>
 	<Form on:submit={submit}>
 		<CardBody>
-			<FormInput label="Username" type="text" bind:value={model.username} />
+			<Input placeholder="Username" type="text" bind:value={model.username} />
 			{#if mode === 'signup'}
-				<FormInput label="Email" type="email" bind:value={model.email} />
+				<Input placeholder="Email" type="email" bind:value={model.email} />
 			{/if}
-			<FormInput label="Password" type="password" bind:value={model.password} />
-		</CardBody>
+			<Input placeholder="Password" type="password" bind:value={model.password} />
 
+		</CardBody>
+		
 		<CardFooter position="end">
+			<Row class="text-center text-xs py-6">
+				<Col class="" col="6">
+					{#if mode === 'login'}
+						<a href="/signup">Register</a>
+					{:else}
+						<a href="/login">Login</a>
+					{/if}
+				</Col>
+	
+				<Col class="" col="6">
+					<a>Forgot Password</a>
+				</Col>
+			</Row>
 			<ButtonList>
 				{#if mode === 'login'}
-					<Button on:click={() => mode = 'signup'} size="sm">don't have account?</Button>
-					<Button variant="primary" size="sm" type="submit">Log in</Button>
+					<!-- <Button on:click={() => mode = 'signup'} size="sm">don't have account?</Button> -->
+					<Button block variant="primary" type="submit">Log in</Button>
 				{:else}
-					<Button on:click={() => mode = 'login'} size="sm">already have an account?</Button>
-					<Button variant="primary" size="sm" type="submit">Sign up</Button>
+					<!-- <Button on:click={() => mode = 'login'} size="sm">already have an account?</Button> -->
+					<Button block variant="primary" type="submit">Sign up</Button>
 				{/if}
 			</ButtonList>
 		</CardFooter>

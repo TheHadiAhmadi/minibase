@@ -4,11 +4,11 @@
 
 	import { showError } from '$lib/alerts';
 
-	import { LoginForm } from '$lib/components';
+	import { SignupLoginForm } from '$lib/components';
 
 	function login({ detail }) {
 		goto('/');
 	}
 </script>
 
-<LoginForm full on:login={login} on:error={({ detail }) => showError(detail.message)} />
+<SignupLoginForm full mode="login" on:login={login} on:error={({ detail }) => showError(detail.message)} />
