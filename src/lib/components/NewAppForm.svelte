@@ -5,6 +5,7 @@
 	import { createEventDispatcher } from 'svelte';
 
 	import Form from './Form.svelte';
+import Input from './Input.svelte';
 
 	import Page from './Page.svelte';
 
@@ -50,9 +51,9 @@
 
 <Page title="Create New App">
 	<Form slot="body" on:submit={onSubmit}>
-		<FormInput label="App Name" bind:value={request.name} />
+		<Input placeholder="App Name" bind:value={request.name} />
 		<div class="text-sm text-gray-500">{nameFeedback}</div>
-		<FormInput label="Description" bind:value={request.description} />
+		<Input placeholder="Description" bind:value={request.description} />
 		<div class="h-2" />
 		<Checkbox bind:value={request.public}>Public</Checkbox>
 	</Form>

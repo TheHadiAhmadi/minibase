@@ -16,12 +16,15 @@
 	import 'virtual:windi.css';
 	import '../app.css';
 	import '../app.d.ts';
-
+	
 	import { DashboardLayout } from '$lib/layouts';
 	import { AlertBox } from '$lib/components';
+import { onMount } from 'svelte';
+import { invalidate } from '$app/navigation';
 
 	export let user;
 
+	onMount(() => invalidate())
 </script>
 
 <AlertBox />

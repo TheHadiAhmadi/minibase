@@ -1,6 +1,6 @@
 <script>
 	// Divider,
-	import { Button, FormGroup, Dropdown, Menu, Icon, Input, Label } from '@svind/svelte';
+	import { Button, FormGroup, Dropdown, Menu, Icon, Input, Label, Col, Row } from '@svind/svelte';
 
 	export let rows;
 
@@ -18,35 +18,51 @@
 </script>
 
 <FormGroup>
-	<div class="flex py-2 items-center justify-between">
-		<Label for="">Rows</Label>
-		<Button variant="primary" on:click={addRow} size="xs" circle>
-			<Icon icon="fa-solid:plus" />
-		</Button>
-	</div>
-	{#each rows as row}
-	{@const disabled = row.name === 'id'}
-		<div class="flex items-center gap-2 mt-1">
-				<Button
-					size="sm"
-					circle
-					{disabled}
-					variant="error"
-					on:click={() => (rows = rows.filter((r) => r !== row))}
-				>
-					<Icon icon="fa-solid:times" />
-				</Button>
-			<Input size="sm" {disabled} placeholder="field name..." bind:value={row.name} />
-			<Dropdown position="top" align="end" autoClose>
-				<Button {disabled} size="sm" slot="target">
-					{row.type}
-				</Button>
-				<Menu>
-					{#each rowTypes as type}
-						<li class="menu-item" on:click={() => (row.type = type)}>{type}</li>
-					{/each}
-				</Menu>
-			</Dropdown>
-		</div>
-	{/each}
+	<Label for="">Rows</Label>
+	<hr class="my-2" />
+	<Row>
+		{#each rows as row}
+			{@const disabled = row.name === 'id'}
+
+			<Row class="w-full">
+				<Col col="expand">
+					<Input variant="secondary" size="sm" {disabled} placeholder="field name..." bind:value={row.name} />
+				</Col>
+				<Col class="flex items-center justify-center" col=auto>
+
+					<Dropdown position="top" align="end" autoClose>
+						<Button {disabled}  slot="target">
+							{row.type}
+						</Button>
+						{#if !disabled}
+						<Menu>
+							{#each rowTypes as type}
+							<li class="menu-item" on:click={() => (row.type = type)}>{type}</li>
+							{/each}
+						</Menu>
+						{/if}
+					</Dropdown>
+				</Col>
+				<Col class="flex justify-center items-center" col="auto">
+					<Button
+						size="xs"
+						outline
+						circle
+						{disabled}
+						variant="error"
+						on:click={() => (rows = rows.filter((r) => r !== row))}
+					>
+						<Icon icon="fa-solid:times" />
+					</Button>
+				</Col>
+
+			</Row>
+		{/each}
+		<Col class="mt-2" col=12>
+			<Button block variant="info" on:click={addRow} size="sm">
+				<Icon icon="fa-solid:plus" />
+				Add
+			</Button>
+		</Col>
+	</Row>
 </FormGroup>

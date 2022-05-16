@@ -6,6 +6,7 @@
 
 import 'virtual:windi.css';
 import '../app.css';
+
 import '../app.d.ts';
 import Alert from '$lib/components/Alert.svelte';
 import { AlertBox } from '$lib/components';

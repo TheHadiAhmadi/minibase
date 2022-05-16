@@ -26,15 +26,13 @@
 	let variantColors = {
 		info: 'text-cyan-600 dark:text-cyan-400',
 		error: 'text-red-600 dark:text-red-400',
-		success: 'text-green-600 dark:text-green-400',
+		success: '',
 		warning: 'text-orange-600 dark:text-orange-400'
 	};
 
-	$: classes = clsx('rounded shadow m-1 ', {
-		'p-4': !minimal,
-		'p-2': minimal,
-		[`bg-base-200 ${variantColors[variant]}`]: !important && !!variant,
-		[`bg-${variantColors[variant]}`]: important && !!variant
+	$: classes = clsx('alert', {
+		'alert-compact': minimal,
+		[`alert-${variant}`]: !!variant
 	});
 </script>
 
@@ -58,3 +56,63 @@
 		</div>
 	</div>
 {/if}
+<style lang="postcss" global>
+	.alert {
+		@apply rounded m-1 p-4;
+
+		font-size: 14px;
+		font-weight: 400;
+	}
+
+	.alert-compact {
+		@apply p-2;
+	}
+
+	.alert-success {
+		background-color: #dafbe1;
+		border: 1px solid rgba(74,194,107,0.4);
+		color: #24292f;
+	}
+
+	.dark .alert-success {
+		color: #c9d1d2;
+		background-color: rgba(46,160,67,0.15);
+		border: 1px solid rgba(46,160,67,0.4);
+	}
+	.alert-warning {
+		background-color: #fff8c5;
+		border: 1px solid rgba(212,167,44,0.4);
+		color: #24292f;
+	}
+
+	.dark .alert-warning {
+		color: #c9d1d2;
+		background-color: rgba(187,128,9,0.15);
+		border: 1px solid rgba(187,128,9,0.4);
+	}
+
+	.alert-error {
+		background-color: #ffebe9;
+		border: 1px solid rgba(225,129,130,0.4);
+		color: #24292f;
+	}
+
+	.dark .alert-error {
+		color: #c9d1d2;
+		background-color: rgba(248,81,73,0.15);
+		border: 1px solid rgba(248,81,73,0.4);
+	}
+
+	.alert-info {
+		background-color: #ddf4ff;
+		border: 1px solid rgba(84,174,255,0.4);
+		color: #24292f;
+	}
+
+	.dark .alert-info {
+		color: #c9d1d2;
+		background-color: rgba(56,139,253,0.15);
+		border: 1px solid rgba(56,139,253,0.4);
+	}
+
+</style>
