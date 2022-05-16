@@ -61,6 +61,7 @@
 		model = table;
 		updateModalOpen = true;
 		editingTableName = table.name;
+		console.log("updateTable", table, table.name)
 	}
 
 	async function removeTable(table) {

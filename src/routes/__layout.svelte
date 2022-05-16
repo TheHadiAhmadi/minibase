@@ -15,7 +15,6 @@
 
 	import 'virtual:windi.css';
 	import '../app.css';
-	import '../modalLayout.css';
 	import '../app.d.ts';
 	
 	import { DashboardLayout } from '$lib/layouts';

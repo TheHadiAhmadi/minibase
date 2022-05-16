@@ -8,13 +8,13 @@
 		CardFooter,
 		CardBody,
 		FormInput,
-		Input,
 		Row,
 		Col
 	} from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Form from './Form.svelte';
 	import Page from './Page.svelte';
+	import Input from './Input.svelte';
 
 	export let full = false;
 
@@ -57,37 +57,51 @@
 <Page {full} title={mode === 'login' ? 'Login' : 'Signup'}>
 	<Form on:submit={submit}>
 		<CardBody>
-			<Input placeholder="Username" type="text" bind:value={model.username} />
-			{#if mode === 'signup'}
-				<Input placeholder="Email" type="email" bind:value={model.email} />
-			{/if}
-			<Input placeholder="Password" type="password" bind:value={model.password} />
+			<Row class="w-full text-xs">
+				<Col col="12">
+					<Input
+						startIcon="la:user"
+						placeholder="Username"
+						type="text"
+						bind:value={model.username}
+					/>
+				</Col>
+				{#if mode === 'signup'}
+					<Col col="12">
+						<Input
+							startIcon="la:envelope"
+							placeholder="Email"
+							type="email"
+							bind:value={model.email}
+						/>
+					</Col>
+				{/if}
+				<Col col="12">
+					<Input
+						startIcon="la:key"
+						placeholder="Password"
+						type="password"
+						bind:value={model.password}
+					/>
+				</Col>
 
-		</CardBody>
-		
-		<CardFooter position="end">
-			<Row class="text-center text-xs py-6">
-				<Col class="" col="6">
+				<Col col="12" class="mt-4">
 					{#if mode === 'login'}
-						<a href="/signup">Register</a>
+						<Button block variant="primary" type="submit">Log in</Button>
 					{:else}
-						<a href="/login">Login</a>
+						<Button block variant="primary" type="submit">Sign up</Button>
 					{/if}
 				</Col>
-	
-				<Col class="" col="6">
-					<a>Forgot Password</a>
+
+				<Col class="mt-6 h-auto text-center flex flex-col gap-2" col="12">
+					{#if mode === 'login'}
+							<a href="/signup">Don't have account?</a>
+							<a href="/signup#TODO">Forgot Password?</a>
+					{:else}
+						<a href="/login">already have an account?</a>
+					{/if}
 				</Col>
 			</Row>
-			<ButtonList>
-				{#if mode === 'login'}
-					<!-- <Button on:click={() => mode = 'signup'} size="sm">don't have account?</Button> -->
-					<Button block variant="primary" type="submit">Log in</Button>
-				{:else}
-					<!-- <Button on:click={() => mode = 'login'} size="sm">already have an account?</Button> -->
-					<Button block variant="primary" type="submit">Sign up</Button>
-				{/if}
-			</ButtonList>
-		</CardFooter>
+		</CardBody>
 	</Form>
 </Page>

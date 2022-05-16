@@ -3,6 +3,7 @@
 	import { createEventDispatcher } from 'svelte';
 
 	import { Form, Page } from '..';
+import Input from '../Input.svelte';
 	import RowsEditor from './RowsEditor.svelte';
 
 	export let title = 'Add Table';
@@ -36,9 +37,9 @@
 
 <Page {title}>
 	<CardBody>
-		<FormInput label="Table Name" bind:value={name} />
+		<Input placeholder="Table Name" bind:value={name} />
 		<div class="mt-4" />
-		<Checkbox bind:value={isPublic}>Public</Checkbox>
+		<Checkbox variant="primary" bind:value={isPublic}>Public</Checkbox>
 		{#if rows}
 			<RowsEditor bind:rows />
 		{/if}
