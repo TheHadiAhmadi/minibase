@@ -29,8 +29,6 @@ export default class DatabaseQuery {
 	}
 
 	async insert(collection: string, data: any) {
-		data.id = crypto.randomUUID();
-
 		let result;
 		if (Array.isArray(data)) {
 			result = await this.db.collection(collection).insertMany(data);

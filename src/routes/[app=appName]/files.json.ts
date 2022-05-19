@@ -1,6 +1,5 @@
-import { baseUrl, nanoid } from '$lib/helpers';
-import { errorBadRequest, FileService } from '$lib/services';
-import { uuid } from '$lib/services/auth';
+import { nanoid } from '$lib/helpers';
+import { FileService } from '$lib/services';
 
 export async function get() {
 	return {
