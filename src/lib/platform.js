@@ -54,7 +54,7 @@ export default {
 			return array.join(',');
 		},
 		deserialize: (data) => {
-			return data.split(',').map(Number);
+			return new Uint8Array(data.split(',').map(Number));
 		},
 		deserializeStream: (data) => {
 			// return ReadableStream(data.split('-'))
