@@ -30,10 +30,13 @@ export default {
 			await db.insert(collection, data);
 			return true;
 		},
-		serialize: Bson.serialize,
+		serialize: (data) => {
+			return b64.encode(data)
+		},
 		deserializeStream: Bson.deserializeStream,
 		deserialize: (data) => {
-			return b64.decode(Bson.deserialize(data).toJSON())
+			console.log(data)
+			return b64.decode(data)
 		}
 	},
 	secret: env.ACCESS_TOKEN_SECRET
