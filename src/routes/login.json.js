@@ -1,7 +1,7 @@
 /** @type {import('./login.json').RequestHandler} */
-export async function post({ locals }) {
+export async function post({ request, locals }) {
 	const auth = locals.auth;
-	const body = locals.body;
+	const body = await request.json();
 	const { username, password } = body;
 
 	const result = await auth.login({ username, password });
@@ -10,9 +10,7 @@ export async function post({ locals }) {
 		status: 200,
 		body: result,
 		headers: {
-			'set-cookie': [
-				`token=${result.access_token};Path=/; HttpOnly;`,
-			]
+			'set-cookie': [`token=${result.access_token};Path=/; HttpOnly;`]
 		}
 	};
 }

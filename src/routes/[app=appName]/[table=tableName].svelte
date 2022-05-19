@@ -1,8 +1,8 @@
 <script context="module">
 	export async function load({ fetch, stuff, params }) {
-		const apiKey =  stuff.apiKeys?.[0]?.apiKey ?? ''
+		const apiKey = stuff.apiKeys?.[0]?.apiKey ?? '';
 
-		console.log({apiKey,  stuff})
+		console.log({ apiKey, stuff });
 		const response = await fetch(`/${params.app}/${params.table}.json`, {
 			headers: {
 				apiKey
@@ -12,7 +12,7 @@
 		const props = {
 			columns: response.rows,
 			values: response.values,
-			apiKey,
+			apiKey
 		};
 
 		return {
@@ -42,9 +42,9 @@
 		// console.log('insert', detail);
 		const res = await post(`/${app}/${table}.json`, detail, { apiKey });
 
-		reload()
+		reload();
 	}
-	
+
 	function reload() {
 		invalidate(`/${app}/${table}.json`);
 	}
@@ -52,15 +52,15 @@
 	function update({ detail }) {
 		let id = detail.id;
 		// console.log('update', detail);
-		
-		put(`/${app}/${table}/${id}.json`, detail, {apiKey});
+
+		put(`/${app}/${table}/${id}.json`, detail, { apiKey });
 
 		// showError(res.message);
 	}
 	function remove({ detail }) {
-		const id = detail.id
+		const id = detail.id;
 		// console.log('remove', detail);
-		del(`/${app}/${table}/${id}.json`, {apiKey});
+		del(`/${app}/${table}/${id}.json`, { apiKey });
 	}
 </script>
 

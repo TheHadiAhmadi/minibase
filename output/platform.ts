@@ -1,5 +1,5 @@
 import initializeDB from './database.ts';
-import { env } from './deps.ts';
+import { env, Bson } from './deps.ts';
 
 export default {
 	db: {
@@ -29,7 +29,10 @@ export default {
 			console.log('Override INSERT', collection, data);
 			await db.insert(collection, data);
 			return true;
-		}
+		},
+		serialize: Bson.serialize,
+		deserializeStream: Bson.deserializeStream,
+		deserialize: Bson.deserialize
 	},
 	secret: env.ACCESS_TOKEN_SECRET
 };

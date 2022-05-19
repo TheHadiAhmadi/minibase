@@ -1,6 +1,6 @@
-export async function post({ locals }) {
+export async function post({ request, locals }) {
 	const auth = locals.auth;
-	const body = locals.body;
+	const body = await request.json();
 	const { email, password, username } = body;
 
 	const result = await auth.signup({ email, password, username });
@@ -9,9 +9,7 @@ export async function post({ locals }) {
 		status: 201,
 		body: result,
 		headers: {
-			'set-cookie': [
-				`token=${result.access_token};Path=/; HttpOnly;`,
-			],
+			'set-cookie': [`token=${result.access_token};Path=/; HttpOnly;`]
 		}
 	};
 }

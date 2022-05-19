@@ -18,7 +18,8 @@ const config = {
 			filesPrefix: './build',
 			imports: {
 				jsonwebtoken: 'https://dev.jspm.io/jsonwebtoken',
-				crypto: 'https://deno.land/std/node/crypto.ts'
+				crypto: 'https://deno.land/std/node/crypto.ts',
+				nanoid: 'https://deno.land/x/nanoid/mod.ts'
 			}
 		}),
 		vite: {

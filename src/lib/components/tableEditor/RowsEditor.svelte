@@ -14,7 +14,7 @@
 		];
 	}
 
-	const rowTypes = ['string', 'number', 'boolean', 'object', 'array'];
+	const rowTypes = ['string', 'number', 'boolean', 'file', 'object', 'array'];
 </script>
 
 <FormGroup>
@@ -26,20 +26,25 @@
 
 			<Row class="w-full">
 				<Col col="expand">
-					<Input variant="secondary" size="sm" {disabled} placeholder="field name..." bind:value={row.name} />
+					<Input
+						variant="secondary"
+						size="sm"
+						{disabled}
+						placeholder="field name..."
+						bind:value={row.name}
+					/>
 				</Col>
-				<Col class="flex items-center justify-center" col=auto>
-
+				<Col class="flex items-center justify-center" col="auto">
 					<Dropdown position="top" align="end" autoClose>
-						<Button {disabled}  slot="target">
+						<Button {disabled} slot="target">
 							{row.type}
 						</Button>
 						{#if !disabled}
-						<Menu>
-							{#each rowTypes as type}
-							<li class="menu-item" on:click={() => (row.type = type)}>{type}</li>
-							{/each}
-						</Menu>
+							<Menu>
+								{#each rowTypes as type}
+									<li class="menu-item" on:click={() => (row.type = type)}>{type}</li>
+								{/each}
+							</Menu>
 						{/if}
 					</Dropdown>
 				</Col>
@@ -55,10 +60,9 @@
 						<Icon icon="fa-solid:times" />
 					</Button>
 				</Col>
-
 			</Row>
 		{/each}
-		<Col class="mt-2" col=12>
+		<Col class="mt-2" col="12">
 			<Button block variant="info" on:click={addRow} size="sm">
 				<Icon icon="fa-solid:plus" />
 				Add

@@ -44,9 +44,9 @@ export default class AuthService {
 		}
 	}
 
-	async getUser() : Promise<User> {
+	async getUser(): Promise<User> {
 		try {
-			if(!this.token) return null
+			if (!this.token) return null;
 			const payload = await jwt.verify(this.token, this.secret);
 
 			if (payload.user) return payload.user;

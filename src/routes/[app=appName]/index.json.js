@@ -20,10 +20,10 @@ export async function get({ platform, params, locals }) {
 		}
 	};
 }
-export async function post({ params, platform, locals }) {
+export async function post({ params, request, platform, locals }) {
 	const db = platform.db;
 	const auth = locals.auth;
-	const body = locals.body;
+	const body = await request.json();
 	const appName = params.app;
 	const { name, public: isPublic = false, rows } = body;
 

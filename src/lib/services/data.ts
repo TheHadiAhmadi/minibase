@@ -37,7 +37,7 @@ export default class DataService {
 
 			const keys = await this.db.get('keys', { apiKey: this.apiKey, appName: this.app });
 
-			if(keys.length < 1) throw errorNotAuthorized('apikey header not found')
+			if (keys.length < 1) throw errorNotAuthorized('apikey header not found');
 			return await this.verifyAccess(keys[0], method);
 		} catch (err) {
 			throw err;
@@ -78,7 +78,7 @@ export default class DataService {
 
 	async update(id, newData) {
 		console.log('here 1');
-		if(!await this.hasAccess('update')) throw errorNotAuthorized('you cannot do this')
+		if (!(await this.hasAccess('update'))) throw errorNotAuthorized('you cannot do this');
 		console.log('here 2');
 		const dataQuery = {
 			appName: this.app,

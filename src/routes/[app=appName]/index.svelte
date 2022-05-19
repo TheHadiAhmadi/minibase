@@ -1,6 +1,6 @@
 <script context="module">
 	export async function load({ stuff }) {
-		console.log({stuff})
+		console.log({ stuff });
 		return {
 			props: {
 				tables: stuff.tables,
@@ -61,7 +61,7 @@
 		model = table;
 		updateModalOpen = true;
 		editingTableName = table.name;
-		console.log("updateTable", table, table.name)
+		console.log('updateTable', table, table.name);
 	}
 
 	async function removeTable(table) {
@@ -77,8 +77,7 @@
 		};
 		addModalOpen = true;
 	}
-	$: console.log({apiKeys})
-
+	$: console.log({ apiKeys });
 </script>
 
 <Page full title="Tables">

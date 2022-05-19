@@ -2,7 +2,7 @@
 	import '@svind/css/dist/index.css';
 	import 'virtual:windi.css';
 	import { Card, Icon } from '@svind/svelte';
-import DataTable from '$lib/components/dataTable/DataTable.svelte';
+	import DataTable from '$lib/components/dataTable/DataTable.svelte';
 	// define some sample data...
 	let rows = [
 		{ id: 1, first_name: 'Marilyn', last_name: 'Monroe', pet: 'dog' },
@@ -30,20 +30,21 @@ import DataTable from '$lib/components/dataTable/DataTable.svelte';
 	let columns = [
 		{
 			name: 'id',
-			get: v => v.id
+			get: (v) => v.id
 		},
 		{
 			name: 'first_name',
-			get: v => v.first_name
+			get: (v) => v.first_name
 		},
 		{
 			name: 'last_name',
-			get: v => v.last_name
+			get: (v) => v.last_name
 		},
 		{
 			name: 'pet',
-			get: v => v.pet
-		},
-	]
+			get: (v) => v.pet
+		}
+	];
 </script>
-    <DataTable bind:rows {columns}/>
+
+<DataTable bind:rows {columns} />

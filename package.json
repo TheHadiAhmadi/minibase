@@ -39,6 +39,7 @@
 		"cookie": "^0.5.0",
 		"jsonwebtoken": "^8.5.1",
 		"jspreadsheet-ce": "^4.10.1",
+		"nanoid": "^3.3.4",
 		"svelte-table": "^0.3.4",
 		"uuid": "^8.3.2",
 		"windicss": "^3.5.1"

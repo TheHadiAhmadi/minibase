@@ -1,4 +1,4 @@
-export { MongoClient } from 'https://deno.land/x/mongo@v0.29.0/mod.ts';
+export { Bson, MongoClient } from 'https://deno.land/x/mongo@v0.29.0/mod.ts';
 
 // load .env file
 import 'https://deno.land/x/dotenv/load.ts';

@@ -6,7 +6,6 @@ export async function get({ platform, locals }) {
 
 	const appService = new AppService(db, auth);
 
-
 	const apps = await appService.getApps();
 
 	return {
@@ -17,9 +16,9 @@ export async function get({ platform, locals }) {
 	};
 }
 
-export async function post({ platform, locals }) {
+export async function post({ request, platform, locals }) {
 	const auth = locals.auth;
-	const body = locals.body;
+	const body = await request.json();
 	const db = platform.db;
 
 	const { name, description = '', public: isPublic = false } = body;

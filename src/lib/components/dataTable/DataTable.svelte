@@ -13,7 +13,7 @@
 
 	function insert() {
 		model = {};
-		updatingRow = null
+		updatingRow = null;
 		rowEditorOpen = true;
 	}
 

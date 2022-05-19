@@ -26,6 +26,9 @@ export default class TableService {
 			throw errorBadRequest('name, public and rows are required');
 		}
 
+		if (['signup', 'login', 'logout', 'files'].includes(name))
+			throw errorBadRequest(`${name} is not a valid Table name`);
+
 		if (!Array.isArray(rows)) throw errorBadRequest('rows should be array');
 
 		const existingTable = await this.db.get('tables', { appName, name });

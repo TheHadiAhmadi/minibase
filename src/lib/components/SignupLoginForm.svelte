@@ -95,8 +95,8 @@
 
 				<Col class="mt-6 h-auto text-center flex flex-col gap-2" col="12">
 					{#if mode === 'login'}
-							<a href="/signup">Don't have account?</a>
-							<a href="/signup#TODO">Forgot Password?</a>
+						<a href="/signup">Don't have account?</a>
+						<a href="/signup#TODO">Forgot Password?</a>
 					{:else}
 						<a href="/login">already have an account?</a>
 					{/if}

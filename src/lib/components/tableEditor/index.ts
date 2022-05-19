@@ -1,1 +1,1 @@
-export {default as TableEditorForm} from './TableEditorForm.svelte'
+export { default as TableEditorForm } from './TableEditorForm.svelte';

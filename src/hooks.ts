@@ -12,27 +12,21 @@ export async function handle({ event, resolve }) {
 	const cookies = parse(event.request.headers.get('cookie') || '');
 
 	const token = cookies.token ?? null;
-	
+
 	const secret = event.platform.secret || 'dev-secret';
-	
+
 	const authService = new AuthService(event.platform.db, token, secret);
 	try {
 		const user = await authService.getUser();
 
-		if(user) {
-
+		if (user) {
 			event.locals.user = {
 				username: user.username,
 				email: user.email
-			}
+			};
 		}
-	} catch(err) {
+	} catch (err) {
 		// console.log("ERROR", err)
-	}
-
-
-	if (event.request.method !== 'GET' && event.request.method !== 'DELETE') {
-		event.locals.body = await event.request.json();
 	}
 
 	event.locals.auth = authService;
@@ -50,6 +44,7 @@ export async function handle({ event, resolve }) {
 			status: err.status,
 			message: err.message
 		};
+		console.log(err);
 		return new Response(JSON.stringify(response), {
 			headers: { 'content-type': 'application/json' },
 			status: response.status

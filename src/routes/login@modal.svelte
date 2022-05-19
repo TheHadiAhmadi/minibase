@@ -11,4 +11,9 @@
 	}
 </script>
 
-<SignupLoginForm full mode="login" on:login={login} on:error={({ detail }) => showError(detail.message)} />
+<SignupLoginForm
+	full
+	mode="login"
+	on:login={login}
+	on:error={({ detail }) => showError(detail.message)}
+/>

@@ -5,7 +5,7 @@
 	import { createEventDispatcher } from 'svelte';
 
 	import Form from './Form.svelte';
-import Input from './Input.svelte';
+	import Input from './Input.svelte';
 
 	import Page from './Page.svelte';
 

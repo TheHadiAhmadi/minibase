@@ -1,11 +1,11 @@
 <script>
-import { setContext } from "svelte";
+	import { setContext } from 'svelte';
 
-
-    setContext('table-head', true)
+	setContext('table-head', true);
 </script>
+
 <thead>
-    <tr>
-        <slot/>
-    </tr>
+	<tr>
+		<slot />
+	</tr>
 </thead>

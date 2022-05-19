@@ -1,11 +1,11 @@
 <script>
-    import clsx from 'clsx'
-    let className;
-    export {className as class}
+	import clsx from 'clsx';
+	let className;
+	export { className as class };
 
-
-$:classes = clsx('table-parent', className)
+	$: classes = clsx('table-parent', className);
 </script>
+
 <div class={classes}>
 	<table class="table">
 		<slot />
@@ -22,15 +22,14 @@ $:classes = clsx('table-parent', className)
 	.table thead th {
 		@apply text-left px-4 py-2 bg-[#efefef] border border-[#dedede];
 	}
-    .dark .table thead th {
-        @apply bg-[#404040] border-[#505050];
-    }
+	.dark .table thead th {
+		@apply bg-[#404040] border-[#505050];
+	}
 
 	.table tbody tr td {
 		@apply py-1 border border-[#dedede];
 	}
-    .dark .table tbody tr td {
-        @apply border-[#505050];
-    }
-    
+	.dark .table tbody tr td {
+		@apply border-[#505050];
+	}
 </style>

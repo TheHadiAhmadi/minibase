@@ -3,14 +3,12 @@
 	import { createEventDispatcher } from 'svelte';
 
 	import { Form, Page } from '..';
-import Input from '../Input.svelte';
+	import Input from '../Input.svelte';
 	import RowsEditor from './RowsEditor.svelte';
 
 	export let title = 'Add Table';
 
-	export let rows = [
-		{name: 'id', type: 'string'}
-	];
+	export let rows = [{ name: 'id', type: 'string' }];
 	export let name = '';
 	let isPublic = false;
 	export { isPublic as public };
@@ -19,19 +17,16 @@ import Input from '../Input.svelte';
 
 	function submit() {
 		dispatch('submit', { rows, name, public: isPublic });
-		name = ''
-		isPublic = false
-		rows = []
+		name = '';
+		isPublic = false;
+		rows = [];
 	}
 
 	function cancel() {
 		dispatch('cancel');
-		name = ''
-		isPublic = false
-		rows = [
-			{name: 'id', type: 'string'}
-
-		]
+		name = '';
+		isPublic = false;
+		rows = [{ name: 'id', type: 'string' }];
 	}
 </script>
 

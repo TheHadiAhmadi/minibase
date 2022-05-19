@@ -47,18 +47,17 @@
 	}
 
 	let dark = false;
-
 </script>
 
 <Modal bind:open={modalOpen}>
 	<SignupLoginForm on:login={login} on:signup={signup} on:error={handleError} />
 </Modal>
 
-<slot name="sidebar"/>
+<slot name="sidebar" />
 <Page {dark}>
 	<Header>
 		<div class="navbar-brand items-center flex gap-3">
-			<Icon icon="fa:database"/>
+			<Icon icon="fa:database" />
 			Minibase
 			<!-- TODO -->
 		</div>

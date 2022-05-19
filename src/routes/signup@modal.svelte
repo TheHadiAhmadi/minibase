@@ -1,4 +1,3 @@
-
 <script>
 	import { goto } from '$app/navigation';
 	import { session } from '$app/stores';
@@ -16,4 +15,10 @@
 	}
 </script>
 
-<SignupLoginForm mode="signup" full on:login={() => goto('/login')} on:signup={signup} on:error={handleError} />
+<SignupLoginForm
+	mode="signup"
+	full
+	on:login={() => goto('/login')}
+	on:signup={signup}
+	on:error={handleError}
+/>

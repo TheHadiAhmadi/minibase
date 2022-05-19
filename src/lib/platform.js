@@ -49,6 +49,16 @@ export default {
 				return !shouldDelete;
 			});
 			return true;
+		},
+		serialize: (array) => {
+			return array.join(',');
+		},
+		deserialize: (data) => {
+			return data.split(',').map(Number);
+		},
+		deserializeStream: (data) => {
+			// return ReadableStream(data.split('-'))
+			console.log('TODO: implement desesrializeStream');
 		}
 	},
 	secret: import.meta.env.VITE_ACCESS_TOKEN_SECRET

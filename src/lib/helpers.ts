@@ -1,14 +1,16 @@
 import { dev } from '$app/env';
+import { customAlphabet } from 'nanoid';
 
 export const baseUrl = dev ? 'http://localhost:8000' : 'https://minibase.deno.dev';
 
+export function nanoid(length) {
+	const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+	const _nanoid = customAlphabet(alphabet, length);
+	return _nanoid()
+} 
+
 export function generateApiKey() {
-	const result = Array.from({ length: 32 }, () => {
-		const options = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-';
-		const index = Math.floor(Math.random() * options.length);
-		return options[index];
-	}).join('');
-	return result;
+	return nanoid(32)
 }
 
 if (import.meta.vitest) {

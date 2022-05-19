@@ -43,11 +43,10 @@ async function send(method, path, data, headers) {
 	}
 
 	try {
-
 		const res = await fetch(baseUrl + path, opts);
 		return res.json();
-	} catch(err) {
-		console.log('CAUGHT', err)
+	} catch (err) {
+		console.log('CAUGHT', err);
 	}
 }
 

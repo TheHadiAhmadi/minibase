@@ -1,5 +1,5 @@
-export * from './table'
-export * from './dataTable'
+export * from './table';
+export * from './dataTable';
 export { default as AlertBox } from './AlertBox.svelte';
 export { default as ApiKeyEditor } from './ApiKeyEditor.svelte';
 export { default as AppCard } from './AppCard.svelte';

@@ -16,16 +16,16 @@ td {
 	box-shadow: 0 1px 1px #ababab77 inset, 0 -1px 1px #ffffff inset;
 	margin-top: 4px;
 	margin-bottom: 4px;
-	border: 1px solid #d3d3d3d8;	
+	border: 1px solid #d3d3d3d8;
 }
-.form-control[type="checkbox"] {
+.form-control[type='checkbox'] {
 	padding: 8px;
 }
 
 .dark .form-control {
 	background-color: #282828;
 	box-shadow: 0 1px 1px #202020 inset, 0 -1px 1px #202020 inset;
-	border: 1px solid #303030;	
+	border: 1px solid #303030;
 }
 
 .dark .form-control:hover {
@@ -48,6 +48,3 @@ td {
 .card-body .row {
 	margin: 0;
 }
-
-
-

@@ -4,12 +4,12 @@
 
 	import '@svind/css/dist/index.css';
 
-import 'virtual:windi.css';
-import '../app.css';
+	import 'virtual:windi.css';
+	import '../app.css';
 
-import '../app.d.ts';
-import Alert from '$lib/components/Alert.svelte';
-import { AlertBox } from '$lib/components';
+	import '../app.d.ts';
+	import Alert from '$lib/components/Alert.svelte';
+	import { AlertBox } from '$lib/components';
 </script>
 
 <Modal static open>
