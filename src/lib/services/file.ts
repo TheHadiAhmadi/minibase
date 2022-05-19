@@ -61,6 +61,6 @@ export default class FileService {
 		const files = await this.db.get('files', { id: id });
 
 		const result = this.db.deserialize(files[0].content);
-		return new Uint8Array(result);
+		return result;
 	}
 }

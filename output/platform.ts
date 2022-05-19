@@ -1,5 +1,5 @@
 import initializeDB from './database.ts';
-import { env, Bson } from './deps.ts';
+import { env, b64, Bson } from './deps.ts';
 
 export default {
 	db: {
@@ -32,7 +32,9 @@ export default {
 		},
 		serialize: Bson.serialize,
 		deserializeStream: Bson.deserializeStream,
-		deserialize: Bson.deserialize
+		deserialize: (data) => {
+			return b64.decode(Bson.deseerialize(data).toJSON())
+		}
 	},
 	secret: env.ACCESS_TOKEN_SECRET
 };
