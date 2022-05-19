@@ -17,8 +17,8 @@ export default class FileService {
 		const pump = () => {
 			return reader.read().then(({ value, done }) => {
 				if (done) {
-					console.log("serializing ", {chunks})
-					const result = this.db.serialize(chunks);
+					console.log("serializing ", chunks.length, {chunks})
+					const result = this.db.serialize(chunks[0]);
 					console.log("after serialize ", {result})
 					return result
 				}
