@@ -33,7 +33,7 @@ export default {
 		serialize: Bson.serialize,
 		deserializeStream: Bson.deserializeStream,
 		deserialize: (data) => {
-			return b64.decode(Bson.deseerialize(data).toJSON())
+			return b64.decode(Bson.deserialize(data).toJSON())
 		}
 	},
 	secret: env.ACCESS_TOKEN_SECRET
