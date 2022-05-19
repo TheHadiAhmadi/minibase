@@ -54,6 +54,7 @@ export default class FileService {
 	}
 
 	async download(id) {
+		console.log(await this.db.get('files'))
 		const files = await this.db.get('files', { id: id });
 
 		const result = this.db.deserialize(files[0].content);
