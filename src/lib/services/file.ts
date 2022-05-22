@@ -17,10 +17,7 @@ export default class FileService {
 		const pump = () => {
 			return reader.read().then(({ value, done }) => {
 				if (done) {
-					console.log("serializing ", chunks.length, {chunks})
-					const result = this.db.serialize(chunks[0]);
-					console.log("after serialize ", {result})
-					return result
+					return this.db.serialize(chunks[0]);
 				}
 				chunks.push(value);
 				return pump();
@@ -57,7 +54,6 @@ export default class FileService {
 	}
 
 	async download(id) {
-		console.log(await this.db.get('files'))
 		const files = await this.db.get('files', { id: id });
 
 		const result = this.db.deserialize(files[0].content);

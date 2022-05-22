@@ -2,9 +2,9 @@ import { AppService } from '$lib/services';
 
 export async function get({ platform, locals }) {
 	const db = platform.db;
-	const auth = await locals.auth;
+	const user = await locals.user;
 
-	const appService = new AppService(db, auth);
+	const appService = new AppService(db, user);
 
 	const apps = await appService.getApps();
 
@@ -17,13 +17,13 @@ export async function get({ platform, locals }) {
 }
 
 export async function post({ request, platform, locals }) {
-	const auth = locals.auth;
+	const user = locals.user;
 	const body = await request.json();
 	const db = platform.db;
 
 	const { name, description = '', public: isPublic = false } = body;
 
-	const appService = new AppService(db, auth);
+	const appService = new AppService(db, user);
 
 	const data = await appService.addApp({
 		name,

@@ -55,10 +55,6 @@ export default {
 		},
 		deserialize: (data) => {
 			return new Uint8Array(data.split(',').map(Number));
-		},
-		deserializeStream: (data) => {
-			// return ReadableStream(data.split('-'))
-			console.log('TODO: implement desesrializeStream');
 		}
 	},
 	secret: import.meta.env.VITE_ACCESS_TOKEN_SECRET

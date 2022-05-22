@@ -12,24 +12,27 @@ export async function handle({ event, resolve }) {
 	const cookies = parse(event.request.headers.get('cookie') || '');
 
 	const token = cookies.token ?? null;
+	if (token) event.locals.token = token;
+
+	const dark = cookies.dark ?? false;
+	event.locals.dark = !!dark;
 
 	const secret = event.platform.secret || 'dev-secret';
+	if (secret) event.locals.secret = secret;
 
-	const authService = new AuthService(event.platform.db, token, secret);
 	try {
-		const user = await authService.getUser();
+		const user = await AuthService.getUser(token, secret);
 
 		if (user) {
 			event.locals.user = {
+				id: user.id,
 				username: user.username,
-				email: user.email
+				email: user.data.email
 			};
 		}
 	} catch (err) {
 		// console.log("ERROR", err)
 	}
-
-	event.locals.auth = authService;
 
 	try {
 		const response = await resolve(event, { ssr: () => false });
@@ -53,7 +56,20 @@ export async function handle({ event, resolve }) {
 }
 
 export async function getSession(event) {
-	const { user } = event.locals;
+	const { user, dark } = event.locals;
 
-	return { user };
+	if (!user) {
+		return {
+			user: null.
+			dark
+		};
+	}
+
+	return {
+		user: {
+			email: user.email,
+			username: user.username
+		},
+		dark
+	};
 }

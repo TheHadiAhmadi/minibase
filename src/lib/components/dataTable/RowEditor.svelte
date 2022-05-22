@@ -10,7 +10,6 @@
 
 	let uploadOpen = false;
 
-	$: console.log(getAllContexts());
 	const { page } = getContext('__svelte__');
 	let app = $page.params.app;
 	let apiKey = $page.stuff.apiKeys[0].apiKey;
@@ -45,14 +44,18 @@
 				{#if type === 'file'}
 					<div class="form-group flex flex-col">
 						<Label>{name}</Label>
-							<Row class="w-full gap-1 items-center">
-								<Col col="expand">
-									<FormInput placeholder="Enter file url or upload a new file...." size="sm" bind:value={value[name]} />
-								</Col>
-								<Col>
-									<Button on:click={() => openUploadModal(name)}>Upload</Button>
-								</Col>
-							</Row>
+						<Row class="w-full gap-1 items-center">
+							<Col col="expand">
+								<FormInput
+									placeholder="Enter file url or upload a new file...."
+									size="sm"
+									bind:value={value[name]}
+								/>
+							</Col>
+							<Col>
+								<Button on:click={() => openUploadModal(name)}>Upload</Button>
+							</Col>
+						</Row>
 					</div>
 				{:else}
 					<FormInput label={name} {type} bind:value={value[name]} />

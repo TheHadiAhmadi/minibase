@@ -31,16 +31,11 @@ export default {
 			return true;
 		},
 		serialize: (data) => {
-			console.log('serialize', data)
-			console.log('after', b64.encode(data))
-			return b64.encode(data)
+			return b64.encode(data);
 		},
 		deserializeStream: Bson.deserializeStream,
 		deserialize: (data) => {
-
-			console.log('deserialize', data)
-			console.log('after', b64.decode(data))
-			return b64.decode(data)
+			return b64.decode(data);
 		}
 	},
 	secret: env.ACCESS_TOKEN_SECRET

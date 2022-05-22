@@ -13,7 +13,6 @@
 
 	async function uploadFile({ detail }) {
 		const id = detail;
-		console.log(id);
 	}
 
 	setContext('app', app);

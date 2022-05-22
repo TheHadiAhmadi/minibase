@@ -4,9 +4,9 @@ import { TableService } from '$lib/services';
 export async function get({ platform, params, locals }) {
 	const name = params.app;
 	const db = platform.db;
-	const auth = locals.auth;
+	const user = locals.user;
 
-	const appService = new AppService(db, auth);
+	const appService = new AppService(db, user);
 
 	const { tables, apiKeys } = await appService.getTables(name);
 
@@ -22,12 +22,12 @@ export async function get({ platform, params, locals }) {
 }
 export async function post({ params, request, platform, locals }) {
 	const db = platform.db;
-	const auth = locals.auth;
+	const user = locals.user;
 	const body = await request.json();
 	const appName = params.app;
 	const { name, public: isPublic = false, rows } = body;
 
-	const tableService = new TableService(db, auth, appName);
+	const tableService = new TableService(db, user, appName);
 
 	const result = await tableService.addTable({ name, isPublic, rows });
 

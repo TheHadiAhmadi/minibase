@@ -52,10 +52,10 @@ export async function post({ platform, request, params }) {
 export async function del({ platform, locals, params }) {
 	const appName = params.app;
 	const tableName = params.table;
-	const auth = locals.auth;
+	const user = locals.user;
 	const db = platform.db;
 
-	const tableService = new TableService(db, auth, appName);
+	const tableService = new TableService(db, user, appName);
 	await tableService.removeTable(tableName);
 
 	return {

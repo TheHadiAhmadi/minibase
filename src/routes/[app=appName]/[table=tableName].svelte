@@ -2,7 +2,6 @@
 	export async function load({ fetch, stuff, params }) {
 		const apiKey = stuff.apiKeys?.[0]?.apiKey ?? '';
 
-		console.log({ apiKey, stuff });
 		const response = await fetch(`/${params.app}/${params.table}.json`, {
 			headers: {
 				apiKey

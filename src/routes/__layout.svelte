@@ -1,10 +1,10 @@
 <script context="module">
 	/** @type {import('./').Load} */
 	export async function load({ session }) {
-		// console.log("__LAYOUT LOAD: ", {session})
 		return {
 			props: {
-				user: session?.user ?? null
+				user: session?.user ?? null,
+				dark: session?.dark ?? false
 			}
 		};
 	}
@@ -23,12 +23,13 @@
 	import { invalidate } from '$app/navigation';
 
 	export let user;
+	export let dark;
 
 	onMount(() => invalidate());
 </script>
 
 <AlertBox />
-<DashboardLayout {user}>
+<DashboardLayout {user} {dark}>
 	<slot name="sidebar" slot="sidebar" />
 	<slot />
 </DashboardLayout>

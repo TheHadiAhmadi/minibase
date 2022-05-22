@@ -21,7 +21,7 @@
 	let modalMode: 'signup' | 'login' = 'signup';
 
 	export let user = null;
-	export let token = '';
+	export let dark = false;
 
 	function handleError({ detail }) {
 		showError(detail.message);
@@ -46,7 +46,13 @@
 		modalOpen = true;
 	}
 
-	let dark = false;
+	function themeChanged({ detail }) {
+		console.log(detail);
+		if (detail.dark) {
+			console.log('switched to dark mode');
+		}
+		document.cookie = `dark=${detail.dark}`;
+	}
 </script>
 
 <Modal bind:open={modalOpen}>
@@ -64,7 +70,7 @@
 
 		{#if user}
 			<div class="flex items-center gap-3">
-				<ThemeButton bind:dark />
+				<ThemeButton on:change={themeChanged} bind:dark />
 				<AvatarDropdown {user} />
 			</div>
 		{:else}

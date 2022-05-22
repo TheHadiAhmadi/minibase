@@ -7,7 +7,6 @@ export default class DataService {
 	table = null;
 
 	async verifyAccess(key, method) {
-		console.log({ key, method });
 		if (!key || key?.rules[method] !== 'everyone') {
 			throw errorNotAuthorized(`Your ApiKey does not have '${method}' access to this table`);
 		}
@@ -60,9 +59,7 @@ export default class DataService {
 		};
 		if (id !== null) dataQuery.id = id;
 
-		console.log({ dataQuery });
 		const data = await this.db.get('data', dataQuery);
-		console.log({ data });
 
 		/// todo: pagination, filters...
 		const tables = await this.db.get('tables', {
@@ -77,18 +74,14 @@ export default class DataService {
 	}
 
 	async update(id, newData) {
-		console.log('here 1');
 		if (!(await this.hasAccess('update'))) throw errorNotAuthorized('you cannot do this');
-		console.log('here 2');
 		const dataQuery = {
 			appName: this.app,
 			tableName: this.table,
 			id: id
 		};
-		console.log({ dataQuery });
 		const existingData = await this.db.get('data', dataQuery);
 		if (existingData.length < 1) throw errorNotFound('data with this id not found');
-		console.log({ existingData });
 
 		this.db.update('data', dataQuery, {
 			value: { ...existingData[0], ...newData }

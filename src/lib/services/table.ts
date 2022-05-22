@@ -1,13 +1,19 @@
 import { errorBadRequest, errorNotFound, errorResourceExists } from '$lib/services/errors';
+import { errorNotAuthorized } from '.';
 
 export default class TableService {
 	db = null;
-	auth = null;
+	user = null;
 	appName = null;
-	constructor(db, auth, appName) {
+	constructor(db, user, appName) {
 		this.db = db;
-		this.auth = auth;
+		this.user = user;
 		this.appName = appName;
+	}
+
+	getUser() {
+		if (!this.user) throw errorNotAuthorized('you are not logged in');
+		return this.user;
 	}
 
 	async getTable(name) {
@@ -20,7 +26,7 @@ export default class TableService {
 
 	async addTable({ name, isPublic, rows }) {
 		const appName = this.appName;
-		const user = await this.auth.getUser();
+		const user = await this.getUser();
 
 		if (!name || typeof isPublic === 'undefined' || rows.length === 0) {
 			throw errorBadRequest('name, public and rows are required');
@@ -52,7 +58,7 @@ export default class TableService {
 	}
 
 	async removeTable(name: string) {
-		const user = await this.auth.getUser();
+		const user = await this.getUser();
 		const appName = this.appName;
 
 		if (!name) throw errorBadRequest('name of table is required');
@@ -65,7 +71,7 @@ export default class TableService {
 
 	async updateTable(tableName: string, { name, isPublic, rows }) {
 		const appName = this.appName;
-		const user = await this.auth.getUser();
+		const user = await this.getUser();
 
 		const tables = await this.db.get('tables', { ownerId: user.id, appName, name: tableName });
 		if (tables.length === 0) throw errorNotFound('table not found');

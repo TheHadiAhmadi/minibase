@@ -1,5 +1,5 @@
 export { Bson, MongoClient } from 'https://deno.land/x/mongo@v0.29.0/mod.ts';
-export * as b64 from "https://deno.land/std@0.140.0/encoding/base64.ts";
+export * as b64 from 'https://deno.land/std@0.140.0/encoding/base64.ts';
 // load .env file
 import 'https://deno.land/x/dotenv/load.ts';
 

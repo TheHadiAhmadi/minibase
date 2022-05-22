@@ -1,10 +1,13 @@
+import { AuthService } from '$lib/services';
+
 /** @type {import('./login.json').RequestHandler} */
-export async function post({ request, locals }) {
-	const auth = locals.auth;
+export async function post({ platform, request, locals }) {
 	const body = await request.json();
 	const { username, password } = body;
 
-	const result = await auth.login({ username, password });
+	const auth = new AuthService(platform.db, locals.token, locals.secret);
+
+	const result = await auth.login(null, username, password);
 
 	return {
 		status: 200,

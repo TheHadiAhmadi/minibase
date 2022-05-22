@@ -1,6 +1,7 @@
 export async function get({ locals }) {
+	console.log({ locals });
 	return {
-		body: await locals.auth.getUser()
+		body: await locals.user
 	};
 }
 

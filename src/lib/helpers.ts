@@ -6,11 +6,11 @@ export const baseUrl = dev ? 'http://localhost:8000' : 'https://minibase.deno.de
 export function nanoid(length) {
 	const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 	const _nanoid = customAlphabet(alphabet, length);
-	return _nanoid()
-} 
+	return _nanoid();
+}
 
 export function generateApiKey() {
-	return nanoid(32)
+	return nanoid(32);
 }
 
 if (import.meta.vitest) {

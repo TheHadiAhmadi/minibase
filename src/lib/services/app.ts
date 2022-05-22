@@ -8,23 +8,29 @@ import {
 
 export default class AppService {
 	db = null;
-	auth = null;
+	user = null;
 
-	constructor(db, auth) {
+	constructor(db, user) {
 		this.db = db;
-		this.auth = auth;
+		this.user = user;
 	}
+
+	async getUser() {
+		if (!this.user) throw errorNotAuthorized('you are not logged in');
+		return this.user.id;
+	}
+
 	async getApps() {
 		try {
-			const user = await this.auth.getUser();
-			return await this.db.get('apps', { ownerId: user.id });
+			const ownerId = await this.getUser();
+			return await this.db.get('apps', { ownerId });
 		} catch (err) {
 			return await this.db.get('apps', { public: true });
 		}
 	}
 
 	async addApp({ name, description, isPublic }) {
-		const user = await this.auth.getUser();
+		const ownerId = await this.getUser();
 		if (!name || !description || typeof isPublic === 'undefined') throw errorBadRequest();
 
 		const existingApp = await this.db.get('apps', { name });
@@ -32,9 +38,9 @@ export default class AppService {
 		if (existingApp.length > 0) throw errorResourceExists('App with this name already exists');
 
 		const newApp = {
-			ownerId: user.id,
-			name: name,
-			description: description,
+			ownerId,
+			name,
+			description,
 			public: isPublic
 		};
 
@@ -66,18 +72,18 @@ export default class AppService {
 		// TODO
 		if (!appName) throw errorBadRequest();
 
-		const user = await this.auth.getUser();
+		const ownerId = await this.getUser();
 
 		const [apiKeys, apps] = await Promise.all([
 			this.db.get('keys', { appName }),
-			this.db.get('apps', { name: appName })
+			this.db.get('apps', { name: appName, ownerId })
 		]);
 
 		if (apps.length === 0 || apiKeys.length === 0) {
 			return [];
 		}
 
-		if (apps[0].ownerId !== user.id) {
+		if (apps[0].ownerId !== ownerId) {
 			return [];
 		}
 
@@ -85,32 +91,34 @@ export default class AppService {
 	}
 
 	async getTables(appName) {
-		// TODO
-
 		if (!appName) throw errorBadRequest();
 
 		try {
-			const user = await this.auth.getUser();
+			const ownerId = await this.getUser();
 
 			const [tables, apiKeys] = await Promise.all([
-				this.db.get('tables', { ownerId: user.id, appName }),
+				this.db.get('tables', { ownerId, appName }),
 				this.getApiKeys(appName)
 			]);
 
+			console.log({ tables, apiKeys });
 			return {
 				tables,
 				apiKeys
 			};
 		} catch (err) {
+			console.log(err);
 			// check if public
 			const [apps, tables] = await Promise.all([
 				this.db.get('apps', { name: appName, public: true }),
 				this.db.get('tables', { appName, public: true })
 			]);
 
+			console.log({ apps, appName, aspps: await this.db.get('apps') });
 			if (apps.length > 0) {
 				return {
-					tables
+					tables,
+					apiKeys: []
 				};
 			} else throw errorNotAuthorized('this app does not exist or is not public');
 		}

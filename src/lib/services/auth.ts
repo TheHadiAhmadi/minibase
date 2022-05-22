@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import {
 	errorBadRequest,
 	errorJWT,
+	errorNotAuthorized,
 	errorNotFound,
 	errorNotImplemented,
 	errorResourceExists
@@ -11,10 +12,10 @@ import {
 export type User = {
 	id: string;
 	username: string;
-	email: string;
+	[x: string]: any;
 };
 
-async function hashPassword(str: string): Promise<string> {
+export async function hashPassword(str: string): Promise<string> {
 	if (str) {
 		return crypto.createHash('sha256').update(str).digest('hex');
 	}
@@ -29,10 +30,16 @@ export default class AuthService {
 	db = null;
 	token: string = null;
 	secret: string = null;
-	constructor(db, token, secret) {
+	constructor(db, token: string, secret: string) {
 		this.db = db;
 		this.token = token;
 		this.secret = secret;
+	}
+
+	async verifyApiKeyAccess(appName, apiKey) {
+		const apiKeys = await this.db.get('keys', { appName, apiKey });
+
+		if (apiKeys.length < 1) throw errorNotAuthorized();
 	}
 
 	async createAccessToken(user: User): Promise<string> {
@@ -44,19 +51,18 @@ export default class AuthService {
 		}
 	}
 
-	async getUser(): Promise<User> {
+	static async getUser(token: string, secret: string): Promise<User> {
 		try {
-			if (!this.token) return null;
-			const payload = await jwt.verify(this.token, this.secret);
+			if (!token) return null;
+			const payload = await jwt.verify(token, secret);
 
 			if (payload.user) return payload.user;
-			// console.log(payload);
 
 			if (payload)
 				return {
 					id: payload.id,
 					username: payload.username,
-					email: payload.email
+					data: payload.data
 				};
 			return null;
 		} catch (err) {
@@ -64,9 +70,9 @@ export default class AuthService {
 		}
 	}
 
-	async signup({ email, username, password }) {
-		if (!email || !username || !password) {
-			throw errorBadRequest('email, username and password are required');
+	async signup(appName, username, password, data) {
+		if (!username || !password) {
+			throw errorBadRequest('username and password are required');
 		}
 
 		const existingUser = await this.db.get('users', { username });
@@ -77,7 +83,7 @@ export default class AuthService {
 		const user = {
 			id: uuid(),
 			username,
-			email
+			data
 		};
 
 		await this.db.insert('users', {
@@ -93,15 +99,22 @@ export default class AuthService {
 		};
 	}
 
-	async login({ username, password }) {
-		const users = await this.db.get('users', { username });
-
+	async login(appName, username, password) {
 		if (!username || !password) {
 			throw errorBadRequest('username and password are required');
 		}
 
+		let users;
+
+		if (!appName) {
+			users = await this.db.get('users', { username }); // TODO
+			users = users.filter((user) => !user.appName);
+		} else {
+			users = await this.db.get('users', { username, appName });
+		}
+
 		// check if user exists
-		if (users.length !== 1) {
+		if (users.length < 1) {
 			throw errorNotFound('Account with this username not exists');
 		}
 
@@ -113,7 +126,7 @@ export default class AuthService {
 		const payload = {
 			id: users[0].id,
 			username: users[0].username,
-			email: users[0].email
+			data: users[0].data
 		};
 
 		const access_token = await this.createAccessToken(payload);
@@ -124,21 +137,18 @@ export default class AuthService {
 		};
 	}
 
-	async updateUser({ username, email, password, old_password }) {
-		const data: any = {};
-		const user = await this.getUser();
+	async updateUser({ username, password, old_password, data }) {
+		const user = await AuthService.getUser(this.token, this.secret);
+		const query: Partial<User> = {};
 
 		if (username) {
-			data.username = username;
-			const theUser = await this.db.get('users', { username });
-			if (theUser.length > 0) {
+			query.username = username;
+			const users = await this.db.get('users', { username });
+			if (users.length > 0) {
 				throw errorResourceExists('Username taken');
 			}
 		}
-
-		if (email) {
-			data.email = email;
-		}
+		// update data
 
 		if (password && !old_password)
 			throw errorBadRequest('For changing password, you should provide old_password');
@@ -149,14 +159,19 @@ export default class AuthService {
 			if ((await hashPassword(old_password)) !== users[0].password)
 				throw errorBadRequest('Old passwords does not match');
 
-			data.password = await hashPassword(password);
+			query.password = await hashPassword(password);
 		}
 
-		await this.db.update('users', { id: user.id }, data);
+		query.data = { ...user.data, data };
+
+		await this.db.update('users', { id: user.id }, query);
+
+		data.username = username;
+		data.password = password;
 
 		return {
 			user: await this.db.get('users', { id: user.id }),
-			updated: Object.keys(data).join(', ')
+			updated: Object.keys(data).filter(Boolean).join(', ')
 		};
 	}
 
