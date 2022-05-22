@@ -100,10 +100,19 @@ export default class AuthService {
 			data
 		};
 
-		await this.db.insert('users', {
-			...user,
-			password: await hashPassword(password)
-		});
+		if(!appName) {
+
+			await this.db.insert('users', {
+				...user,
+				password: await hashPassword(password)
+			});
+		} else {
+			await this.db.insert('users', {
+				...user,
+				appName,
+				password: await hashPassword(password)
+			});
+		}
 
 		const access_token = await this.createAccessToken(user);
 
