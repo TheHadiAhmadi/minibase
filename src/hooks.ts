@@ -60,7 +60,7 @@ export async function getSession(event) {
 
 	if (!user) {
 		return {
-			user: null.
+			user: null,
 			dark
 		};
 	}
