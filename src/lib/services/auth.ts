@@ -56,11 +56,12 @@ export default class AuthService {
 			if (!token) return null;
 			const payload = await jwt.verify(token, secret);
 
-			if (payload.user) return {
-				id: payload.user.id,
-				username: payload.user.username,
-				data: payload.user.data,
-			}
+			if (payload.user)
+				return {
+					id: payload.user.id,
+					username: payload.user.username,
+					data: payload.user.data
+				};
 
 			if (payload)
 				return {
@@ -69,7 +70,7 @@ export default class AuthService {
 					data: payload.data
 				};
 
-			console.log({payload})
+			console.log({ payload });
 			return null;
 		} catch (err) {
 			throw errorJWT(err);
@@ -81,9 +82,16 @@ export default class AuthService {
 			throw errorBadRequest('username and password are required');
 		}
 
-		const existingUser = await this.db.get('users', { username });
+		let existingUser;
+		if (!appName) {
+			existingUser = await this.db.get('users', { username });
+			existingUser = existingUser.filter((user) => !user.appName);
+		} else {
+			existingUser = await this.db.get('users', { username, appName });
+		}
+
 		if (existingUser.length > 0) {
-			throw errorResourceExists('Username taken.');
+			throw errorResourceExists('Username is Not available');
 		}
 
 		const user = {
