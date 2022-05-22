@@ -31,7 +31,7 @@ export async function handle({ event, resolve }) {
 			};
 		}
 	} catch (err) {
-		// console.log("ERROR", err)
+		console.log("ERROR", err)
 	}
 
 	try {
@@ -57,6 +57,7 @@ export async function handle({ event, resolve }) {
 
 export async function getSession(event) {
 	const { user, dark } = event.locals;
+	console.log({user, dark})
 
 	if (!user) {
 		return {

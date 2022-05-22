@@ -56,7 +56,11 @@ export default class AuthService {
 			if (!token) return null;
 			const payload = await jwt.verify(token, secret);
 
-			if (payload.user) return payload.user;
+			if (payload.user) return {
+				id: payload.user.id,
+				username: payload.user.username,
+				data: payload.user.data,
+			}
 
 			if (payload)
 				return {
@@ -64,6 +68,8 @@ export default class AuthService {
 					username: payload.username,
 					data: payload.data
 				};
+
+			console.log({payload})
 			return null;
 		} catch (err) {
 			throw errorJWT(err);
