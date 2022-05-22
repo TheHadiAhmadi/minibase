@@ -27,7 +27,7 @@ export async function handle({ event, resolve }) {
 			event.locals.user = {
 				id: user.id,
 				username: user.username,
-				email: user.data.email
+				email: user.data?.email ?? user.email // fallback
 			};
 		}
 	} catch (err) {

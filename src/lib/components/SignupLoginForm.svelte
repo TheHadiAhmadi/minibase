@@ -45,7 +45,7 @@
 			$session = {
 				user: {
 					username: res.user.username,
-					email: res.user.email
+					email: res.user.data?.email ?? res.user.email 
 				}
 			};
 
