@@ -37,7 +37,7 @@ export async function post({ platform, request, params }) {
 	const { app, table } = params;
 
 	const dataService = new DataService(db, apiKey, app, table);
-	const id = uuid();
+	const id = body.id ?? uuid();
 
 	const result = await dataService.insert(id, body);
 
