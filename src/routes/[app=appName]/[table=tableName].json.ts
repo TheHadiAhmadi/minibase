@@ -6,16 +6,6 @@ export async function get({ platform, request, params }) {
 	const db = platform.db;
 	const apiKey = request.headers.get('apiKey');
 
-	if (!apiKey)
-		return {
-			status: 200,
-			body: {
-				status: 200,
-				values: [],
-				rows: []
-			}
-		};
-
 	const dataService = new DataService(db, apiKey, app, table);
 
 	const { values, rows } = await dataService.get();
