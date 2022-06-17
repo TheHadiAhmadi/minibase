@@ -70,6 +70,7 @@ export default class TableService {
 	}
 
 	async updateTable(tableName: string, { name, isPublic, rows }) {
+		console.log("updateTable: ", {name, isPublic, rows})
 		const appName = this.appName;
 		const user = await this.getUser();
 

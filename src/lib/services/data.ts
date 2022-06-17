@@ -40,7 +40,6 @@ export default class DataService {
 			return await this.verifyAccess(keys[0], method);
 		} catch (err) {
 			throw err;
-			return false;
 		}
 	}
 
@@ -49,6 +48,10 @@ export default class DataService {
 		this.apiKey = apiKey;
 		this.app = app;
 		this.table = table;
+	}
+
+	async push(type, data) {
+		console.log("push event", {type, data});
 	}
 
 	async get(id = null) {
@@ -107,6 +110,7 @@ export default class DataService {
 			tableName: this.table,
 			value: newData
 		});
+		await this.push('INSERT', {data});
 		return true;
 	}
 }
