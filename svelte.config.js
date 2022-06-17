@@ -17,7 +17,7 @@ const config = {
 			out: './output/build',
 			filesPrefix: './build',
 			imports: {
-				jsonwebtoken: 'https://esm.sh/jsonwebtoken',
+				jsonwebtoken: 'https://dev.jspm.io/jsonwebtoken',
 				crypto: 'https://deno.land/std/node/crypto.ts',
 				nanoid: 'https://deno.land/x/nanoid/mod.ts'
 			}
