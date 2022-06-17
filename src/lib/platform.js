@@ -16,7 +16,7 @@ export default {
 		},
 		insert: (collection, data) => {
 			// console.log('DEV, insert', collection, data);
-			_data[collection].push(data);
+			_data[collection].concat(data)	
 			return true;
 		},
 		async update(collection, filter, data) {

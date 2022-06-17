@@ -27,14 +27,24 @@ export async function post({ platform, request, params }) {
 	const { app, table } = params;
 
 	const dataService = new DataService(db, apiKey, app, table);
-	const id = body.id ?? uuid();
 
-	const result = await dataService.insert(id, body);
+	const multiple = !!Array.isArray(body) 
+	let result;
+	let newBody;
+	if(multiple) {
+		newBody = body.map(b => ({ id: uuid(), ...b}));
+		result = await dataService.insertMany(newBody);
+		
+	} else {
+		body.id = body.id ?? uuid();
+		result = await dataService.insert(body.id, body);
+	}
+
 
 	return {
 		status: 200,
 		body: {
-			data: { ...body, id }
+			data: multiple ? newBody : body
 		}
 	};
 }

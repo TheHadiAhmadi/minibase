@@ -113,4 +113,15 @@ export default class DataService {
 		await this.push('INSERT', {data});
 		return true;
 	}
+
+	async insertMany(newData: any[]) {
+		await this.db.insert('data', newData.map(d => {
+			return {
+				id: d.id,
+				appName: this.app,
+				tableName: this.table,
+				value: d
+			}
+		}))
+	}
 }
