@@ -110,7 +110,7 @@ export default class DataService {
 			tableName: this.table,
 			value: newData
 		});
-		await this.push('INSERT', {data});
+		await this.push('INSERT', {data: newData});
 		return true;
 	}
 
