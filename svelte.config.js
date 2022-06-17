@@ -17,7 +17,7 @@ const config = {
 			out: './output/build',
 			filesPrefix: './build',
 			imports: {
-				jsonwebtoken: 'https://cdn.skypack.dev/jsonwebtoken',
+				jsonwebtoken: 'https://esm.sh/jsonwebtoken',
 				crypto: 'https://deno.land/std/node/crypto.ts',
 				nanoid: 'https://deno.land/x/nanoid/mod.ts'
 			}
