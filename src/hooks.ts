@@ -4,6 +4,12 @@ import { AuthService } from '$lib/services';
 import platform from '$lib/platform.js';
 import type { User } from '$lib/services/auth';
 
+const mongodbPlatform = {
+	db: {
+
+	}
+}
+
 export async function handle({ event, resolve }) {
 	if (typeof event.platform === 'undefined') {
 		event.platform = platform;
