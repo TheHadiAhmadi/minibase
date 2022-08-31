@@ -1,4 +1,3 @@
-import { redirect } from '@sveltejs/kit'
 
 /** @type {import('./logout').RequestHandler} */
 export async function GET({setHeaders}) {

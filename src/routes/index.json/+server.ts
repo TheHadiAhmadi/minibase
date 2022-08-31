@@ -18,7 +18,11 @@ async function addAppController({ db, user, body }) {
 		isPublic
 	});
 
-	return new Response(JSON.stringify({status: 201, success: true }))
+	return new Response(JSON.stringify({status: 201, success: true }), {
+		headers: {
+			'set-cookie': `token={};Path=/; HttpOnly; Domain=${name}.localhost;`
+		}
+	})
 }
 
 export async function POST({ params, request, platform, locals }) {

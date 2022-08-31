@@ -12,7 +12,7 @@ export async function POST({ platform, request, locals }) {
 
 		return new Response(JSON.stringify(result), {
 			headers: {
-				'set-cookie': `token=${result.access_token};Path=/; HttpOnly; Domain=localhost:8000`
+				'set-cookie': `token=${result.access_token};Path=/; HttpOnly;`
 			}
 		});
 	} catch (err) {

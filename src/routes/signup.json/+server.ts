@@ -1,5 +1,4 @@
 import { AuthService } from '$lib/services';
-import { redirect } from '@sveltejs/kit';
 
 export async function POST({ platform, request, locals, setHeaders }) {
 	const body = await request.json();

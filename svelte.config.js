@@ -1,5 +1,5 @@
 // // import adapter from '@sveltejs/adapter-node';
-import adapter from 'svelte-adapter-deno-deploy';
+import adapter from 'svelte-adapter-deno-deploy2';
 import preprocess from 'svelte-preprocess';
 // import windicss from 'vite-plugin-windicss';
 import path from 'path';

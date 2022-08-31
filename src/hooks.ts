@@ -35,7 +35,7 @@ export async function handle({ event, resolve }) {
 	}
 
 	try {
-		const response = await resolve(event, { ssr: () => false });
+		const response = await resolve(event);
 
 		response.headers.set('Access-Control-Allow-Origin', '*');
 		response.headers.set('Access-Control-Allow-Headers', 'Content-Type, ApiKey');
