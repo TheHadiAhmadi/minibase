@@ -6,13 +6,9 @@ export function createError(status = 500, message = 'Internal Server Error') {
 }
 
 export function errorResponse(error) {
-	return {
-		status: error.status,
-		body: {
-			status: error.status,
-			message: error.message
-		}
-	};
+	return new Response(JSON.stringify({ status: error.status, message: error.message }), {
+		status: error.status
+	});
 }
 
 export function errorBadRequest(message = 'Invalid Request') {

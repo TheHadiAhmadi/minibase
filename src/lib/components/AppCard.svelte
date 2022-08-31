@@ -8,7 +8,7 @@
 	export let description;
 </script>
 
-<a href="/{name}">
+<a href="http://{name}.localhost:8000/">
 	<!-- TODO: Card transition and hoverable + shadow -->
 	<Card class="min-w-60 transition hover:bg-[#efefef] dark:hover:bg-[#404040]">
 		<CardBody>

@@ -1,8 +1,9 @@
 <script>
-	import { post } from '$lib/api';
+	import { goto } from '$app/navigation';
 
-	import { Button, CardFooter, Checkbox, FormInput, Modal } from '@svind/svelte';
+	import { Button, ButtonList, CardFooter, Checkbox, FormInput, Modal } from '@svind/svelte';
 	import { createEventDispatcher } from 'svelte';
+	import { apiCreateApp } from '../api';
 
 	import Form from './Form.svelte';
 	import Input from './Input.svelte';
@@ -11,18 +12,20 @@
 
 	export let loading = false;
 
+	export let full = false;
 	let request = {};
 
 	const dispatch = createEventDispatcher();
 
 	async function onSubmit(e) {
 		loading = true;
-		const result = await post('/.json', request);
+		const result = await apiCreateApp(request);
 
 		if (result.status >= 400) {
 			dispatch('error', result);
 		} else {
 			dispatch('success', result);
+			goto('/');
 		}
 	}
 
@@ -49,7 +52,7 @@
 	}
 </script>
 
-<Page title="Create New App">
+<Page {full} title="Create New App">
 	<Form slot="body" on:submit={onSubmit}>
 		<Input placeholder="App Name" bind:value={request.name} />
 		<div class="text-sm text-gray-500">{nameFeedback}</div>
@@ -57,7 +60,8 @@
 		<div class="h-2" />
 		<Checkbox bind:value={request.public}>Public</Checkbox>
 	</Form>
-	<Button on:click={onSubmit} slot="footer:actions" variant="primary" disabled={!valid || loading}
-		>Create</Button
-	>
+	<ButtonList slot="footer:actions">
+		<Button ghost on:click={() => console.log('TODO: close')}>Cancel</Button>
+		<Button on:click={onSubmit} variant="primary" disabled={!valid || loading}>Create</Button>
+	</ButtonList>
 </Page>

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { session } from '$app/stores';
+	// import { session } from '$app/stores';
 
+	// const session = {}
 	import {
 		Button,
 		ButtonList,
@@ -37,17 +38,18 @@
 			body: JSON.stringify(model)
 		});
 
-		const res = await response.json();
+		const res = await response.json()
+		if (res.status >= 400) {
 
-		if (response.status >= 400) {
-			dispatch('error', res);
+			dispatch('error',res);
 		} else {
-			$session = {
-				user: {
-					username: res.user.username,
-					email: res.user.data?.email ?? res.user.email 
-				}
-			};
+			// $session = {
+			// 	user: {
+			// 		username: res.user.username,
+			// 		email: res.user.data?.email ?? res.user.email 
+			// 	}
+			// };
+			console.log("update session")
 
 			dispatch(mode, res);
 		}
