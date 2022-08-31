@@ -1,4 +1,4 @@
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 import { parse } from 'cookie';
 import { AuthService } from '$lib/services';
 import platform from '$lib/platform.js';
@@ -14,7 +14,7 @@ export async function handle({ event, resolve }) {
 	const token = cookies.token ?? null;
 	if (token) event.locals.token = token;
 
-	const dark = cookies.dark ?? false;
+	const dark = cookies.dark ? cookies.dark == 'true' ? true : false : false;
 	event.locals.dark = !!dark;
 
 	const secret = event.platform.secret || 'dev-secret';
@@ -55,22 +55,22 @@ export async function handle({ event, resolve }) {
 	}
 }
 
-export async function getSession(event) {
-	const { user, dark } = event.locals;
-	console.log({user, dark})
+// export async function getSession(event) {
+// 	const { user, dark } = event.locals;
+// 	console.log({user, dark})
 
-	if (!user) {
-		return {
-			user: null,
-			dark
-		};
-	}
+// 	if (!user) {
+// 		return {
+// 			user: null,
+// 			dark
+// 		};
+// 	}
 
-	return {
-		user: {
-			email: user.email,
-			username: user.username
-		},
-		dark
-	};
-}
+// 	return {
+// 		user: {
+// 			email: user.email,
+// 			username: user.username
+// 		},
+// 		dark
+// 	};
+// }

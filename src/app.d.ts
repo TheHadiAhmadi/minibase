@@ -5,12 +5,5 @@ declare namespace App {
 
 	interface Platform {}
 
-	interface Session {
-		user: {
-			username: string;
-			email: string;
-		};
-	}
-
 	interface Stuff {}
 }

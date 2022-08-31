@@ -7,12 +7,10 @@
 
 	export let value;
 	export let columns;
+	export let appName;
+	export let apiKey;
 
 	let uploadOpen = false;
-
-	const { page } = getContext('__svelte__');
-	let app = $page.params.app;
-	let apiKey = $page.stuff.apiKeys[0].apiKey;
 
 	let fileField = '';
 
@@ -70,7 +68,7 @@
 </Page>
 
 <Modal bind:open={uploadOpen}>
-	<FileUploader {app} {apiKey} on:close={() => (uploadOpen = false)} on:upload={upload} />
+	<FileUploader app={appName} {apiKey} on:close={() => (uploadOpen = false)} on:upload={upload} />
 </Modal>
 
 <style global>

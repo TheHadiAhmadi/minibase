@@ -20,12 +20,22 @@ export default class AppService {
 		return this.user.id;
 	}
 
+	async getPublicApps() {
+		const publicApps = await this.db.get('apps', { public: true });
+		try {
+			const ownerId = await this.getUser();
+			return publicApps.filter((app) => app.ownerId !== ownerId);
+		} catch (err) {
+			return publicApps;
+		}
+	}
+
 	async getApps() {
 		try {
 			const ownerId = await this.getUser();
 			return await this.db.get('apps', { ownerId });
 		} catch (err) {
-			return await this.db.get('apps', { public: true });
+			return [];
 		}
 	}
 
@@ -44,9 +54,11 @@ export default class AppService {
 			public: isPublic
 		};
 
+		console.log('HERE', newApp);
 		// insert app
 		await this.db.insert('apps', newApp);
 
+		console.log(await this.db.get('apps', { name }));
 		const apiKey = {
 			name: 'Full Access',
 			appName: newApp.name,
@@ -97,11 +109,10 @@ export default class AppService {
 			const ownerId = await this.getUser();
 
 			const [tables, apiKeys] = await Promise.all([
-				this.db.get('tables', { ownerId, appName }),
+				this.db.get('tables', { appName }),
 				this.getApiKeys(appName)
 			]);
 
-			console.log({ tables, apiKeys });
 			return {
 				tables,
 				apiKeys

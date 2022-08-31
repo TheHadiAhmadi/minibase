@@ -1,3 +1,11 @@
-import { extractFromSvelteConfig } from 'vitest-svelte-kit';
+import { sveltekit } from '@sveltejs/kit/vite';
+import windicss from 'vite-plugin-windicss';
 
-export default extractFromSvelteConfig();
+export default {
+	plugins: [windicss(), sveltekit()],
+	test: {
+		globals: true,
+		environment: 'jsdom',
+		includeSource: ['src/**/*.{js,ts,svelte}']
+	}
+};

@@ -56,7 +56,7 @@
 </script>
 
 <Modal bind:open={modalOpen}>
-	<SignupLoginForm on:login={login} on:signup={signup} on:error={handleError} />
+	<SignupLoginForm mode={modalMode} on:login={login} on:signup={signup} on:error={handleError} />
 </Modal>
 
 <slot name="sidebar" />

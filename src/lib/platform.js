@@ -1,5 +1,15 @@
 // import fs from 'fs/promises';
-import _data from './data.json';
+// import _data from './data.json';
+const _data = {
+	"users": [],
+	"apps": [],
+	"tables": [],
+	"keys": [],
+	"files": [],
+	"data": []
+}
+
+
 
 export default {
 	db: {
@@ -16,7 +26,8 @@ export default {
 		},
 		insert: (collection, data) => {
 			// console.log('DEV, insert', collection, data);
-			_data[collection].concat(data)	
+			_data[collection] = [..._data[collection], data]
+			
 			return true;
 		},
 		async update(collection, filter, data) {
