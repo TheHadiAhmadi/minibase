@@ -1,0 +1,5 @@
+
+<div class="flex flex-col gap-3 h-screen w-screen bg-gradient-to-tl from-blue-200 to-cyan-100 text-lg items-center justify-center">
+  <p class="text-xl text-gray-700 font-bold">Welcome to Minibase</p>
+  <a href="/projects" class="p-2 rounded shadow hover:shadow-xl bg-blue-500 focus:bg-blue-500 text-white hover:bg-blue-600 border-none transition">Get Started</a>
+</div>

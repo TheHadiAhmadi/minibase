@@ -1,8 +1,6 @@
-// import adapter from '@sveltejs/adapter-node';
-import adapter from 'svelte-adapter-deno-deploy';
+import adapter from '@sveltejs/adapter-vercel';
 import preprocess from 'svelte-preprocess';
-import windicss from 'vite-plugin-windicss';
-import path from 'path';
+import path from 'path'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -11,24 +9,13 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		// adapter: adapter(),
-		adapter: adapter({
-			serverFile: path.resolve('output/server.js'),
-			out: './output/build',
-			filesPrefix: './build',
-			imports: {
-				jsonwebtoken: 'https://jspm.dev/jsonwebtoken@8.5.1',
-				crypto: 'https://deno.land/std/node/crypto.ts',
-				nanoid: 'https://deno.land/x/nanoid/mod.ts'
-			}
-		}),
-		vite: {
-			plugins: [windicss()],
-			test: {
-				globals: true,
-				environment: 'jsdom',
-				includeSource: ['src/**/*.{js,ts,svelte}']
-			}
+		adapter: adapter(),
+		alias: {
+			'$services': path.resolve('./src/services'),
+			'$components': path.resolve('./src/components'),
+			'$types': path.resolve('./src/types'),
+			'$stores': path.resolve('./src/stores'),
+			'$server': path.resolve('./src/server'),
 		}
 	}
 };
