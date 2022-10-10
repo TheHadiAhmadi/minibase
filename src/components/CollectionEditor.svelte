@@ -6,10 +6,11 @@
     getRows,
     deleteData,
   } from "$services/api";
-  
+
   import type { CollectionRow, ProjectCollection } from "$types";
   import { createEventDispatcher } from "svelte";
   import Main from "./Main.svelte";
+  import MainBody from "./MainBody.svelte";
   import SchemaEditor from "./SchemaEditor.svelte";
 
   export let project: string;
@@ -186,11 +187,13 @@
     </TableBody>
   </Table>
 {:else}
-  <FormInput label="name" bind:value={data.name} />
-  <FormField>
-    <Label>Schema</Label>
-    <SchemaEditor bind:schema={data.schema} />
-  </FormField>
+  <MainBody>
+    <FormInput label="name" bind:value={data.name} />
+    <FormField>
+      <Label>Schema</Label>
+      <SchemaEditor bind:schema={data.schema} />
+    </FormField>
+  </MainBody>
 {/if}
 <CardFooter slot="footer">
   <CardActions>

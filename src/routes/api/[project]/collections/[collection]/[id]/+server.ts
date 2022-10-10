@@ -6,11 +6,17 @@ import {
   deleteData,
   getData,
 } from "$server/services";
+import { APIKEY_SCOPES } from "../../../../../../types";
 import type { RequestEvent } from "./$types";
 
 // get data
 export async function GET({ request, params }: RequestEvent) {
-  await validateApiKey(params.project, request.headers.get("ApiKey"));
+  await validateApiKey(
+    params.project,
+    request.headers.get("ApiKey"),
+    [APIKEY_SCOPES.READ_DATA],
+    [APIKEY_SCOPES.PROJECT_ADMIN]
+  );
 
   const data = await getData({
     project: params.project,
@@ -22,8 +28,14 @@ export async function GET({ request, params }: RequestEvent) {
 
 // edit data
 export async function PUT({ request, params }: RequestEvent) {
+  await validateApiKey(
+    params.project,
+    request.headers.get("ApiKey"),
+    [APIKEY_SCOPES.PROJECT_ADMIN],
+    [APIKEY_SCOPES.WRITE_DATA]
+  );
+
   const body = await request.json();
-  await validateApiKey(params.project, request.headers.get("ApiKey"));
 
   if (!body) throw new ResponseError(400, "body should be an object");
   const data = await editData({
@@ -37,7 +49,12 @@ export async function PUT({ request, params }: RequestEvent) {
 
 // delete data
 export async function DELETE({ request, params }: RequestEvent) {
-  await validateApiKey(params.project, request.headers.get("ApiKey"));
+  await validateApiKey(
+    params.project,
+    request.headers.get("ApiKey"),
+    [APIKEY_SCOPES.PROJECT_ADMIN],
+    [APIKEY_SCOPES.WRITE_DATA]
+  );
 
   const data = await deleteData({
     project: params.project,

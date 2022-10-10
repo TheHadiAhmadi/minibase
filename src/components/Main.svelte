@@ -8,14 +8,13 @@
     class:opacity-0={!backdrop}
   />
 
-  <div class="p-3 overflow-hidden">
+  <div
+    class="p-3 overflow-hidden transform transition origin-right duration-400"
+    class:scale-95={backdrop}
+    class:translate-x-6={backdrop}
+  >
     <Card class="max-h-full overflow-hidden">
-      <slot name="header" />
-
-      <CardBody class="h-100px overflow-auto flex-1 flex flex-col">
-        <slot />
-      </CardBody>
-      <slot name="footer" />
+      <slot />
     </Card>
   </div>
 </AppBody>

@@ -2,6 +2,7 @@
   import { updateProject } from "$services/api";
   import { createEventDispatcher } from "svelte";
   import Main from "./Main.svelte";
+  import MainBody from "./MainBody.svelte";
   export let apiKey: string;
   export let key: string | undefined = undefined;
   export let value: string | undefined = undefined;
@@ -44,9 +45,11 @@
     {/if}
   </CardTitle>
 </CardHeader>
-<FormInput readOnly={mode === "edit"} label="name" bind:value={key} />
+<MainBody>
+  <FormInput readOnly={mode === "edit"} label="name" bind:value={key} />
 
-<FormTextarea placeholder="Enter value..." label="value" bind:value />
+  <FormTextarea placeholder="Enter value..." label="value" bind:value />
+</MainBody>
 
 <CardFooter slot="footer">
   <CardActions>

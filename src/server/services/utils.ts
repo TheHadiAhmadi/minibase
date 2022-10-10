@@ -1,16 +1,6 @@
 import type { ProjectInfoPromise } from "$types";
 import { getProject } from "./project";
 
-export async function validateApiKey(
-  project: string,
-  apiKey: string | null = ""
-): Promise<ProjectInfoPromise> {
-  const projectInfo = await getProject({ name: project });
-
-  if (projectInfo.apiKey !== apiKey) throw new Error("ApiKey is invalid");
-
-  return projectInfo;
-}
 
 export class ResponseError extends Error {
   status: number;

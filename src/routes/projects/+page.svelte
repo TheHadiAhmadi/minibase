@@ -24,7 +24,7 @@
   async function createProjectSubmit() {
     const project = await createProject(newProject);
 
-    apiKey = project.apiKey;
+    apiKey = project.apiKeys[0].value;
     projects = [...projects, project];
   }
 
@@ -103,6 +103,5 @@
         </Button>
       </DialogFooter>
     {/if}
-
   </DialogContent>
 </Dialog>

@@ -14,6 +14,7 @@
   import Main from "$components/Main.svelte";
   import { alertMessage } from "$stores/alert";
   import EnvEditor from "$components/EnvEditor.svelte";
+  import SettingsEditor from "$components/SettingsEditor.svelte";
 
   let collections: ProjectCollection[] = [];
   let functions: ProjectFunction[] = [];
@@ -32,7 +33,8 @@
     | "add-function"
     | "edit-env"
     | "add-env"
-    | "default" = "default";
+    | "default"
+    | "settings" = "default";
 
   function openAddCollection() {
     activePage = "add-collection";
@@ -44,7 +46,7 @@
   }
   function openAddEnv() {
     activePage = "add-env";
-    // activeEnv = "";
+    activeEnv = "";
     closeSidebar();
   }
 
@@ -62,6 +64,10 @@
     activePage = "edit-env";
     activeEnv = key;
     closeSidebar();
+  }
+
+  function openSettings() {
+    activePage = "settings";
   }
 
   function addFunctionSubmit({ detail }: CustomEvent) {
@@ -292,6 +298,12 @@
             {/each}
           </Menu>
         </MenuItem>
+
+        <MenuItem on:click={openSettings} title="Settings">
+            <Icon slot="start" pack="la" name="cog" />
+        </MenuItem>
+
+
       </Menu>
     </AppSidebar>
 
@@ -354,6 +366,8 @@
           on:back={() => (activePage = "default")}
           on:save={addEnvSubmit}
         />
+      {:else if activePage === "settings"}
+          <SettingsEditor {apiKey}/>
       {:else}
         Welcome to Dashboard
       {/if}

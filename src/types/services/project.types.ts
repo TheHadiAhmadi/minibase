@@ -8,10 +8,6 @@ type ParamsAddProject = {
 type ReturnAddProject = Project;
 export type ServiceAddProject = Service<ParamsAddProject, ReturnAddProject>;
 
-type ParamsDeleteData = { id: string; project: string; collection: string };
-type ReturnDeleteData = boolean;
-export type ServiceDeleteData = Service<ParamsDeleteData, ReturnDeleteData>;
-
 type ParamsUpdateProject = {
   name: string;
   body: Project;

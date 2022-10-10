@@ -4,6 +4,7 @@
   import { addFunction, editFunction } from "$services/api";
   import Main from "./Main.svelte";
   import { alertMessage } from "$stores/alert";
+  import MainBody from "./MainBody.svelte";
 
   export let project: string;
   export let apiKey: string;
@@ -59,7 +60,7 @@
   $: updateCode(name);
 </script>
 
-    <CardHeader slot="header">
+    <CardHeader>
       <CardTitle>
         {#if mode === "add"}
           Add Function
@@ -68,14 +69,17 @@
         {/if}
       </CardTitle>
     </CardHeader>
+    <MainBody>
+
       <FormInput label="name" bind:value={data.name} />
 
       <FormField>
         <Label>Code</Label>
         <CodeEditor bind:this={codeEditor} bind:code={data.code} />
       </FormField>
+    </MainBody>
 
-    <CardFooter slot="footer">
+    <CardFooter>
       <CardActions>
         <Button on:click={back}>Back</Button>
         <Button color="primary" on:click={save}>Save</Button>

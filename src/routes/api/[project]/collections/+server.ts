@@ -1,25 +1,36 @@
 import {
   addCollection,
-  getCollections,
   respond,
   ResponseError,
   validateApiKey,
 } from "$server/services";
 import type { ProjectCollection } from "$types";
+import { getCollections } from "../../../../server/services";
+import { APIKEY_SCOPES } from "../../../../types";
 import type { RequestEvent } from "./$types";
 
+// return list of collections
 export async function GET({ request, params }: RequestEvent) {
-  const project = await validateApiKey(
+  await validateApiKey(
     params.project,
-    request.headers.get("ApiKey")
+    request.headers.get("ApiKey"),
+    [APIKEY_SCOPES.PROJECT_ADMIN],
+    [APIKEY_SCOPES.READ_DATA]
   );
 
-  const data = await project.collections;
+  const data = await getCollections({ project: params.project });
+
   return respond({ data });
 }
 
+// add new collection
 export async function POST({ request, params }: RequestEvent) {
-  await validateApiKey(params.project, request.headers.get("ApiKey"));
+  await validateApiKey(
+    params.project,
+    request.headers.get("ApiKey"),
+    [APIKEY_SCOPES.PROJECT_ADMIN],
+    [APIKEY_SCOPES.WRITE_DATA]
+  );
   const body = (await request.json()) as ProjectCollection;
 
   if (!body.project || !body.schema || !body.name)

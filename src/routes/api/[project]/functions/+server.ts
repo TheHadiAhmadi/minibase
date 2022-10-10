@@ -3,32 +3,39 @@ import {
   respond,
   ResponseError,
   validateApiKey,
+  getFunctions,
 } from "$server/services";
+import { APIKEY_SCOPES } from "../../../../types";
 
-import type { ProjectInfoPromise } from "$types";
 import type { RequestEvent } from "./$types";
 
 export async function GET({ params, request }: RequestEvent) {
-  const key = request.headers.get("ApiKey") ?? "";
+  await validateApiKey(
+    params.project,
+    request.headers.get("ApiKey"),
+    [APIKEY_SCOPES.READ_FUNCTION],
+    [APIKEY_SCOPES.PROJECT_ADMIN]
+  );
+  const data = await getFunctions({ project: params.project });
 
-  const project = await validateApiKey(params.project, key);
-
-  if (!project) throw new ResponseError(401, "ApiKey in not valid");
-
-  return respond({ data: await project.functions });
+  return respond({ data });
 }
 
 // Add Function
 export async function POST({ request, params }: RequestEvent) {
+  await validateApiKey(
+    params.project,
+    request.headers.get("ApiKey"),
+    [APIKEY_SCOPES.WRITE_FUNCTION],
+    [APIKEY_SCOPES.PROJECT_ADMIN]
+  );
+
   const body = await request.json();
 
   if (!body.name || !body.code)
     throw new ResponseError(400, "Invalid request: name and code are required");
 
-  // apiKey
-  await validateApiKey(params.project, request.headers.get("ApiKey"));
+  const data = await addFunction({ body, project: params.project });
 
-  const result = await addFunction({ body, project: params.project });
-
-  return respond({ data: result });
+  return respond({ data });
 }

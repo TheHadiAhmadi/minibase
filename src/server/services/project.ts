@@ -8,30 +8,46 @@ import type {
 } from "$types/services/project.types";
 import { nanoid } from "nanoid";
 import { getCollections, getFunctions } from ".";
+import { APIKEY_SCOPES } from "../../types";
+import { addApiKey } from "./apikey";
 
 export const updateProject: ServiceUpdateProject = async ({ name, body }) => {
-  // only update env
-  // TODO: Later also apiKey
   const updateObject: Partial<Project> = {};
 
   if (body.env) {
     updateObject.env = body.env;
   }
-  // if (body.apiKeys) {
-  //   updateObject.apiKeys = body.apiKeys;
-  // }
 
-  const result = await db("projects").update({ env: body.env }).where({ name });
+  await db("projects").update({ env: body.env }).where({ name });
 
   return updateObject;
 };
 
 export const addProject: ServiceAddProject = async ({ body }) => {
-  body.apiKey = "mb_" + nanoid(32);
   body.id = crypto.randomUUID();
+  body.env = {};
+
+  const apiKey = await addApiKey({
+    body: {
+      project: body.name,
+      id: crypto.randomUUID(),
+      name: "Admin",
+      value: "mb_" + nanoid(32),
+      scopes: [
+        APIKEY_SCOPES.READ_DATA,
+        APIKEY_SCOPES.WRITE_DATA,
+        APIKEY_SCOPES.READ_FUNCTION,
+        APIKEY_SCOPES.WRITE_FUNCTION,
+        APIKEY_SCOPES.READ_ENV,
+        APIKEY_SCOPES.WRITE_ENV,
+      ],
+    },
+  });
 
   await db("projects").insert(body);
 
+  body.apiKeys = [apiKey];
+  console.log("addProject", body);
   return body;
 };
 
