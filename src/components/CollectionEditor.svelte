@@ -6,6 +6,7 @@
     getRows,
     deleteData,
   } from "$services/api";
+  
   import type { CollectionRow, ProjectCollection } from "$types";
   import { createEventDispatcher } from "svelte";
   import Main from "./Main.svelte";
