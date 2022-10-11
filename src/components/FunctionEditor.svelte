@@ -21,21 +21,22 @@
 
   async function edit() {
     try {
-
-    const response: ProjectFunction = await editFunction(
-      data.id!,
-      data,
-      apiKey
-    );
-    dispatch("save", response);
-
-    }catch(err) {
-      // 
+      data.project = project;
+      const response: ProjectFunction = await editFunction(
+        data.id!,
+        data,
+        apiKey
+      );
+      dispatch("save", response);
+    } catch (err) {
+      //
     }
   }
 
   async function add() {
     try {
+      data.project = project;
+
       const response: ProjectFunction = await addFunction(data, apiKey);
       dispatch("save", response);
     } catch (err) {
@@ -60,28 +61,27 @@
   $: updateCode(name);
 </script>
 
-    <CardHeader>
-      <CardTitle>
-        {#if mode === "add"}
-          Add Function
-        {:else}
-          Edit Function
-        {/if}
-      </CardTitle>
-    </CardHeader>
-    <MainBody>
+<CardHeader>
+  <CardTitle>
+    {#if mode === "add"}
+      Add Function
+    {:else}
+      Edit Function
+    {/if}
+  </CardTitle>
+</CardHeader>
+<MainBody>
+  <FormInput label="name" bind:value={data.name} />
 
-      <FormInput label="name" bind:value={data.name} />
+  <FormField>
+    <Label>Code</Label>
+    <CodeEditor bind:this={codeEditor} bind:code={data.code} />
+  </FormField>
+</MainBody>
 
-      <FormField>
-        <Label>Code</Label>
-        <CodeEditor bind:this={codeEditor} bind:code={data.code} />
-      </FormField>
-    </MainBody>
-
-    <CardFooter>
-      <CardActions>
-        <Button on:click={back}>Back</Button>
-        <Button color="primary" on:click={save}>Save</Button>
-      </CardActions>
-    </CardFooter>
+<CardFooter>
+  <CardActions>
+    <Button on:click={back}>Back</Button>
+    <Button color="primary" on:click={save}>Save</Button>
+  </CardActions>
+</CardFooter>

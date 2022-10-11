@@ -29,7 +29,7 @@
   let loadingData = false;
 
   let editModalOpen = false;
-  let editingData: CollectionRow | null = null;
+  let editingData: CollectionRow | {} = {};
 
   async function remove(val: CollectionRow) {
     try {

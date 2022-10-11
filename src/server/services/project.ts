@@ -1,15 +1,17 @@
 import db from "$server/db";
 import type { Project } from "$types";
+import { ResponseError } from "$server/services";
 import type {
   ServiceAddProject,
   ServiceGetAllProjects,
   ServiceGetPorject,
+  ServiceRemoveProject,
   ServiceUpdateProject,
 } from "$types/services/project.types";
 import { nanoid } from "nanoid";
 import { getCollections, getFunctions } from ".";
 import { APIKEY_SCOPES } from "../../types";
-import { addApiKey } from "./apikey";
+import { addApiKey, getApiKeys } from "./apikey";
 
 export const updateProject: ServiceUpdateProject = async ({ name, body }) => {
   const updateObject: Partial<Project> = {};
@@ -18,7 +20,32 @@ export const updateProject: ServiceUpdateProject = async ({ name, body }) => {
     updateObject.env = body.env;
   }
 
-  await db("projects").update({ env: body.env }).where({ name });
+  if (body.name) {
+    updateObject.name = body.name;
+  }
+
+  try {
+    await db("projects").update(updateObject).where({ name });
+  } catch (err) {
+    throw new ResponseError(409, "this name is not available");
+  }
+
+  if (updateObject.name) {
+    await Promise.all([
+      db("collections")
+        .update({ project: updateObject.name })
+        .where({ project: name }),
+      db("keys")
+        .update({ project: updateObject.name })
+        .where({ project: name }),
+      db("functions")
+        .update({ project: updateObject.name })
+        .where({ project: name }),
+      db("rows")
+        .update({ project: updateObject.name })
+        .where({ project: name }),
+    ]);
+  }
 
   return updateObject;
 };
@@ -28,23 +55,15 @@ export const addProject: ServiceAddProject = async ({ body }) => {
   body.env = {};
 
   const apiKey = await addApiKey({
+    project: body.name,
     body: {
-      project: body.name,
       id: crypto.randomUUID(),
       name: "Admin",
-      value: "mb_" + nanoid(32),
-      scopes: [
-        APIKEY_SCOPES.READ_DATA,
-        APIKEY_SCOPES.WRITE_DATA,
-        APIKEY_SCOPES.READ_FUNCTION,
-        APIKEY_SCOPES.WRITE_FUNCTION,
-        APIKEY_SCOPES.READ_ENV,
-        APIKEY_SCOPES.WRITE_ENV,
-      ],
+      scopes: [APIKEY_SCOPES.PROJECT_ADMIN],
     },
   });
 
-  await db("projects").insert(body);
+  await db("projects").insert({ name: body.name, env: body.env, id: body.id });
 
   body.apiKeys = [apiKey];
   console.log("addProject", body);
@@ -60,9 +79,21 @@ export const getProject: ServiceGetPorject = async ({ name }) => {
     ...project,
     functions: getFunctions({ project: name }),
     collections: getCollections({ project: name }),
+    apiKeys: getApiKeys({ project: name }),
   };
 };
 
 export const getAllProjects: ServiceGetAllProjects = async ({} = {}) => {
   return db("projects").select("name", "id");
+};
+
+export const removeProject: ServiceRemoveProject = async ({ name }) => {
+  await Promise.all([
+    db("projects").delete().where({ name }),
+    db("keys").delete().where({ project: name }),
+    db("collections").delete().where({ project: name }),
+    db("rows").delete().where({ project: name }),
+    db("functions").delete().where({ project: name }),
+  ]);
+  return true;
 };

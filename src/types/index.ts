@@ -13,20 +13,20 @@ export type ApiKeyScopes = typeof APIKEY_SCOPES[keyof typeof APIKEY_SCOPES];
 export type ApiKey = {
   id?: string;
   name: string;
-  project: string;
-  value: string;
+  project?: string;
+  value?: string;
   scopes: ApiKeyScopes[];
 };
 
 export type Project = {
   name: string;
-  env: Record<string, string>;
+  env?: Record<string, string>;
   id?: string;
-  apiKeys: ApiKey[];
+  apiKeys?: ApiKey[];
 };
 export type ProjectInfo = Project & {
-  functions: ProjectFunction[];
-  collections: ProjectCollection[];
+  functions?: ProjectFunction[];
+  collections?: ProjectCollection[];
 };
 export type ProjectInfoPromise = Project & {
   functions: Promise<ProjectFunction[]>;

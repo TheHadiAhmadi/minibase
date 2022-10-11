@@ -2,6 +2,7 @@ import { ApiKey, ApiKeyScopes } from "..";
 import type { Service } from "./service.types";
 
 type ParamsAddApiKey = {
+  project: string;
   body: ApiKey;
 };
 type ReturnAddApiKey = ApiKey;
@@ -25,20 +26,15 @@ type ParamsGetApiKey = {
 type ReturnGetApiKey = ApiKey;
 export type ServiceGetApiKey = Service<ParamsGetApiKey, ReturnGetApiKey>;
 
-type ParamsValidateApiKey = {
+type ParamsGetApiKeys = {
   project: string;
-  value: string;
-  scpoes: ApiKeyScopes[];
 };
-type ReturnValidateApiKey = boolean;
-export type ServiceValidateApiKey = Service<
-  ParamsValidateApiKey,
-  ReturnValidateApiKey
->;
+type ReturnGetApiKeys = ApiKey[];
+export type ServiceGetApiKeys = Service<ParamsGetApiKeys, ReturnGetApiKeys>;
 
 type ParamsRemoveApiKey = {
   project: string;
-  value: string;
+  id: string;
 };
 type ReturnRemoveApiKey = boolean;
 export type ServiceRemoveApiKey = Service<

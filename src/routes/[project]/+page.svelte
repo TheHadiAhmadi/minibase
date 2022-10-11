@@ -4,7 +4,7 @@
   import { media, activeProject } from "$stores";
   import { page } from "$app/stores";
 
-  import type { ProjectCollection, ProjectFunction } from "src/types";
+  import type { ApiKey, ProjectCollection, ProjectFunction } from "src/types";
   import {
     getProject,
     removeCollection,
@@ -15,9 +15,13 @@
   import { alertMessage } from "$stores/alert";
   import EnvEditor from "$components/EnvEditor.svelte";
   import SettingsEditor from "$components/SettingsEditor.svelte";
+  import { goto } from "$app/navigation";
+  import { setContext } from "svelte";
 
   let collections: ProjectCollection[] = [];
   let functions: ProjectFunction[] = [];
+  let apiKeys: ApiKey[] = [];
+  let env: Array<{ key: string; value: string }> = [];
 
   let activeFunction: ProjectFunction | null = null;
   let activeEnv: string | null = null;
@@ -25,6 +29,15 @@
 
   let hasAccess = false;
   let apiKey = "";
+  let disabled = {
+    "read:function": true,
+    "read:data": true,
+    "read:env": true,
+    "write:function": true,
+    "write:data": true,
+    "write:env": true,
+    "admin:project": true,
+  };
 
   let activePage:
     | "edit-collection"
@@ -68,6 +81,7 @@
 
   function openSettings() {
     activePage = "settings";
+    closeSidebar();
   }
 
   function addFunctionSubmit({ detail }: CustomEvent) {
@@ -90,7 +104,22 @@
     // TODO
     alertMessage.showInfo("Environment Variable edited successfully");
     console.log("edit env", detail);
-    $activeProject.env[detail.key] = detail.value;
+    console.log("TODO");
+    // const currentEnv = env.find((en) => en.key === detail.key);
+    // currentEnv?.value = detail.value;
+    // env.find([detail.key] = detail.value;
+  }
+
+  function settingsSubmit({ detail }: CustomEvent) {
+    console.log("Update", detail);
+    $activeProject.name = detail.name;
+    project = detail.name;
+
+    goto(detail.name);
+  }
+
+  function settingsRemoveSubmit() {
+    goto("/projects");
   }
 
   async function openRemoveFunction(fn: ProjectFunction) {
@@ -124,7 +153,8 @@
 
   async function openRemoveEnv(envkey: string) {
     try {
-      delete $activeProject.env[envkey];
+      // delete $activeProject.env[envkey];
+      env = env.filter((en) => en.key !== envkey);
       const response = await updateProject(project, $activeProject, apiKey);
       alertMessage.showInfo("Environment variable removed successfullly");
       $activeProject = $activeProject;
@@ -151,20 +181,38 @@
   }
 
   function addEnvSubmit({ detail }: CustomEvent) {
-    // TODO
     alertMessage.showInfo("Environment Variable added successfully");
 
-    $activeProject.env[detail.key] = detail.value;
+    env = [...env, detail];
     activePage = "edit-env";
     activeEnv = detail.key;
   }
 
+  function disable(section: keyof typeof disabled) {
+    disabled[section] = true;
+  }
+  function enable(section: keyof typeof disabled) {
+    disabled[section] = false;
+  }
+
   async function onContinue() {
     try {
-      $activeProject = await getProject($page.params.project, apiKey);
-      console.log($activeProject);
-      functions = $activeProject.functions;
-      collections = $activeProject.collections;
+      const result = await getProject($page.params.project, apiKey);
+      $activeProject = result.project;
+
+      console.log(result.scopes);
+      result.scopes.map((scope) => {
+        enable(scope);
+      });
+
+      if ($activeProject.functions) functions = $activeProject.functions;
+      if ($activeProject.collections) collections = $activeProject.collections;
+      if ($activeProject.env)
+        env = Object.entries($activeProject.env).map(([key, value]) => ({
+          key,
+          value,
+        }));
+      if ($activeProject.apiKeys) apiKeys = $activeProject.apiKeys;
 
       alertMessage.showInfo("Welcome to minibase");
       hasAccess = true;
@@ -177,8 +225,9 @@
   function closeSidebar() {
     open = false;
   }
+  setContext("project", { project: activeProject });
 
-  $: project = $page.params.project;
+  let project = $page.params.project;
 
   let open = false;
 </script>
@@ -214,8 +263,9 @@
       class="z-2 flex flex-col bg-blue-50 border-r !top-57px border-blue-400"
     >
       <Menu>
-        <MenuItem title="Functions">
+        <MenuItem disabled={disabled["read:function"]} title="Functions">
           <Button
+            disabled={disabled["write:function"]}
             on:click={openAddFunction}
             slot="end"
             size="sm"
@@ -241,8 +291,9 @@
             {/each}
           </Menu>
         </MenuItem>
-        <MenuItem title="Collections">
+        <MenuItem disabled={disabled["read:data"]} title="Collections">
           <Button
+            disabled={disabled["write_collections"]}
             on:click={openAddCollection}
             slot="end"
             size="sm"
@@ -259,6 +310,7 @@
               >
                 <Icon slot="start" pack="mdi" name="database" />
                 <Button
+                  disabled={disabled["write:data"]}
                   on:click={() => openRemoveCollection(collection)}
                   slot="end"
                   size="sm"
@@ -271,8 +323,9 @@
             {/each}
           </Menu>
         </MenuItem>
-        <MenuItem title="Environment Variables">
+        <MenuItem disabled={disabled["read:env"]} title="Environment Variables">
           <Button
+            disabled={disabled["write:env"]}
             on:click={openAddEnv}
             slot="end"
             size="sm"
@@ -299,11 +352,13 @@
           </Menu>
         </MenuItem>
 
-        <MenuItem on:click={openSettings} title="Settings">
-            <Icon slot="start" pack="la" name="cog" />
+        <MenuItem
+          disabled={disabled["admin:project"]}
+          on:click={openSettings}
+          title="Settings"
+        >
+          <Icon slot="start" pack="la" name="cog" />
         </MenuItem>
-
-
       </Menu>
     </AppSidebar>
 
@@ -367,7 +422,12 @@
           on:save={addEnvSubmit}
         />
       {:else if activePage === "settings"}
-          <SettingsEditor {apiKey}/>
+        <SettingsEditor
+          {apiKey}
+          name={$activeProject.name}
+          on:save={settingsSubmit}
+          on:remove={settingsRemoveSubmit}
+        />
       {:else}
         Welcome to Dashboard
       {/if}

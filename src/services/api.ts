@@ -1,5 +1,7 @@
 import { alertMessage } from "$stores/alert";
 import type {
+  ApiKey,
+  ApiKeyScopes,
   CollectionInfo,
   CollectionRow,
   Project,
@@ -40,7 +42,10 @@ export async function getProject(name: string, apiKey: string) {
   }
 
   console.log(result);
-  return result.data as ProjectInfo;
+  return {
+    project: result.data as ProjectInfo,
+    scopes: result.scopes as ApiKeyScopes[],
+  };
 }
 
 export async function createProject(name: string) {
@@ -62,13 +67,46 @@ export async function createProject(name: string) {
 
 export async function updateProject(
   id: string,
-  request: ProjectInfo,
+  request: Partial<ProjectInfo>,
   apiKey: string
 ) {
   const result = await fetch(`/api/${id}`, {
     method: "POST",
     headers: { ApiKey: apiKey },
     body: JSON.stringify(request),
+  })
+    .then((res) => res.json())
+    .catch(showError);
+
+  if (result.status >= 400) {
+    showError(result);
+    throw result;
+  }
+
+  return result.data;
+}
+
+export async function removeProject(id: string, apiKey: string) {
+  const result = await fetch(`/api/${id}`, {
+    method: "DELETE",
+    headers: { ApiKey: apiKey },
+  })
+    .then((res) => res.json())
+    .catch(showError);
+
+  if (result.status >= 400) {
+    showError(result);
+    throw result;
+  }
+
+  return true;
+}
+
+export async function addApiKey(project: string, body: ApiKey, apiKey: string) {
+  const result = await fetch(`/api/${project}/apikeys`, {
+    method: "POST",
+    headers: { ApiKey: apiKey },
+    body: JSON.stringify(body),
   })
     .then((res) => res.json())
     .catch(showError);

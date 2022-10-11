@@ -1,35 +1,50 @@
 import db from "$server/db";
 import type { ApiKeyScopes } from "$types/services";
-import {
+import { nanoid } from "nanoid";
+import type {
   ServiceAddApiKey,
   ServiceGetApiKey,
   ServiceRemoveApiKey,
   ServiceUpdateApiKey,
+  ServiceGetApiKeys,
 } from "../../types/services/apikey.types";
 import { ResponseError } from "./utils";
 
-export const addApiKey: ServiceAddApiKey = async ({ body }) => {
+export const addApiKey: ServiceAddApiKey = async ({ project, body }) => {
   // add apiKey to list
-  console.log({ body });
+
   const id = crypto.randomUUID();
 
   const apiKey = {
     id,
-    project: body.project,
+    project,
     name: body.name,
-    value: body.value,
+    value: "mb_" + nanoid(32),
     scopes: body.scopes ?? [],
   };
 
+  console.log("insert to db", {
+    ...apiKey,
+    scopes: JSON.stringify(apiKey.scopes),
+  });
   await db("keys").insert({ ...apiKey, scopes: JSON.stringify(apiKey.scopes) });
 
   return apiKey;
 };
 
 export const getApiKey: ServiceGetApiKey = async ({ project, value }) => {
+  console.log(project);
   const key = await db("keys").select("*").where({ project, value }).first();
 
   return key;
+};
+
+export const getApiKeys: ServiceGetApiKeys = async ({ project }) => {
+  const keys = await db("keys")
+    .select("id", "name", "scopes")
+    .where({ project });
+
+  return keys;
 };
 
 export const updateApiKey: ServiceUpdateApiKey = async ({
@@ -51,28 +66,35 @@ export const removeApiKey: ServiceRemoveApiKey = async ({ id, project }) => {
   return true;
 };
 
-export async function validateApiKey(
+export type ServiceValidateApiKey = (
   project: string,
-  apiKey: string | null = "",
+  apiKey: string | null,
   ...scopeGroups: ApiKeyScopes[]
-): Promise<boolean> {
+) => Promise<ApiKeyScopes[]>;
+
+export const validateApiKey: ServiceValidateApiKey = async (
+  project,
+  apiKey = "",
+  ...scopeGroups
+) => {
   const key = await getApiKey({ project, value: apiKey ?? "" });
 
-//   if (!key) throw new ResponseError(401, "ApiKey is invalid");
-    
+  //   if (!key) throw new ResponseError(401, "ApiKey is invalid");
+
   const keyScopes = (key && key.scopes) || [];
 
-  let hasAccess = false;
-  for (let scopes in scopeGroups) {
+  const accesses = scopeGroups.map((scopes) => {
     for (let i = 0; i < scopes.length; i++) {
       if (!keyScopes.includes(scopes[i] as ApiKeyScopes)) {
-        continue;
+        return false;
       }
     }
-    hasAccess = true;
-    break;
-  }
+    return true;
+  });
+
+  const hasAccess = accesses.some((value) => value === true);
+
   if (!hasAccess) throw new ResponseError(401, "You don't have access");
 
-  return true;
-}
+  return keyScopes;
+};

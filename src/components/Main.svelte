@@ -9,7 +9,7 @@
   />
 
   <div
-    class="p-3 overflow-hidden transform transition origin-right duration-400"
+    class="p-3 overflow-hidden h-100 transform transition origin-right duration-400"
     class:scale-95={backdrop}
     class:translate-x-6={backdrop}
   >

@@ -1,13 +1,26 @@
 <script>
+  import { createEventDispatcher } from "svelte";
+
   export let title = "";
   export let open = false;
+
+  export let disabled = false;
+
+  const dispatch = createEventDispatcher();
+
+  function click() {
+    if (!disabled) {
+      open = !open;
+      dispatch("click");
+    }
+  }
 </script>
 
 <li
-  on:click={() => (open = !open)}
-  on:click
+  on:click={click}
   class="flex items-center gap-2 hover:bg-blue-100 p-2 border-b border-gray-100 hover:border-gray-200"
   class:font-bold={$$slots["default"] && open}
+  class:text-gray-500={disabled}
 >
   <slot name="start" {open}>
     {#if open}

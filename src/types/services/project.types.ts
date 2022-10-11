@@ -28,3 +28,12 @@ export type ServiceGetAllProjects = Service<
   ParamsGetAllProjects,
   ReturnGetAllProjects
 >;
+
+type ParamsRemoveProject = {
+  name: string;
+};
+type ReturnRemoveProject = boolean;
+export type ServiceRemoveProject = Service<
+  ParamsRemoveProject,
+  ReturnRemoveProject
+>;
