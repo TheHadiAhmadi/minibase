@@ -41,7 +41,7 @@ export async function getProject(name: string, apiKey: string) {
     throw result;
   }
 
-  console.log(result);
+  console.log("sss", result);
   return {
     project: result.data as ProjectInfo,
     scopes: result.scopes as ApiKeyScopes[],

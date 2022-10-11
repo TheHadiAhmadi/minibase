@@ -36,7 +36,7 @@ export async function GET({ request, params }: RequestEvent) {
     data.collections = await project.collections
     data.functions = await project.functions
 
-    return respond({data})
+    return respond({data, scopes})
   }
 
   if (scopes.includes(APIKEY_SCOPES.READ_ENV)) {

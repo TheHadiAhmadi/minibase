@@ -24,7 +24,7 @@
   let env: Array<{ key: string; value: string }> = [];
 
   let activeFunction: ProjectFunction | null = null;
-  let activeEnv: string | null = null;
+  let activeEnv: { key: string; value: string } | null = null;
   let activeCollection: ProjectCollection | null = null;
 
   let hasAccess = false;
@@ -59,7 +59,7 @@
   }
   function openAddEnv() {
     activePage = "add-env";
-    activeEnv = "";
+    activeEnv = null;
     closeSidebar();
   }
 
@@ -73,7 +73,7 @@
     activeFunction = fn;
     closeSidebar();
   }
-  function openEditEnv(key: string) {
+  function openEditEnv(key: { key: string; value: string }) {
     activePage = "edit-env";
     activeEnv = key;
     closeSidebar();
@@ -86,7 +86,7 @@
 
   function addFunctionSubmit({ detail }: CustomEvent) {
     functions = [...functions, detail as ProjectFunction];
-    activeFunction = functions[functions.length - 1];
+    activeFunction = detail;
     activePage = "edit-function";
   }
 
@@ -104,10 +104,11 @@
     // TODO
     alertMessage.showInfo("Environment Variable edited successfully");
     console.log("edit env", detail);
-    console.log("TODO");
-    // const currentEnv = env.find((en) => en.key === detail.key);
-    // currentEnv?.value = detail.value;
-    // env.find([detail.key] = detail.value;
+
+    env = env.map((en) => {
+      if (en.key === detail.key) return detail;
+      return en;
+    });
   }
 
   function settingsSubmit({ detail }: CustomEvent) {
@@ -159,7 +160,7 @@
       alertMessage.showInfo("Environment variable removed successfullly");
       $activeProject = $activeProject;
 
-      if (activeEnv === envkey) {
+      if (activeEnv?.key === envkey) {
         activeEnv = null;
         activePage = "default";
       }
@@ -173,7 +174,7 @@
     console.log("addCollectionSubmit", detail);
     alertMessage.showInfo("Collection added successfully");
     collections = [...collections, detail];
-    activeCollection = collections[collections.length - 1];
+    activeCollection = detail;
     activePage = "edit-collection";
   }
   function editCollectionSubmit() {
@@ -185,7 +186,7 @@
 
     env = [...env, detail];
     activePage = "edit-env";
-    activeEnv = detail.key;
+    activeEnv = detail;
   }
 
   function disable(section: keyof typeof disabled) {
@@ -201,7 +202,16 @@
       $activeProject = result.project;
 
       console.log(result.scopes);
+      
       result.scopes.map((scope) => {
+        if(scope === 'admin:project') {
+          enable('read:data')
+          enable('read:env')
+          enable('read:function')
+          enable('write:function')
+          enable('write:data')
+          enable('write:env')
+        }
         enable(scope);
       });
 
@@ -391,8 +401,8 @@
         <EnvEditor
           projectInfo={$activeProject}
           mode="edit"
-          key={activeEnv}
-          bind:value={$activeProject.env[activeEnv]}
+          key={activeEnv.key}
+          bind:value={activeEnv.value}
           on:back={() => (activePage = "default")}
           on:save={editEnvSubmit}
           {apiKey}
