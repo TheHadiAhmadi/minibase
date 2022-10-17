@@ -28,9 +28,19 @@ export async function getProjects() {
   return result.data as Project[];
 }
 
-export async function getProject(name: string, apiKey: string) {
-  console.log({ apiKey });
-  const result = await fetch(`/api/${name}`, {
+export async function getProject(
+  name: string,
+  apiKey: string,
+  fetcher: typeof fetch = fetch
+) {
+  const result1 = await fetcher(`/api/${name}`, {
+    headers: { ApiKey: apiKey },
+  }).then((res) => res.text());
+
+  console.log({ result1 });
+
+  console.log({ apiKey, name });
+  const result = await fetcher(`/api/${name}`, {
     headers: { ApiKey: apiKey },
   })
     .then((res) => res.json())
@@ -215,11 +225,22 @@ export async function addCollection(
 }
 
 export async function editCollection(
-  id: string,
+  name: string,
   request: ProjectCollection,
   apiKey: string
 ) {
   // TODO
+  const result = await fetch(`/api/${request.project}/collections/${name}`, {
+    method: "PUT",
+    headers: { ApiKey: apiKey },
+    body: JSON.stringify(request),
+  }).then((res) => res.json());
+
+  if (result.status >= 400) {
+    showError(result);
+    throw result;
+  }
+  return result.data;
 }
 
 export async function removeCollection(

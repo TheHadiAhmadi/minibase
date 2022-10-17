@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ApiKeyValue from "$components/ApiKeyValue.svelte";
   import { getProjects, createProject } from "$services/api";
 
   import type { Project } from "src/types";
@@ -78,24 +79,7 @@
       </DialogHeader>
       <DialogBody>
         <!-- {apiKey} -->
-        <div
-          on:click={() => {
-            navigator.clipboard.writeText(apiKey);
-            copied = true;
-          }}
-        >
-          <Alert>
-            <div class="alert-title">
-              {#if copied}
-                Copied To Clipboard!
-              {:else}
-                Copy this ApiKey
-              {/if}
-            </div>
-            <p class="break-all">{apiKey}</p>
-          </Alert>
-        </div>
-        <Alert>Hello</Alert>
+        <ApiKeyValue value={apiKey} />
       </DialogBody>
       <DialogFooter>
         <Button color="primary" href="/{projects[projects.length - 1].name}">
@@ -105,3 +89,5 @@
     {/if}
   </DialogContent>
 </Dialog>
+
+<!-- kjjk:  mb_dU8Jl_uIoBixcGY4jFPQejwcVRZmn1g3 -->

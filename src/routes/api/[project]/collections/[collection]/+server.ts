@@ -1,4 +1,5 @@
 import {
+  editCollection,
   getRows,
   insertData,
   removeCollection,
@@ -45,6 +46,22 @@ export async function POST({ request, params }: RequestEvent) {
     body,
   });
 
+  return respond({ data });
+}
+
+// edit collection
+export async function PUT({ request, params }: RequestEvent) {
+  await validateApiKey(
+    params.project,
+    request.headers.get("ApiKey"),
+    [APIKEY_SCOPES.WRITE_DATA],
+    [APIKEY_SCOPES.PROJECT_ADMIN]
+  );
+  const body = await request.json();
+
+  if (!body) throw new ResponseError(400, "Body should be an object");
+
+  const data = await editCollection({ name: params.collection, body });
   return respond({ data });
 }
 

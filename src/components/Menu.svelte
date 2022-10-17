@@ -1,3 +1,3 @@
-<ul class="py-2">
-    <slot/>
+<ul class="pb-2">
+  <slot />
 </ul>

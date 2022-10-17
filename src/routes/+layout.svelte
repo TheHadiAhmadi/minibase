@@ -4,9 +4,13 @@
   import "virtual:windi.css";
 </script>
 
-<slot />
+<div>
+  <slot />
+</div>
 
-<div class="absolute z-2 bottom-4 right-4 left-4 min-w-300px sm:right-auto alert-container">
+<div
+  class="absolute z-2 bottom-4 right-4 left-4 min-w-300px sm:right-auto alert-container"
+>
   {#each $alertMessage as alert}
     {@const color = alert.type === "error" ? "danger" : alert.type}
     <Alert {color}>
@@ -14,3 +18,10 @@
     </Alert>
   {/each}
 </div>
+
+<style>
+  div {
+    font-family: Roboto, sans-serif;
+
+  }
+</style>

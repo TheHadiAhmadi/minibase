@@ -1,10 +1,13 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from "svelte";
 
   export let title = "";
   export let open = false;
 
   export let disabled = false;
+
+  let className = "";
+  export { className as class };
 
   const dispatch = createEventDispatcher();
 
@@ -18,26 +21,52 @@
 
 <li
   on:click={click}
-  class="flex items-center gap-2 hover:bg-blue-100 p-2 border-b border-gray-100 hover:border-gray-200"
-  class:font-bold={$$slots["default"] && open}
+  class="flex items-center gap-2 hover:bg-blue-100 p-2 border-b border-gray-100 hover:border-gray-200 {className}"
+  class:font-bold={$$slots["content"] && open}
   class:text-gray-500={disabled}
 >
-  <slot name="start" {open}>
-    {#if open}
-      <Icon pack="ion" name="ios-arrow-down" />
+  <slot>
+    <slot name="start" {open}>
+      {#if open}
+        <Icon pack="mdi" name="chevron-down" />
+      {:else}
+        <Icon pack="mdi" name="chevron-right" />
+      {/if}
+    </slot>
+
+    <slot name="title">
+      <span class="flex-1">{title}</span>
+    </slot>
+    <!-- <p
+    class="flex items-center w-full"
+    on:dblclick={() => (editable ? (renaming = true) : (renaming = false))}
+  >
+    {#if renaming}
+      <input
+        size="4"
+        class="w-full outline-none border border-gray-200 bg-gray-100 p-0.5 mr-1"
+        placeholder="Enter a name..."
+        on:keydown={(e) => {
+          if (e.key === "Enter") {
+            rename();
+          }
+        }}
+        bind:value={title}
+      />
+      <Button color="success" on:click={() => rename()} size="sm">
+        <Icon pack="mdi" name="check" />
+      </Button>
     {:else}
-      <Icon pack="ion" name="ios-arrow-right" />
+      <span>{title}</span>
     {/if}
+  </p> -->
+    <div on:click|stopPropagation={() => {}}>
+      <slot name="end" />
+    </div>
   </slot>
-  <p class="w-full">
-    {title}
-  </p>
-  <div on:click|stopPropagation={() => {}}>
-    <slot name="end" />
-  </div>
 </li>
-{#if open && $$slots["default"]}
-  <div class="pl-4 pb-2">
-    <slot />
+{#if open && $$slots["content"]}
+  <div class="pl-4">
+    <slot name="content" />
   </div>
 {/if}

@@ -40,8 +40,17 @@ export const removeCollection: ServiceRemoveCollection = async ({
   return true;
 };
 
-export const editCollection: ServiceEditCollection = async ({ id, body }) => {
-  await db("collections").update(body).where({ id });
+export const editCollection: ServiceEditCollection = async ({ name, body }) => {
+  await db("collections")
+    .update({ ...body, schema: JSON.stringify(body.schema) })
+    .where({ name, project: body.project });
+
+  console.log('editCollection', {body, name})
+  if (body.name) {
+    await db("rows")
+      .update({ collection: body.name })
+      .where({ project: body.project, collection: name });
+  }
 
   return body;
 };

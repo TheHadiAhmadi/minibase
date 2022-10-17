@@ -4,7 +4,6 @@ import type { Handle, HandleServerError } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
   try {
-    console.log("handle");
     return await resolve(event);
   } catch (err: any) {
     console.log("ERROR", err);
@@ -13,6 +12,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 };
 
 export const handleError: HandleServerError = ({ error, event }) => {
+  console.log("handleError", error, error.message, error.status);
   return {
     message: (error as ResponseError).message ?? "Internal Server Error",
     status: (error as ResponseError).status ?? 500,

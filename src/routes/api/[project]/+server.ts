@@ -11,6 +11,8 @@ import type { RequestEvent } from "./$types";
 
 // Get Project Info
 export async function GET({ request, params }: RequestEvent) {
+  console.log(request.headers);
+  console.log(request.headers.get("apiKey"));
   const scopes = await validateApiKey(
     params.project,
     request.headers.get("ApiKey"),
@@ -19,7 +21,7 @@ export async function GET({ request, params }: RequestEvent) {
     [APIKEY_SCOPES.READ_FUNCTION],
     [APIKEY_SCOPES.PROJECT_ADMIN]
   );
-  console.log(scopes);
+  console.log({ scopes });
 
   const project: ProjectInfoPromise = await getProject({
     name: params.project,
@@ -27,16 +29,16 @@ export async function GET({ request, params }: RequestEvent) {
 
   const data: ProjectInfo = {
     name: project.name,
-    id: project.id
+    id: project.id,
   };
 
   if (scopes.includes(APIKEY_SCOPES.PROJECT_ADMIN)) {
     data.apiKeys = await project.apiKeys;
     data.env = project.env;
-    data.collections = await project.collections
-    data.functions = await project.functions
+    data.collections = await project.collections;
+    data.functions = await project.functions;
 
-    return respond({data, scopes})
+    return respond({ data, scopes });
   }
 
   if (scopes.includes(APIKEY_SCOPES.READ_ENV)) {
@@ -52,7 +54,7 @@ export async function GET({ request, params }: RequestEvent) {
   return respond({ data, scopes });
 }
 
-export async function POST({ request, params }: RequestEvent) {
+export async function POST({ request, cookies, params }: RequestEvent) {
   const body = await request.json();
 
   await validateApiKey(params.project, request.headers.get("ApiKey"), [
@@ -70,6 +72,14 @@ export async function POST({ request, params }: RequestEvent) {
     functions: await result.functions,
     collections: await result.collections,
   };
+
+  if (body.name) {
+    cookies.delete(`${params.project}-apikey`);
+    cookies.set(`${body.name}-apikey`, request.headers.get("ApiKey") ?? "", {
+      path: "/",
+      httpOnly: true,
+    });
+  }
 
   return respond({ data });
 }

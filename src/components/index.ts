@@ -1,1 +1,2 @@
-export {default as CodeEditor} from './CodeEditor.svelte'
+import "./initializeEditor";
+export { default as CodeEditor } from "./CodeEditor.svelte";

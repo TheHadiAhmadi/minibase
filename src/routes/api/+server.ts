@@ -14,7 +14,7 @@ export async function GET() {
 }
 
 // Add Project
-export async function POST({ request }: RequestEvent) {
+export async function POST({ request, cookies }: RequestEvent) {
   const body = (await request.json()) as Project;
 
   if (!body.name)
@@ -22,5 +22,9 @@ export async function POST({ request }: RequestEvent) {
 
   const data = await addProject({ body });
 
+  const apiKey = data.apiKeys![0].value ?? 'Error'
+  
+  cookies.set(`${body.name}-apikey`, apiKey, {httpOnly: true, path: '/'})
+  
   return respond({ data });
 }

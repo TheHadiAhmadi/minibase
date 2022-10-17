@@ -15,7 +15,7 @@ export type ServiceRemoveCollection = Service<
   ReturnRemoveCollection
 >;
 
-type ParamsEditCollection = { id: string; body: ProjectCollection };
+type ParamsEditCollection = { name: string; body: ProjectCollection };
 type ReturnEditCollection = ProjectCollection;
 export type ServiceEditCollection = Service<
   ParamsEditCollection,

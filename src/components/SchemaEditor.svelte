@@ -4,36 +4,35 @@
 
   export let schema: CollectionSchema[];
 
+  $: console.log(schema);
+
   let newSchem: CollectionSchema = {
     name: "",
     type: "string",
   };
 
   function add() {
-    schema = [...schema, newSchem]
-    newSchem = { name: '', type: 'string'}
+    schema = [...schema, newSchem];
+    newSchem = { name: "", type: "string" };
   }
 
   function remove(schem: CollectionSchema) {
-    schema = schema.filter(sch => sch !== schem)
+    schema = schema.filter((sch) => sch !== schem);
   }
 </script>
 
 <Row>
   {#each schema as schem}
-  <CollectionTypeEditor bind:schem={schem}>
-    <Button block color="danger" on:click={() => remove(schem)}>
-        Remove
-    </Button>
+    <CollectionTypeEditor bind:schem>
+      <Button color="danger" on:click={() => remove(schem)}>
+        <Icon name="minus" pack="mdi" />
+      </Button>
     </CollectionTypeEditor>
   {/each}
   <Col cols="12">
     <Divider>New</Divider>
-</Col>
+  </Col>
   <CollectionTypeEditor bind:schem={newSchem}>
-    <Button color="primary" block on:click={add}>
-    Add
-    </Button>
-    </CollectionTypeEditor>
-  </Row> 
-  
+    <Button color="primary" block on:click={add}>Add</Button>
+  </CollectionTypeEditor>
+</Row>
