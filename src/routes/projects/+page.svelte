@@ -78,7 +78,6 @@
         <DialogTitle>Here is ApiKey for "{newProject}"</DialogTitle>
       </DialogHeader>
       <DialogBody>
-        <!-- {apiKey} -->
         <ApiKeyValue value={apiKey} />
       </DialogBody>
       <DialogFooter>
