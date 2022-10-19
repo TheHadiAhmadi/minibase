@@ -77,7 +77,8 @@ export async function POST({ request, cookies, params }: RequestEvent) {
     cookies.delete(`${params.project}-apikey`);
     cookies.set(`${body.name}-apikey`, request.headers.get("ApiKey") ?? "", {
       path: "/",
-      httpOnly: true,
+      httpOnly: true, 
+      maxAge: 10 * 365 * 24 * 60 * 60
     });
   }
 

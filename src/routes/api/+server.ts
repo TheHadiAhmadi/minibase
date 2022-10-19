@@ -22,9 +22,13 @@ export async function POST({ request, cookies }: RequestEvent) {
 
   const data = await addProject({ body });
 
-  const apiKey = data.apiKeys![0].value ?? 'Error'
-  
-  cookies.set(`${body.name}-apikey`, apiKey, {httpOnly: true, path: '/'})
-  
+  const apiKey = data.apiKeys![0].value ?? "Error";
+
+  cookies.set(`${body.name}-apikey`, apiKey, {
+    httpOnly: true,
+    path: "/",
+    maxAge: 10 * 365 * 24 * 60 * 60,
+  });
+
   return respond({ data });
 }
