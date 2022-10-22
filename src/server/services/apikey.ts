@@ -61,7 +61,7 @@ export const updateApiKey: ServiceUpdateApiKey = async ({
 };
 
 export const removeApiKey: ServiceRemoveApiKey = async ({ id, project }) => {
-  await db("keys").delete.where({ id, project });
+  await db("keys").delete().where({ id, project });
 
   return true;
 };

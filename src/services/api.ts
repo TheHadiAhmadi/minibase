@@ -294,3 +294,21 @@ export async function removeFunction(
 
   return result.data;
 }
+
+export async function removeApiKey(
+  project: string,
+  id: string
+): Promise<boolean> {
+  const result = await fetch(`/api/${project}/apikeys/${id}`, {
+    method: "DELETE",
+  })
+    .then((res) => res.json())
+    .catch(showError);
+
+  if (result.status >= 400) {
+    showError(result);
+    throw result;
+  }
+
+  return result.data;
+}

@@ -11,10 +11,7 @@
   const dispatch = createEventDispatcher();
   async function save() {
     try {
-      const result = await updateProject(
-        data.project.name,
-        { name: newName }
-      );
+      const result = await updateProject(data.project.name, { name: newName });
       data.project.name = newName;
     } catch (err) {}
   }
@@ -27,7 +24,6 @@
       //
     }
   }
-
 </script>
 
 <CardHeader>
@@ -37,12 +33,13 @@
 <CardBody>
   <FormInput label="Rename Project" bind:value={newName} />
   <Button on:click={save}>Rename</Button>
-  <br />
-  <br />
-  apiKey <br /> import / export data
+
+  <div class="p-6 opacity-50">
+    <br /> import / export data
+  </div>
 
   <FormField>
-    <Label>ApiKey</Label>
+    <Label>ApiKeys</Label>
     <ApiKeyEditor />
   </FormField>
 
