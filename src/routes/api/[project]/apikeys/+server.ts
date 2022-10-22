@@ -8,8 +8,8 @@ import {
 import { APIKEY_SCOPES } from "$types";
 import type { RequestEvent } from "./$types";
 
-export async function GET({ request, params }: RequestEvent) {
-  await validateApiKey(params.project, request.headers.get("ApiKey"), [
+export async function GET({ params, locals }: RequestEvent) {
+  await validateApiKey(params.project, locals.apiKey, [
     APIKEY_SCOPES.PROJECT_ADMIN,
   ]);
 
@@ -17,8 +17,8 @@ export async function GET({ request, params }: RequestEvent) {
   return respond({ data });
 }
 
-export async function POST({ request, params }: RequestEvent) {
-  await validateApiKey(params.project, request.headers.get("ApiKey"), [
+export async function POST({ request, params, locals }: RequestEvent) {
+  await validateApiKey(params.project, locals.apiKey, [
     APIKEY_SCOPES.PROJECT_ADMIN,
   ]);
   const body = await request.json();

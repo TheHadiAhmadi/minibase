@@ -11,10 +11,10 @@ import { APIKEY_SCOPES } from "../../../../../types";
 import type { RequestEvent } from "./$types";
 
 // get rows of collection
-export async function GET({ request, params }: RequestEvent) {
+export async function GET({ locals, params }: RequestEvent) {
   await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.READ_DATA],
     [APIKEY_SCOPES.PROJECT_ADMIN]
   );
@@ -28,10 +28,10 @@ export async function GET({ request, params }: RequestEvent) {
 }
 
 // insert data
-export async function POST({ request, params }: RequestEvent) {
+export async function POST({ locals, request, params }: RequestEvent) {
   await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.WRITE_DATA],
     [APIKEY_SCOPES.PROJECT_ADMIN]
   );
@@ -50,10 +50,10 @@ export async function POST({ request, params }: RequestEvent) {
 }
 
 // edit collection
-export async function PUT({ request, params }: RequestEvent) {
+export async function PUT({ locals, request, params }: RequestEvent) {
   await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.WRITE_DATA],
     [APIKEY_SCOPES.PROJECT_ADMIN]
   );
@@ -66,10 +66,10 @@ export async function PUT({ request, params }: RequestEvent) {
 }
 
 // delete collection
-export async function DELETE({ request, params }: RequestEvent) {
+export async function DELETE({ locals, params }: RequestEvent) {
   await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.WRITE_DATA],
     [APIKEY_SCOPES.PROJECT_ADMIN]
   );

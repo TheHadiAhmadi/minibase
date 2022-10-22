@@ -18,6 +18,7 @@ export async function initDB() {
   await db.schema.createTable("functions", (builder) => {
     builder.string("id").notNullable().primary();
     builder.string("project").notNullable();
+    builder.text("routes").notNullable();
     builder.string("name").notNullable();
     builder.text("code").notNullable();
   });

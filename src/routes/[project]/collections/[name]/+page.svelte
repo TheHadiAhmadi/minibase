@@ -35,8 +35,7 @@
     await deleteData(
       data.project.name,
       data.collection.name,
-      value.id,
-      data.apiKey
+      value.id
     );
     //
   }
@@ -44,8 +43,7 @@
   async function reload(deps) {
     if (!browser) return;
     values = await getRows(
-      { project: data.project.name, name: data.collection.name },
-      data.apiKey
+      { project: data.project.name, name: data.collection.name }
     );
     console.log(values);
 
@@ -55,8 +53,7 @@
     const value = await insertData(
       data.project.name,
       data.collection.name,
-      editingData,
-      data.apiKey
+      editingData
     );
     values = [...values, value];
     editModalOpen = false;
@@ -66,8 +63,7 @@
       data.project.name,
       data.collection.name,
       editingData.id,
-      editingData,
-      data.apiKey
+      editingData
     );
     values = values.map((val) => {
       if (val.id === value.id) return value;

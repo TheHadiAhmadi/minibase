@@ -13,8 +13,7 @@
     try {
       const result = await updateProject(
         data.project.name,
-        { name: newName },
-        data.apiKey
+        { name: newName }
       );
       data.project.name = newName;
     } catch (err) {}
@@ -23,7 +22,7 @@
   async function remove() {
     try {
       console.log("PROMPT");
-      await removeProject(data.project.name, data.apiKey);
+      await removeProject(data.project.name);
     } catch (err) {
       //
     }

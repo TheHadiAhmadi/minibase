@@ -15,27 +15,11 @@
 
   export let data: LayoutData;
 
-  $: console.log(data);
-
   let errorMessage: string = "";
 
   let loading = false;
 
   let apiKey = data.apiKey ?? "";
-
-  // let disabled = {
-  //   "read:function": true,
-  //   "read:data": true,
-  //   "read:env": true,
-  //   "write:function": true,
-  //   "write:data": true,
-  //   "write:env": true,
-  //   "admin:project": true,
-  // };
-
-  // function enable(section: keyof typeof disabled) {
-  //   disabled[section] = false;
-  // }
 
   async function onContinue() {
     const result = await fetch("/api/set-cookie", {

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { addFunction, editFunction, removeFunction } from "$services/api";
   import type { ProjectFunction, ProjectInfo } from "$types";
-  import { createEventDispatcher } from "svelte";
   import { page } from "$app/stores";
 
   import MenuItem from "./MenuItem.svelte";
@@ -21,15 +20,15 @@
   let project: ProjectInfo;
   $: project = $page.data.project;
 
-  const dispatch = createEventDispatcher();
-
   async function add() {
     try {
       const code = ` `;
-      const fn = await addFunction(
-        { name, project: project.name, code },
-        $page.data.apiKey
-      );
+      const fn = await addFunction({
+        name,
+        project: project.name,
+        code,
+        routes: [],
+      });
       project.functions = [...(project.functions ?? []), fn];
 
       openEditPage(fn);
@@ -39,16 +38,16 @@
   }
 
   function openEditPage(fn: ProjectFunction) {
+    goto(`/${project.name}/functions/${fn.name}/edit`);
+  }
+
+  function openViewPage(fn: ProjectFunction) {
     goto(`/${project.name}/functions/${fn.name}`);
   }
 
   async function remove(fn: ProjectFunction) {
     console.log("prompt");
-    const result = await removeFunction(
-      project.name,
-      fn.id!,
-      $page.data.apiKey
-    );
+    const result = await removeFunction(project.name, fn.id!);
     project.functions = project.functions?.filter((fun) => fun.id !== fn.id);
   }
 
@@ -56,7 +55,7 @@
     console.log("rename");
     fn.name = newName;
 
-    const result = await editFunction(fn.id!, fn, $page.data.apiKey);
+    const result = await editFunction(fn.id!, fn);
     project.functions = project.functions?.map((fun) => {
       if (fun.id === fn.id) return fn;
       return fun;
@@ -81,18 +80,27 @@
   </Button>
   <Menu slot="content">
     {#each project.functions ?? [] as fn}
-      <MenuItem on:click={() => openEditPage(fn)} title={fn.name}>
+      <MenuItem on:click={() => openViewPage(fn)} title={fn.name}>
         <Icon slot="start" pack="mdi" name="function" />
 
-        <Button
-          on:click={() => remove(fn)}
-          size="sm"
-          slot="end"
-          shape="tile"
-          class="text-red-400 bg-red-200 hover:bg-red-400 hover:text-white hover:border-red-400"
-        >
-          <Icon pack="mdi" name="trash-can" />
-        </Button>
+        <ButtonGroup slot="end">
+          <Button
+            on:click={() => openEditPage(fn)}
+            size="sm"
+            shape="tile"
+            class="text-blue-400 bg-blue-200 hover:bg-blue-400 hover:text-white hover:border-blue-400"
+          >
+            <Icon pack="mdi" name="pencil" />
+          </Button>
+          <Button
+            on:click={() => remove(fn)}
+            size="sm"
+            shape="tile"
+            class="text-red-400 bg-red-200 hover:bg-red-400 hover:text-white hover:border-red-400"
+          >
+            <Icon pack="mdi" name="trash-can" />
+          </Button>
+        </ButtonGroup>
       </MenuItem>
     {/each}
 

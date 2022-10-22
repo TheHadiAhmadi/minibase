@@ -9,10 +9,11 @@ import { APIKEY_SCOPES } from "../../../../../types";
 import type { RequestEvent } from "./$types";
 
 // edit function
-export async function PUT({ params, request }: RequestEvent) {
+export async function PUT({ params, locals, request }: RequestEvent) {
+  console.log({locals})
   await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.WRITE_FUNCTION],
     [APIKEY_SCOPES.PROJECT_ADMIN]
   );
@@ -25,10 +26,10 @@ export async function PUT({ params, request }: RequestEvent) {
 }
 
 // Delete function
-export async function DELETE({ params, request }: RequestEvent) {
+export async function DELETE({ params, locals, request }: RequestEvent) {
   await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.WRITE_FUNCTION],
     [APIKEY_SCOPES.PROJECT_ADMIN]
   );

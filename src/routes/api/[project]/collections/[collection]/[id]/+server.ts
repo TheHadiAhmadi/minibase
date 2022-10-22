@@ -10,10 +10,10 @@ import { APIKEY_SCOPES } from "../../../../../../types";
 import type { RequestEvent } from "./$types";
 
 // get data
-export async function GET({ request, params }: RequestEvent) {
+export async function GET({ locals, params }: RequestEvent) {
   await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.READ_DATA],
     [APIKEY_SCOPES.PROJECT_ADMIN]
   );
@@ -27,10 +27,10 @@ export async function GET({ request, params }: RequestEvent) {
 }
 
 // edit data
-export async function PUT({ request, params }: RequestEvent) {
+export async function PUT({ request, locals, params }: RequestEvent) {
   await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.PROJECT_ADMIN],
     [APIKEY_SCOPES.WRITE_DATA]
   );
@@ -48,10 +48,10 @@ export async function PUT({ request, params }: RequestEvent) {
 }
 
 // delete data
-export async function DELETE({ request, params }: RequestEvent) {
+export async function DELETE({ locals, params }: RequestEvent) {
   await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.PROJECT_ADMIN],
     [APIKEY_SCOPES.WRITE_DATA]
   );

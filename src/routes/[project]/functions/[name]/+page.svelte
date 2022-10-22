@@ -20,8 +20,7 @@
       data.function.project = data.project.name;
       const response: ProjectFunction = await editFunction(
         data.function.id!,
-        data.function,
-        data.apiKey
+        data.function
       );
 
       data.function = response;

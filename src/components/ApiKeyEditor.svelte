@@ -21,7 +21,7 @@
 
   async function add() {
     try {
-      const result: ApiKey = await addApiKey(project.name, request, $page.data.apiKey);
+      const result: ApiKey = await addApiKey(project.name, request);
 
       console.log(result)
       value = result.value ?? ''

@@ -53,6 +53,7 @@ export type ProjectFunction = {
   project: string;
   name: string;
   code: string;
+  routes: string[];
   id?: string;
 };
 

@@ -28,21 +28,8 @@ export async function getProjects() {
   return result.data as Project[];
 }
 
-export async function getProject(
-  name: string,
-  apiKey: string,
-  fetcher: typeof fetch = fetch
-) {
-  const result1 = await fetcher(`/api/${name}`, {
-    headers: { ApiKey: apiKey },
-  }).then((res) => res.text());
-
-  console.log({ result1 });
-
-  console.log({ apiKey, name });
-  const result = await fetcher(`/api/${name}`, {
-    headers: { ApiKey: apiKey },
-  })
+export async function getProject(name: string, fetcher: typeof fetch = fetch) {
+  const result = await fetcher(`/api/${name}`)
     .then((res) => res.json())
     .catch(showError);
 
@@ -51,7 +38,6 @@ export async function getProject(
     throw result;
   }
 
-  console.log("sss", result);
   return {
     project: result.data as ProjectInfo,
     scopes: result.scopes as ApiKeyScopes[],
@@ -75,14 +61,9 @@ export async function createProject(name: string) {
   return result.data;
 }
 
-export async function updateProject(
-  id: string,
-  request: Partial<ProjectInfo>,
-  apiKey: string
-) {
+export async function updateProject(id: string, request: Partial<ProjectInfo>) {
   const result = await fetch(`/api/${id}`, {
     method: "POST",
-    headers: { ApiKey: apiKey },
     body: JSON.stringify(request),
   })
     .then((res) => res.json())
@@ -96,10 +77,9 @@ export async function updateProject(
   return result.data;
 }
 
-export async function removeProject(id: string, apiKey: string) {
+export async function removeProject(id: string) {
   const result = await fetch(`/api/${id}`, {
     method: "DELETE",
-    headers: { ApiKey: apiKey },
   })
     .then((res) => res.json())
     .catch(showError);
@@ -112,10 +92,9 @@ export async function removeProject(id: string, apiKey: string) {
   return true;
 }
 
-export async function addApiKey(project: string, body: ApiKey, apiKey: string) {
+export async function addApiKey(project: string, body: ApiKey) {
   const result = await fetch(`/api/${project}/apikeys`, {
     method: "POST",
-    headers: { ApiKey: apiKey },
     body: JSON.stringify(body),
   })
     .then((res) => res.json())
@@ -129,13 +108,16 @@ export async function addApiKey(project: string, body: ApiKey, apiKey: string) {
   return result.data;
 }
 
-export async function getRows(
-  { project, name }: { project: string; name: string },
-  apiKey: string
-): Promise<CollectionRow[]> {
-  const result = await fetch(`/api/${project}/collections/${name}`, {
-    headers: { ApiKey: apiKey },
-  }).then((res) => res.json());
+export async function getRows({
+  project,
+  name,
+}: {
+  project: string;
+  name: string;
+}): Promise<CollectionRow[]> {
+  const result = await fetch(`/api/${project}/collections/${name}`).then(
+    (res) => res.json()
+  );
 
   return result.data as CollectionRow[];
 }
@@ -143,12 +125,10 @@ export async function getRows(
 export async function insertData(
   project: string,
   collection: string,
-  request: CollectionRow,
-  apiKey: string
+  request: CollectionRow
 ) {
   const result = await fetch(`/api/${project}/collections/${collection}`, {
     method: "POST",
-    headers: { ApiKey: apiKey },
     body: JSON.stringify(request),
   }).then((res) => res.json());
   if (result.status >= 400) {
@@ -163,14 +143,12 @@ export async function editData(
   project: string,
   collection: string,
   id: string,
-  request: CollectionRow,
-  apiKey: string
+  request: CollectionRow
 ) {
   const result = await fetch(
     `/api/${project}/collections/${collection}/${id}`,
     {
       method: "PUT",
-      headers: { ApiKey: apiKey },
       body: JSON.stringify(request),
     }
   ).then((res) => res.json());
@@ -185,14 +163,12 @@ export async function editData(
 export async function deleteData(
   project: string,
   collection: string,
-  id: string,
-  apiKey: string
+  id: string
 ) {
   const result = await fetch(
     `/api/${project}/collections/${collection}/${id}`,
     {
       method: "DELETE",
-      headers: { ApiKey: apiKey },
     }
   ).then((res) => res.json());
   if (result.status >= 400) {
@@ -202,13 +178,9 @@ export async function deleteData(
   return result.data;
 }
 
-export async function addCollection(
-  request: ProjectCollection,
-  apiKey: string
-) {
+export async function addCollection(request: ProjectCollection) {
   const result = await fetch(`/api/${request.project}/collections`, {
     method: "POST",
-    headers: { ApiKey: apiKey },
     body: JSON.stringify(request),
   })
     .then((res) => res.json())
@@ -224,15 +196,10 @@ export async function addCollection(
   return result.data;
 }
 
-export async function editCollection(
-  name: string,
-  request: ProjectCollection,
-  apiKey: string
-) {
+export async function editCollection(name: string, request: ProjectCollection) {
   // TODO
   const result = await fetch(`/api/${request.project}/collections/${name}`, {
     method: "PUT",
-    headers: { ApiKey: apiKey },
     body: JSON.stringify(request),
   }).then((res) => res.json());
 
@@ -243,15 +210,10 @@ export async function editCollection(
   return result.data;
 }
 
-export async function removeCollection(
-  project: string,
-  name: string,
-  apiKey: string
-) {
+export async function removeCollection(project: string, name: string) {
   // TODO
   const result = await fetch(`/api/${project}/collections/${name}`, {
     method: "DELETE",
-    headers: { ApiKey: apiKey },
   }).then((res) => res.json());
 
   if (result.status >= 400) {
@@ -261,14 +223,15 @@ export async function removeCollection(
   return true;
 }
 
-export async function addFunction(
-  { name, code, project }: ProjectFunction,
-  apiKey: string
-): Promise<ProjectFunction> {
+export async function addFunction({
+  name,
+  code,
+  routes,
+  project,
+}: ProjectFunction): Promise<ProjectFunction> {
   const result = await fetch(`/api/${project}/functions`, {
     method: "POST",
-    headers: { ApiKey: apiKey },
-    body: JSON.stringify({ name, code }),
+    body: JSON.stringify({ name, code, routes }),
   })
     .then((res) => res.json())
     .catch(showError);
@@ -283,13 +246,8 @@ export async function addFunction(
   return result.data as ProjectFunction;
 }
 
-export async function getFunctions(
-  project: string,
-  apiKey: string
-): Promise<ProjectFunction> {
-  const result = await fetch(`/api/${project}/functions`, {
-    headers: { ApiKey: apiKey },
-  })
+export async function getFunctions(project: string): Promise<ProjectFunction> {
+  const result = await fetch(`/api/${project}/functions`)
     .then((res) => res.json())
     .catch(showError);
   if (result.status >= 400) {
@@ -302,14 +260,10 @@ export async function getFunctions(
 
 export async function editFunction(
   id: string,
-  data: ProjectFunction,
-  apiKey: string
+  data: ProjectFunction
 ): Promise<ProjectFunction> {
   const result = await fetch(`/api/${data.project}/functions/${id}`, {
     method: "PUT",
-    headers: {
-      ApiKey: apiKey,
-    },
     body: JSON.stringify(data),
   })
     .then((res) => res.json())
@@ -325,14 +279,10 @@ export async function editFunction(
 
 export async function removeFunction(
   project: string,
-  id: string,
-  apiKey: string
+  id: string
 ): Promise<boolean> {
   const result = await fetch(`/api/${project}/functions/${id}`, {
     method: "DELETE",
-    headers: {
-      ApiKey: apiKey,
-    },
   })
     .then((res) => res.json())
     .catch(showError);

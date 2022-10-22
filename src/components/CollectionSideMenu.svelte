@@ -35,10 +35,11 @@
   async function add() {
     try {
       const schema: CollectionSchema[] = [];
-      const collection = await addCollection(
-        { name, project: project.name, schema },
-        $page.data.apiKey
-      );
+      const collection = await addCollection({
+        name,
+        project: project.name,
+        schema,
+      });
       project.collections = [...(project.collections ?? []), collection];
 
       openEditPage(collection);
@@ -59,8 +60,8 @@
     console.log("prompt");
     const result = await removeCollection(
       project.name,
-      collection.name,
-      $page.data.apiKey
+      collection.name
+      
     );
     project.collections = project.collections?.filter(
       (coll) => coll.id !== collection.id
@@ -73,8 +74,7 @@
 
     const result = await editCollection(
       collection.name,
-      collection,
-      $page.data.apiKey
+      collection
     );
     project.collections = project.collections?.map((coll) => {
       if (coll.id === collection.id) return collection;

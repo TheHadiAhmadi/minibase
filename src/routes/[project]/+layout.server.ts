@@ -1,4 +1,3 @@
-import { invalid, type Actions } from "@sveltejs/kit";
 import type { LayoutServerLoadEvent } from "./$types";
 
 export async function load({ params, cookies, fetch }: LayoutServerLoadEvent) {

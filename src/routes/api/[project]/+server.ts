@@ -10,12 +10,10 @@ import { APIKEY_SCOPES } from "../../../types";
 import type { RequestEvent } from "./$types";
 
 // Get Project Info
-export async function GET({ request, params }: RequestEvent) {
-  console.log(request.headers);
-  console.log(request.headers.get("apiKey"));
+export async function GET({ request, locals, params }: RequestEvent) {
   const scopes = await validateApiKey(
     params.project,
-    request.headers.get("ApiKey"),
+    locals.apiKey,
     [APIKEY_SCOPES.READ_DATA],
     [APIKEY_SCOPES.READ_ENV],
     [APIKEY_SCOPES.READ_FUNCTION],
@@ -54,10 +52,10 @@ export async function GET({ request, params }: RequestEvent) {
   return respond({ data, scopes });
 }
 
-export async function POST({ request, cookies, params }: RequestEvent) {
+export async function POST({ request, locals, cookies, params }: RequestEvent) {
   const body = await request.json();
 
-  await validateApiKey(params.project, request.headers.get("ApiKey"), [
+  await validateApiKey(params.project, locals.apiKey, [
     APIKEY_SCOPES.PROJECT_ADMIN,
   ]);
 
@@ -75,18 +73,18 @@ export async function POST({ request, cookies, params }: RequestEvent) {
 
   if (body.name) {
     cookies.delete(`${params.project}-apikey`);
-    cookies.set(`${body.name}-apikey`, request.headers.get("ApiKey") ?? "", {
+    cookies.set(`${body.name}-apikey`, locals.apiKey, {
       path: "/",
-      httpOnly: true, 
-      maxAge: 10 * 365 * 24 * 60 * 60
+      httpOnly: true,
+      maxAge: 10 * 365 * 24 * 60 * 60,
     });
   }
 
   return respond({ data });
 }
 
-export async function DELETE({ request, params }: RequestEvent) {
-  await validateApiKey(params.project, request.headers.get("ApiKey"), [
+export async function DELETE({ locals, params }: RequestEvent) {
+  await validateApiKey(params.project, locals.apiKey, [
     APIKEY_SCOPES.PROJECT_ADMIN,
   ]);
 

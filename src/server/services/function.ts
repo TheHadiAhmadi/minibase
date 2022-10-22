@@ -16,6 +16,7 @@ export const addFunction: ServiceAddFunction = async ({ project, body }) => {
       project,
       name: body.name,
       code: body.code,
+      routes: body.routes.join(" "),
     });
   } catch (err) {
     console.log(err);
@@ -27,11 +28,16 @@ export const addFunction: ServiceAddFunction = async ({ project, body }) => {
 export const getFunctions: ServiceGetFunctions = async ({ project }) => {
   const result = await db("functions").select("*").where({ project });
 
-  return result;
+  return result.map((r) => ({
+    ...r,
+    routes: r.routes.split(" ").filter((r) => !!r),
+  }));
 };
 
 export const editFunction: ServiceEditFunction = async ({ id, body }) => {
-  await db("functions").update(body).where({ id });
+  await db("functions")
+    .update({ ...body, routes: body.routes.join(" ") ?? null })
+    .where({ id });
 
   return body;
 };
