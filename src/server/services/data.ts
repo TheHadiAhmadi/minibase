@@ -12,7 +12,7 @@ export const getRows: ServiceGetRows = async ({ project, collection }) => {
     .select("data", "id")
     .where({ project, collection });
 
-  return rows.map((row) => row.data);
+  return rows.map((row) => ({ ...row.data, id: row.id }));
 };
 
 export const editData: ServiceEditData = async ({
@@ -40,7 +40,7 @@ export const getData: ServiceGetData = async ({ project, collection, id }) => {
     .where({ project, collection, id })
     .first();
 
-  return result.data;
+  return {...result.data, id: result.id};
 };
 
 export const insertData: ServiceInsertData = async ({
@@ -51,8 +51,6 @@ export const insertData: ServiceInsertData = async ({
   if (Array.isArray(data)) {
     const d = data.map((dat) => {
       const id = crypto.randomUUID();
-      dat.id = id;
-
       return {
         project,
         collection,
@@ -62,11 +60,10 @@ export const insertData: ServiceInsertData = async ({
     });
     await db("rows").insert(d);
 
-    return d.map((dd) => dd.data);
+    return d.map((dd) => ({...dd.data, id: dd.id});
   }
 
   const id = crypto.randomUUID();
-  data.id = id;
   await db("rows").insert({ project, collection, data, id });
 
   return data;
