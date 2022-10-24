@@ -22,7 +22,7 @@ export const editData: ServiceEditData = async ({
   body: data,
 }) => {
   await db("rows").update({ data }).where({ project, collection, id });
-  return data;
+  return { ...data, id };
 };
 
 export const deleteData: ServiceDeleteData = async ({
@@ -66,5 +66,5 @@ export const insertData: ServiceInsertData = async ({
   const id = crypto.randomUUID();
   await db("rows").insert({ project, collection, data, id });
 
-  return data;
+  return { ...data, id };
 };
