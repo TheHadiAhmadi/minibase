@@ -40,7 +40,7 @@ export const getData: ServiceGetData = async ({ project, collection, id }) => {
     .where({ project, collection, id })
     .first();
 
-  return {...result.data, id: result.id};
+  return { ...result.data, id: result.id };
 };
 
 export const insertData: ServiceInsertData = async ({
@@ -60,7 +60,7 @@ export const insertData: ServiceInsertData = async ({
     });
     await db("rows").insert(d);
 
-    return d.map((dd) => ({...dd.data, id: dd.id});
+    return d.map((dd) => ({ ...dd.data, id: dd.id }));
   }
 
   const id = crypto.randomUUID();
