@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import MainBody from "$components/MainBody.svelte";
+  import ShowSdk from "$components/ShowSdk.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -46,13 +47,34 @@
   //   activePage = "edit-env";
   //   activeEnv = detail;
   // }
+
+  let showSdkModalOpen = false;
 </script>
 
 <MainBody>
   <h1>Welcome to Dashboard</h1>
   <div class="h-200px" />
-
-  <Button color="danger" class="w-min ms-auto" on:click={logout}
-    >Exit from Project</Button
-  >
 </MainBody>
+<CardFooter>
+  <CardActions>
+    <ButtonGroup>
+      <Button color="primary" on:click={() => (showSdkModalOpen = true)}
+        >Show SDK File</Button
+      >
+      <Button color="danger" class="w-min ms-auto" on:click={logout}>
+        Exit from Project
+      </Button>
+    </ButtonGroup>
+  </CardActions>
+</CardFooter>
+
+<Dialog bind:open={showSdkModalOpen} placement="center" persistent size="lg">
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>store this file as minibase.js in your project</DialogTitle>
+    </DialogHeader>
+    <ShowSdk project={data.project} />
+
+    <DialogClose />
+  </DialogContent>
+</Dialog>

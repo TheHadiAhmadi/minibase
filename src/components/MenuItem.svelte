@@ -21,7 +21,7 @@
 
 <li
   on:click={click}
-  class="flex items-center gap-2 hover:bg-blue-100 p-2 border-b border-gray-100 hover:border-gray-200 {className}"
+  class="flex cursor-default items-center gap-2 hover:bg-blue-100 p-2 border-b border-gray-100 hover:border-gray-200 {className}"
   class:font-bold={$$slots["content"] && open}
   class:text-gray-500={disabled}
 >
