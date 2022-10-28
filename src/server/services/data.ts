@@ -68,6 +68,7 @@ export const insertData: ServiceInsertData = async ({
     project,
     collection,
     data: JSON.stringify(data),
+    
     id,
   });
 
