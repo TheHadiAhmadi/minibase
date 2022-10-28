@@ -1,11 +1,5 @@
 <script lang="ts">
-  import {
-    addCollection,
-    editData,
-    insertData,
-    getRows,
-    deleteData,
-  } from "$services/api";
+  import api from "$services/api";
 
   import type { CollectionRow, ProjectCollection } from "$types";
   import { createEventDispatcher } from "svelte";
@@ -33,7 +27,7 @@
 
   async function remove(val: CollectionRow) {
     try {
-      await deleteData(project, data.name, val.id, apiKey);
+      await api.removeData(project, data.name, val.id);
       values = values.filter((value) => value !== val);
     } catch (err) {
       //

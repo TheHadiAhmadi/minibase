@@ -2,18 +2,13 @@
   import { goto } from "$app/navigation";
   import MainBody from "$components/MainBody.svelte";
   import ShowSdk from "$components/ShowSdk.svelte";
+  import api from "$services/api";
   import type { PageData } from "./$types";
 
   export let data: PageData;
 
   async function logout() {
-    await fetch("/api/set-cookie", {
-      method: "POST",
-      body: JSON.stringify({
-        name: `${data.project.name}-apikey`,
-        value: "",
-      }),
-    });
+    await api.setCookie(`${data.project.name}-apikey`, "");
     goto("/projects");
   }
 

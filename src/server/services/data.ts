@@ -40,7 +40,7 @@ export const getData: ServiceGetData = async ({ project, collection, id }) => {
     .where({ project, collection, id })
     .first();
 
-  return { ...result.data, id: result.id };
+  return { ...JSON.parse(result.data), id: result.id };
 };
 
 export const insertData: ServiceInsertData = async ({
@@ -54,17 +54,22 @@ export const insertData: ServiceInsertData = async ({
       return {
         project,
         collection,
-        data: dat,
+        data: JSON.stringify(dat),
         id,
       };
     });
     await db("rows").insert(d);
 
-    return d.map((dd) => ({ ...dd.data, id: dd.id }));
+    return d.map((dd) => ({ ...JSON.parse(dd.data), id: dd.id }));
   }
 
   const id = crypto.randomUUID();
-  await db("rows").insert({ project, collection, data, id });
+  await db("rows").insert({
+    project,
+    collection,
+    data: JSON.stringify(data),
+    id,
+  });
 
   return { ...data, id };
 };

@@ -21,35 +21,35 @@ export async function GET({ request, locals, params }: RequestEvent) {
   );
   console.log({ scopes });
 
-  const project: ProjectInfoPromise = await getProject({
+  const projectPromise: ProjectInfoPromise = await getProject({
     name: params.project,
   });
 
-  const data: ProjectInfo = {
-    name: project.name,
-    id: project.id,
+  const project: ProjectInfo = {
+    name: projectPromise.name,
+    id: projectPromise.id,
   };
 
   if (scopes.includes(APIKEY_SCOPES.PROJECT_ADMIN)) {
-    data.apiKeys = await project.apiKeys;
-    data.env = project.env;
-    data.collections = await project.collections;
-    data.functions = await project.functions;
+    project.apiKeys = await projectPromise.apiKeys;
+    project.env = projectPromise.env;
+    project.collections = await projectPromise.collections;
+    project.functions = await projectPromise.functions;
 
-    return respond({ data, scopes });
+    return respond({ data: { project, scopes } });
   }
 
   if (scopes.includes(APIKEY_SCOPES.READ_ENV)) {
-    data.env = project.env;
+    project.env = projectPromise.env;
   }
   if (scopes.includes(APIKEY_SCOPES.READ_DATA)) {
-    data.collections = await project.collections;
+    project.collections = await projectPromise.collections;
   }
   if (scopes.includes(APIKEY_SCOPES.READ_FUNCTION)) {
-    data.functions = await project.functions;
+    project.functions = await projectPromise.functions;
   }
 
-  return respond({ data, scopes });
+  return respond({ data: { scopes, project } });
 }
 
 export async function POST({ request, locals, cookies, params }: RequestEvent) {
@@ -88,7 +88,7 @@ export async function DELETE({ locals, params }: RequestEvent) {
     APIKEY_SCOPES.PROJECT_ADMIN,
   ]);
 
-  const result = await removeProject({ name: params.project });
+  const data = await removeProject({ name: params.project });
 
-  return respond({ data: result });
+  return respond({ data });
 }

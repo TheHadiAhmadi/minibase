@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
-  import { deleteData, editData, getRows, insertData } from "$services/api";
+  import api from "$services/api";
   import type { CollectionRow } from "$types";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -32,25 +32,19 @@
   }
 
   async function remove(value: CollectionRow) {
-    await deleteData(
-      data.project.name,
-      data.collection.name,
-      value.id
-    );
+    await api.removeData(data.project.name, data.collection.name, value.id);
     //
   }
 
-  async function reload(deps) {
+  async function reload(deps?: any) {
     if (!browser) return;
-    values = await getRows(
-      { project: data.project.name, name: data.collection.name }
-    );
+    values = await api.getRows(data.project.name, data.collection.name);
     console.log(values);
 
     //
   }
   async function add() {
-    const value = await insertData(
+    const value = await api.insertData(
       data.project.name,
       data.collection.name,
       editingData
@@ -59,7 +53,7 @@
     editModalOpen = false;
   }
   async function save() {
-    const value = await editData(
+    const value = await api.editData(
       data.project.name,
       data.collection.name,
       editingData.id,

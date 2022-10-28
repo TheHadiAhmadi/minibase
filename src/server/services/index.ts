@@ -7,4 +7,4 @@ export * from "./function";
 export * from "./project";
 export * from "./utils";
 
-// initDB();
+initDB();

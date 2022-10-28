@@ -4,7 +4,7 @@
   import "virtual:windi.css";
 </script>
 
-<div>
+<div class="h-full font-roboto">
   <slot />
 </div>
 
@@ -20,8 +20,7 @@
 </div>
 
 <style>
-  div {
+  .font-roboto {
     font-family: Roboto, sans-serif;
-
   }
 </style>

@@ -2,313 +2,128 @@ import { alertMessage } from "$stores/alert";
 import type {
   ApiKey,
   ApiKeyScopes,
-  CollectionInfo,
   CollectionRow,
   Project,
   ProjectCollection,
   ProjectFunction,
   ProjectInfo,
-} from "src/types";
+} from "$types";
 
 function showError(err: App.Error) {
   console.log(err);
   alertMessage.showError(`(${err.status}) - ${err.message}`);
 }
 
-export async function getProjects() {
-  const result = await fetch("/api")
-    .then((res) => res.json())
-    .catch(showError);
+const api = () => {
+  async function send<T>(
+    url: string,
+    method = "GET",
+    data: object | null = null
+  ): Promise<T> {
+    try {
+      const opts: RequestInit = {};
 
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
+      if (method !== "GET") {
+        opts.method = method;
+      }
+      opts.headers = new Headers();
 
-  return result.data as Project[];
-}
+      if (data != null) {
+        opts.headers.set("Content-Type", "application/json");
 
-export async function getProject(name: string, fetcher: typeof fetch = fetch) {
-  const result = await fetcher(`/api/${name}`)
-    .then((res) => res.json())
-    .catch(showError);
+        opts.body = JSON.stringify(data);
+      }
 
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
+      const result = await fetch(url, opts).then((res) => res.json());
+
+      if (result.status >= 400)
+        throw new Error(`${result.status} - ${result.message}`);
+
+      return result.data;
+    } catch (err: any) {
+      showError(err);
+      throw err;
+    }
   }
 
   return {
-    project: result.data as ProjectInfo,
-    scopes: result.scopes as ApiKeyScopes[],
+    getProjects: () => send<Project[]>("/api"),
+
+    getProject: (name: string) =>
+      send<{ project: ProjectInfo; scopes: ApiKeyScopes[] }>(`/api/${name}`),
+
+    createProject: (name: string) =>
+      send<ProjectInfo>("/api", "POST", { name }),
+
+    updateProject: (id: string, request: Partial<Project>) =>
+      send<Project>(`/api/${id}`, "POST", request),
+
+    removeProject: (id: string) => send<boolean>(`/api/${id}`, "DELETE"),
+
+    addApiKey: (project: string, request: ApiKey) =>
+      send<ApiKey>(`/api/${project}/apikeys`, "POST", request),
+
+    getRows: (project: string, collection: string) =>
+      send<CollectionRow[]>(`/api/${project}/collections/${collection}`),
+
+    insertData: (project: string, collection: string, request: CollectionRow) =>
+      send<CollectionRow>(
+        `/api/${project}/collections/${collection}`,
+        "POST",
+        request
+      ),
+
+    editData: (
+      project: string,
+      collection: string,
+      id: string,
+      request: CollectionRow
+    ) =>
+      send<CollectionRow>(
+        `/api/${project}/collections/${collection}/${id}`,
+        "PUT",
+        request
+      ),
+
+    removeData: (project: string, collection: string, id: string) =>
+      send<boolean>(
+        `/api/${project}/collections/${collection}/${id}`,
+        "DELETE"
+      ),
+
+    addCollection: (project: string, request: ProjectCollection) =>
+      send<ProjectCollection>(`/api/${project}/collections`, "POST", request),
+
+    editCollection: (
+      project: string,
+      collection: string,
+      request: ProjectCollection
+    ) =>
+      send<ProjectCollection>(
+        `/api/${project}/collections/${collection}`,
+        "PUT",
+        request
+      ),
+
+    removeCollection: (project: string, collection: string) =>
+      send<boolean>(`/api/${project}/collections/${collection}`, "DELETE"),
+
+    addFunction: (project: string, request: ProjectFunction) =>
+      send<ProjectFunction>(`/api/${project}/functions`, "POST", request),
+
+    getFunctions: (project: string) =>
+      send<ProjectFunction>(`/api/${project}/functions`),
+
+    editFunction: (project: string, id: string, request: ProjectFunction) =>
+      send<ProjectFunction>(`/api/${project}/functions/${id}`, "PUT", request),
+
+    removeFunction: (project: string, id: string) =>
+      send<boolean>(`/api/${project}/functions/${id}`, "DELETE"),
+
+    removeApiKey: (project: string, id: string) =>
+      send<boolean>(`/api/${project}/apikeys/${id}`, "DELETE"),
+    setCookie: (name: string, value: string) =>
+      send<boolean>("/api/set-cookie", "POST", { name, value }),
   };
-}
-
-export async function createProject(name: string) {
-  const result = await fetch("/api", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name }),
-  })
-    .then((res) => res.json())
-    .catch(showError);
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data;
-}
-
-export async function updateProject(id: string, request: Partial<ProjectInfo>) {
-  const result = await fetch(`/api/${id}`, {
-    method: "POST",
-    body: JSON.stringify(request),
-  })
-    .then((res) => res.json())
-    .catch(showError);
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data;
-}
-
-export async function removeProject(id: string) {
-  const result = await fetch(`/api/${id}`, {
-    method: "DELETE",
-  })
-    .then((res) => res.json())
-    .catch(showError);
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return true;
-}
-
-export async function addApiKey(project: string, body: ApiKey) {
-  const result = await fetch(`/api/${project}/apikeys`, {
-    method: "POST",
-    body: JSON.stringify(body),
-  })
-    .then((res) => res.json())
-    .catch(showError);
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data;
-}
-
-export async function getRows({
-  project,
-  name,
-}: {
-  project: string;
-  name: string;
-}): Promise<CollectionRow[]> {
-  const result = await fetch(`/api/${project}/collections/${name}`).then(
-    (res) => res.json()
-  );
-
-  return result.data as CollectionRow[];
-}
-
-export async function insertData(
-  project: string,
-  collection: string,
-  request: CollectionRow
-) {
-  const result = await fetch(`/api/${project}/collections/${collection}`, {
-    method: "POST",
-    body: JSON.stringify(request),
-  }).then((res) => res.json());
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data;
-}
-
-export async function editData(
-  project: string,
-  collection: string,
-  id: string,
-  request: CollectionRow
-) {
-  const result = await fetch(
-    `/api/${project}/collections/${collection}/${id}`,
-    {
-      method: "PUT",
-      body: JSON.stringify(request),
-    }
-  ).then((res) => res.json());
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data;
-}
-
-export async function deleteData(
-  project: string,
-  collection: string,
-  id: string
-) {
-  const result = await fetch(
-    `/api/${project}/collections/${collection}/${id}`,
-    {
-      method: "DELETE",
-    }
-  ).then((res) => res.json());
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-  return result.data;
-}
-
-export async function addCollection(request: ProjectCollection) {
-  const result = await fetch(`/api/${request.project}/collections`, {
-    method: "POST",
-    body: JSON.stringify(request),
-  })
-    .then((res) => res.json())
-    .catch(showError);
-
-  console.log("addCollection", result);
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data;
-}
-
-export async function editCollection(name: string, request: ProjectCollection) {
-  // TODO
-  const result = await fetch(`/api/${request.project}/collections/${name}`, {
-    method: "PUT",
-    body: JSON.stringify(request),
-  }).then((res) => res.json());
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-  return result.data;
-}
-
-export async function removeCollection(project: string, name: string) {
-  // TODO
-  const result = await fetch(`/api/${project}/collections/${name}`, {
-    method: "DELETE",
-  }).then((res) => res.json());
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-  return true;
-}
-
-export async function addFunction({
-  name,
-  code,
-  routes,
-  project,
-}: ProjectFunction): Promise<ProjectFunction> {
-  const result = await fetch(`/api/${project}/functions`, {
-    method: "POST",
-    body: JSON.stringify({ name, code, routes }),
-  })
-    .then((res) => res.json())
-    .catch(showError);
-
-  console.log("api add function", { result });
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data as ProjectFunction;
-}
-
-export async function getFunctions(project: string): Promise<ProjectFunction> {
-  const result = await fetch(`/api/${project}/functions`)
-    .then((res) => res.json())
-    .catch(showError);
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data as ProjectFunction;
-}
-
-export async function editFunction(
-  id: string,
-  data: ProjectFunction
-): Promise<ProjectFunction> {
-  const result = await fetch(`/api/${data.project}/functions/${id}`, {
-    method: "PUT",
-    body: JSON.stringify(data),
-  })
-    .then((res) => res.json())
-    .catch(showError);
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data;
-}
-
-export async function removeFunction(
-  project: string,
-  id: string
-): Promise<boolean> {
-  const result = await fetch(`/api/${project}/functions/${id}`, {
-    method: "DELETE",
-  })
-    .then((res) => res.json())
-    .catch(showError);
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data;
-}
-
-export async function removeApiKey(
-  project: string,
-  id: string
-): Promise<boolean> {
-  const result = await fetch(`/api/${project}/apikeys/${id}`, {
-    method: "DELETE",
-  })
-    .then((res) => res.json())
-    .catch(showError);
-
-  if (result.status >= 400) {
-    showError(result);
-    throw result;
-  }
-
-  return result.data;
-}
+};
+export default api();

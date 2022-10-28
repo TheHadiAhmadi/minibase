@@ -1,31 +1,32 @@
 <script lang="ts">
   import type { ProjectFunction } from "$types";
-  import { createEventDispatcher, SvelteComponent } from "svelte";
-  import { editFunction } from "$services/api";
-  // import Main from "./Main.svelte";
-  // import { alertMessage } from "$stores/alert";
-  // import MainBody from "./MainBody.svelte";
+  import type { SvelteComponent } from "svelte";
+  import api from "$services/api";
+
   import type { PageData } from "./$types";
-  import { goto } from "$app/navigation";
+  import { goto, invalidateAll } from "$app/navigation";
 
   export let data: PageData;
 
-  $: console.log(data);
+  let state = "clean";
 
-  const dispatch = createEventDispatcher();
+  let prevCode = data.function.code;
 
   async function save() {
     try {
+      if (state !== "dirty") return;
       data.function.code = code;
       data.function.project = data.project.name;
-      const response: ProjectFunction = await editFunction(
+      state = "saving";
+      const response: ProjectFunction = await api.editFunction(
+        data.project.name,
         data.function.id!,
         data.function
       );
+      state = "clean";
 
       data.function = response;
-
-      // dispatch("save", response);
+      invalidateAll();
     } catch (err) {
       //
     }
@@ -36,9 +37,13 @@
   let code = data.function.code;
 
   function updateCode(name?: string) {
+    console.log("update");
     codeEditor?.updateCode(data.function.code);
     code = data.function.code;
   }
+
+  $: if (prevCode !== code) state = "dirty";
+  else state = "clean";
 
   $: updateCode(data.function.name);
 </script>
@@ -50,10 +55,22 @@
     </CardTitle>
     <CardActions>
       <ButtonGroup>
-        <Button size="sm" on:click={() => goto("/" + data.project.name)}>
-          Back
+        <Button on:click={() => goto("/" + data.project.name)}>Back</Button>
+        <Button
+          loading={state === "saving"}
+          disabled={state !== "dirty"}
+          color="primary"
+          on:click={save}
+        >
+          {#if state === "clean"}
+            <Icon pack="material-symbols" name="check" />
+          {:else if state === "dirty"}
+            <Icon pack="material-symbols" name="save-outline" />
+          {:else if state === "saving"}
+            <Icon pack="material-symbols" name="save-outline" />
+          {/if}
+          Save
         </Button>
-        <Button size="sm" color="primary" on:click={save}>Save</Button>
       </ButtonGroup>
     </CardActions>
   </CardHeader>

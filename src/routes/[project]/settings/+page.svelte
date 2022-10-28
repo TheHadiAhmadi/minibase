@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { removeProject, updateProject } from "$services/api";
+  import api from "$services/api";
   import type { PageData } from "./$types";
   import { createEventDispatcher } from "svelte";
   import ApiKeyEditor from "$components/ApiKeyEditor.svelte";
@@ -11,7 +11,9 @@
   const dispatch = createEventDispatcher();
   async function save() {
     try {
-      const result = await updateProject(data.project.name, { name: newName });
+      await api.updateProject(data.project.name, {
+        name: newName,
+      });
       data.project.name = newName;
     } catch (err) {}
   }
@@ -19,7 +21,7 @@
   async function remove() {
     try {
       console.log("PROMPT");
-      await removeProject(data.project.name);
+      await api.removeProject(data.project.name);
     } catch (err) {
       //
     }

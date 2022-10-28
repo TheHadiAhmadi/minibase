@@ -14,10 +14,10 @@ import { APIKEY_SCOPES } from "../../types";
 import { addApiKey, getApiKeys } from "./apikey";
 
 export const updateProject: ServiceUpdateProject = async ({ name, body }) => {
-  const updateObject: Partial<Project> = {};
+  const updateObject: any = {};
 
   if (body.env) {
-    updateObject.env = body.env;
+    updateObject.env = JSON.stringify(body.env);
   }
 
   if (body.name) {
@@ -63,7 +63,12 @@ export const addProject: ServiceAddProject = async ({ body }) => {
     },
   });
 
-  await db("projects").insert({ name: body.name, env: body.env, id: body.id });
+  console.log(body.env);
+  await db("projects").insert({
+    name: body.name,
+    env: JSON.stringify(body.env),
+    id: body.id,
+  });
 
   body.apiKeys = [apiKey];
   console.log("addProject", body);
@@ -77,13 +82,14 @@ export const getProject: ServiceGetPorject = async ({ name }) => {
 
   return {
     ...project,
+    env: JSON.parse(project.env ?? {}),
     functions: getFunctions({ project: name }),
     collections: getCollections({ project: name }),
     apiKeys: getApiKeys({ project: name }),
   };
 };
 
-export const getAllProjects: ServiceGetAllProjects = async ({} = {}) => {
+export const getAllProjects: ServiceGetAllProjects = async (_) => {
   return db("projects").select("name", "id");
 };
 

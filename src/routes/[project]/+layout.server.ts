@@ -6,15 +6,15 @@ export async function load({ params, cookies, fetch }: LayoutServerLoadEvent) {
   console.log({ apiKey });
   try {
     const result = await fetch("/api/" + params.project, {
-      headers: { 
-        ApiKey: apiKey
+      headers: {
+        ApiKey: apiKey,
       },
     }).then((res) => res.json());
 
     return {
       apiKey,
-      scopes: result.scopes,
-      project: result.data,
+      scopes: result.data.scopes,
+      project: result.data.project,
     };
   } catch (err) {
     console.log("Found error", err);

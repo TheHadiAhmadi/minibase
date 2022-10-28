@@ -36,7 +36,10 @@ export const getApiKey: ServiceGetApiKey = async ({ project, value }) => {
   console.log(project);
   const key = await db("keys").select("*").where({ project, value }).first();
 
-  return key;
+  return {
+    ...key,
+    scopes: JSON.parse(key.scopes),
+  };
 };
 
 export const getApiKeys: ServiceGetApiKeys = async ({ project }) => {
@@ -44,7 +47,7 @@ export const getApiKeys: ServiceGetApiKeys = async ({ project }) => {
     .select("id", "name", "scopes")
     .where({ project });
 
-  return keys;
+  return keys.map(k => ({...k, scopes: JSON.parse(k.scopes)}));
 };
 
 export const updateApiKey: ServiceUpdateApiKey = async ({

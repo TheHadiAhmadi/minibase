@@ -1,7 +1,7 @@
 <script lang="ts">
   import { media, activeProject } from "$stores";
   import { page } from "$app/stores";
-  import { getProject } from "$services/api";
+  import api from "$services/api";
   import { alertMessage } from "$stores/alert";
   import FunctionSideMenu from "$components/FunctionSideMenu.svelte";
   import type { LayoutData } from "./$types";
@@ -12,30 +12,42 @@
   import { browser } from "$app/environment";
   import SettingsSideMenu from "$components/SettingsSideMenu.svelte";
   import HomeSideMenu from "$components/HomeSideMenu.svelte";
+  import Loading from "$components/Loading.svelte";
+  import EnvSideMenu from "$components/EnvSideMenu.svelte";
 
   export let data: LayoutData;
 
   let errorMessage: string = "";
 
-  let loading = false;
-
   let apiKey = data.apiKey ?? "";
 
   async function onContinue() {
-    const result = await fetch("/api/set-cookie", {
-      method: "POST",
-      body: JSON.stringify({
-        name: $page.params.project + "-apikey",
-        value: apiKey,
-      }),
-    });
+    await api.setCookie($page.params.project + "-apikey", apiKey);
     invalidateAll();
   }
+
+  async function logout() {
+    await api.setCookie(`${data.project.name}-apikey`, "");
+    goto("/projects");
+  }
+
+  let loading = true;
+
+  onMount(() => (loading = false));
 
   let open = false;
 </script>
 
-{#if data.project}
+{#if loading}
+  <div
+    class="h-full overflow-hidden w-full flex flex-col text-lg text-teal-900 font-bold items-center justify-center"
+  >
+    <Loading />
+    Loading Project...
+  </div>
+{/if}
+
+{#if !loading && data.project}
   <App>
     <AppHeader class="!h-60px">
       <div
@@ -57,6 +69,9 @@
         <div>
           <Avatar shape="circle">AB</Avatar>
         </div>
+        <UMenu>
+          <Button on:click={logout} block>Exit From Project</Button>
+        </UMenu>
       </div>
     </AppHeader>
 
@@ -68,7 +83,7 @@
       <HomeSideMenu />
       <FunctionSideMenu />
       <CollectionSideMenu />
-      <!-- <EnvSideMenu />-->
+      <EnvSideMenu />
       <SettingsSideMenu />
     </AppSidebar>
 

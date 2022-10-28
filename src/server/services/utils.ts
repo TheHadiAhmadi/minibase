@@ -1,7 +1,6 @@
 import type { ProjectInfoPromise } from "$types";
 import { getProject } from "./project";
 
-
 export class ResponseError extends Error {
   status: number;
   constructor(status: number, message: string) {
@@ -30,15 +29,14 @@ export function respondError(error: ResponseError | Error) {
   );
 }
 
-export function respond(
-  body: object | string | ResponseError | Error,
-  options?: { status: number; headers: HeadersInit }
-) {
-  if (body instanceof Error) {
-    return respondError(body);
-  } else {
-    const status = options?.status ?? 200;
-    const headers = options?.headers ?? {};
-    return new Response(JSON.stringify(body ?? {}), { status, headers });
-  }
+export function respond(body: {
+  data: any;
+  status?: number;
+  headers?: HeadersInit;
+}) {
+  const status = body.status ?? 200;
+  const headers = body.headers ?? {};
+  const data = body.data ?? {};
+
+  return new Response(JSON.stringify({ data, status }), { status, headers });
 }

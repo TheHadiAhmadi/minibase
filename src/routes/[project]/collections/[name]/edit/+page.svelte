@@ -2,7 +2,7 @@
   import { goto, invalidate, invalidateAll } from "$app/navigation";
   import CollectionEditor from "$components/CollectionEditor.svelte";
   import SchemaEditor from "$components/SchemaEditor.svelte";
-  import { editCollection } from "$services/api";
+  import api from "$services/api";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -11,13 +11,14 @@
 
   $: console.log(data);
   async function save() {
-    const result = await editCollection(
+    const result = await api.editCollection(
+      data.project.name,
       data.collection.name,
       { ...data.collection, name: newName }
     );
+
     data.collection = result;
     invalidateAll();
-    console.log(result);
     goto(`./`);
   }
 </script>

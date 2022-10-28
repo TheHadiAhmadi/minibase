@@ -3,7 +3,7 @@
   import CollectionEditor from "$components/CollectionEditor.svelte";
   import RoutesEditor from "$components/RoutesEditor.svelte";
   import SchemaEditor from "$components/SchemaEditor.svelte";
-  import { editCollection, editFunction } from "$services/api";
+  import api from "$services/api";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -12,10 +12,14 @@
 
   $: console.log(data);
   async function save() {
-    const result = await editFunction(data.function.id!, {
-      ...data.function,
-      name: newName,
-    });
+    const result = await api.editFunction(
+      data.project.name,
+      data.function.id!,
+      {
+        ...data.function,
+        name: newName,
+      }
+    );
 
     await goto(`/${data.project.name}`);
     data.function = result;
@@ -40,10 +44,14 @@
 
       <DialogBody class="overflow-y-auto max-h-screen">
         <FormInput label="name" bind:value={newName} />
-        <FormField class="!-mb-4">
+        Readme
+
+        <br />
+        input/output schema
+        <!-- <FormField class="!-mb-4">
           <Label>Routes</Label>
           <RoutesEditor bind:routes={data.function.routes} />
-        </FormField>
+        </FormField> -->
       </DialogBody>
     </DialogContent>
   </Dialog>

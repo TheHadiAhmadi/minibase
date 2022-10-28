@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
+minibase.db
 /build
 /.svelte-kit
 /package

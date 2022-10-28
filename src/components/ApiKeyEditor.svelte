@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { addApiKey, removeApiKey } from "$services/api";
   import { APIKEY_SCOPES, type ApiKey, type ProjectInfo } from "$types";
   import { page } from "$app/stores";
   import ApiKeyValue from "./ApiKeyValue.svelte";
   import { invalidateAll } from "$app/navigation";
+  import api from "$services/api";
 
   const project: ProjectInfo = $page.data.project;
 
@@ -19,7 +19,7 @@
 
   async function add() {
     try {
-      const result: ApiKey = await addApiKey(project.name, request);
+      const result: ApiKey = await api.addApiKey(project.name, request);
 
       project.apiKeys = [...(project.apiKeys ?? []), result];
       value = result.value ?? "";
@@ -31,8 +31,8 @@
     } catch (err) {}
   }
 
-  async function remove(id?: string) {
-    await removeApiKey(project.name, id);
+  async function remove(id: string) {
+    await api.removeApiKey(project.name, id);
     project.apiKeys = project.apiKeys?.filter((apikey) => apikey.id !== id);
   }
 </script>
@@ -42,7 +42,12 @@
     <div class="flex items-center justify-between">
       <div class="font-bold">{key.name}</div>
       {#if index > 0}
-        <Button outline size="sm" color="red" on:click={() => remove(key.id)}>
+        <Button
+          outline
+          size="sm"
+          color="red"
+          on:click={() => remove(key.id ?? "")}
+        >
           <Icon name="trash-can" pack="mdi" />
         </Button>
       {/if}

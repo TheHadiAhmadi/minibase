@@ -10,7 +10,11 @@ import { ResponseError } from ".";
 export const getCollections: ServiceGetCollections = async ({ project }) => {
   const result = await db("collections").where({ project });
   console.log("DB", "collections", result);
-  return result;
+
+  return result.map((r) => ({
+    ...r,
+    schema: JSON.parse(r.schema),
+  }));
 };
 
 export const addCollection: ServiceAddCollection = async ({ body }) => {
@@ -45,7 +49,7 @@ export const editCollection: ServiceEditCollection = async ({ name, body }) => {
     .update({ ...body, schema: JSON.stringify(body.schema) })
     .where({ name, project: body.project });
 
-  console.log('editCollection', {body, name})
+  console.log("editCollection", { body, name });
   if (body.name) {
     await db("rows")
       .update({ collection: body.name })

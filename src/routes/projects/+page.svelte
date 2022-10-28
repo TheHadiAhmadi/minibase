@@ -1,6 +1,6 @@
 <script lang="ts">
   import ApiKeyValue from "$components/ApiKeyValue.svelte";
-  import { getProjects, createProject } from "$services/api";
+  import api from "$services/api";
 
   import type { Project } from "src/types";
   import { onMount } from "svelte";
@@ -23,18 +23,18 @@
     newProject = "";
   }
   async function createProjectSubmit() {
-    const project = await createProject(newProject);
+    const project = await api.createProject(newProject);
 
-    apiKey = project.apiKeys[0].value;
+    apiKey = project.apiKeys?.[0].value ?? "";
     projects = [...projects, project];
   }
 
   onMount(async () => {
-    projects = await getProjects();
+    projects = await api.getProjects();
   });
 </script>
 
-<div class="h-screen w-screen p-2 bg-gradient-to-tl from-blue-50 to-cyan-100">
+<div class="h-full w-full p-2 bg-gradient-to-tl from-blue-50 to-cyan-100">
   <div
     class="container flex flex-col rounded bg-gradient-to-b from-blue-500/10 to-transparent "
   >

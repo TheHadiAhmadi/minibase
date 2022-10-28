@@ -1,12 +1,4 @@
 <script lang="ts">
-  import {
-    addCollection,
-    addFunction,
-    editCollection,
-    editFunction,
-    removeCollection,
-    removeFunction,
-  } from "$services/api";
   import type {
     CollectionSchema,
     ProjectCollection,
@@ -17,6 +9,7 @@
 
   import MenuItem from "./MenuItem.svelte";
   import { goto } from "$app/navigation";
+  import api from "$services/api";
 
   let name: string = "";
 
@@ -35,7 +28,7 @@
   async function add() {
     try {
       const schema: CollectionSchema[] = [];
-      const collection = await addCollection({
+      const collection = await api.addCollection(project.name, {
         name,
         project: project.name,
         schema,
@@ -58,11 +51,8 @@
 
   async function remove(collection: ProjectCollection) {
     console.log("prompt");
-    const result = await removeCollection(
-      project.name,
-      collection.name
-      
-    );
+    await api.removeCollection(project.name, collection.name);
+
     project.collections = project.collections?.filter(
       (coll) => coll.id !== collection.id
     );
@@ -70,12 +60,15 @@
 
   async function rename(collection: ProjectCollection, newName: string) {
     console.log("rename");
+    const prevName = collection.name
     collection.name = newName;
 
-    const result = await editCollection(
-      collection.name,
+    const result = await api.editCollection(
+      project.name,
+      prevName,
       collection
     );
+
     project.collections = project.collections?.map((coll) => {
       if (coll.id === collection.id) return collection;
       return coll;
