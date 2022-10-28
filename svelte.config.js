@@ -9,9 +9,7 @@ const config = {
   preprocess: preprocess(),
 
   kit: {
-    adapter: adapter({
-      edge: true,
-    }),
+    adapter: adapter(),
     alias: {
       $services: path.resolve("./src/services"),
       $components: path.resolve("./src/components"),
