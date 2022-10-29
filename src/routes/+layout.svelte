@@ -4,15 +4,15 @@
   import "virtual:windi.css";
   import "../styles.css";
 
-  let dark = true;
+  let dark = false;
 </script>
 
 <div class="h-full" class:dark>
   <div class="h-full font-roboto bg-gray-100 dark:bg-[#303030]">
-    <button
+    <!-- <button
       class="absolute p-2 bottom-2 right-2 z-10 dark:bg-gray-800 dark:text-white bg-gray-100"
       on:click={() => (dark = !dark)}>Toggle Theme</button
-    >
+    > -->
     <slot />
   </div>
 </div>
