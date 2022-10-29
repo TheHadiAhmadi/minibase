@@ -1,0 +1,106 @@
+.dark .u-button {
+  background-color: #404040;
+}
+.dark .u-button:active,
+.dark .u-button:focus {
+  background-color: #505050;
+}
+
+.dark .u-button-color-primary {
+  background-color: #327bb3;
+  border-color: transparent;
+}
+
+.dark .u-button-color-primary:hover,
+.dark .u-button-color-primary:hover {
+  background-color: #327bb3;
+  border-color: transparent;
+}
+
+.dark .u-button {
+  border-color: #505050;
+}
+
+.dark .u-dialog-content {
+  color: #efefef;
+  border: 1px solid #505050;
+}
+
+.dark .u-dialog-header {
+  border-color: #404040;
+  background-color: #303030;
+}
+.dark .u-dialog-content {
+  background-color: #303030;
+}
+.dark .u-dialog-footer {
+  background-color: #303030;
+}
+
+.dark .u-input {
+  background-color: #404040;
+  border-color: #505050;
+  outline: none;
+}
+.dark .u-input:focus {
+  background-color: #505050;
+  box-shadow: none;
+}
+
+.dark .u-button:focus {
+  box-shadow: none;
+}
+
+.dark .u-alert {
+  background-color: #404040;
+  color: #ababab;
+  padding: 0.5rem 1rem;
+}
+.dark .alert-title {
+  color: #cdcdcd;
+  margin-bottom: 8px;
+}
+
+.dark .u-card {
+  background-color: #404040;
+  color: #efefef;
+}
+.dark .u-card-footer {
+  background-color: #454545;
+  color: #efefef;
+}
+
+.dark .u-app-sidebar {
+    background-color: #404040;
+}
+
+.dark .u-app-sidebar .u-button {
+    background-color: #505050;
+}
+
+.dark .u-textarea {
+    background-color: #404040;
+    border-color: #505050;
+}
+.dark .u-textarea:focus {
+    box-shadow: none;
+    background-color: #505050;
+}
+
+.dark .u-table-head .u-table-cell {
+    background-color: #505050;
+    color: white;
+}
+.dark .u-table-body .u-button {
+    background-color: #505050;
+}
+.dark .u-table-body .u-button:hover {
+    background-color: #606060;
+}
+
+.dark .u-dialog {
+    backdrop-filter: blur(16px);
+    background-color: #404040;
+    opacity: 0.8;
+}
+/* test: mb_b6JqGHD6pqxMjaWNolfN2Mtlq46lJkHH */

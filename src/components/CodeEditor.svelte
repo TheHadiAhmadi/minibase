@@ -45,8 +45,7 @@
     font-family: "Source Code Pro", monospace;
     font-size: 14px;
     font-weight: 400;
-    height: max-content;
-    min-height: 80vh;
+    height: 100%;
     letter-spacing: normal;
     line-height: 20px;
     padding: 10px;
@@ -55,6 +54,7 @@
 
   .codejar-wrap {
     width: 100%;
+    height: 100%;
     /* background-color: #303030; */
     /* color: white; */
   }

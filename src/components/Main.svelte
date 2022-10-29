@@ -13,7 +13,7 @@
     class:scale-95={backdrop}
     class:translate-x-6={backdrop}
   >
-    <Card class="max-h-full overflow-hidden">
+    <Card class="h-full overflow-hidden">
       <slot />
     </Card>
   </div>

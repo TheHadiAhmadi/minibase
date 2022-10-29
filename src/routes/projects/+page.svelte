@@ -13,7 +13,6 @@
 
   let newProject: string = "";
 
-  let copied = false;
   function openCreateProject() {
     createProjectModalOpen = true;
   }
@@ -34,21 +33,23 @@
   });
 </script>
 
-<div class="h-full w-full p-2 bg-gradient-to-tl from-blue-50 to-cyan-100">
-  <div
-    class="container flex flex-col rounded bg-gradient-to-b from-blue-500/10 to-transparent "
-  >
-    <div class="p-4 flex w-full items-center justify-between">
-      <p class="font-bold text-lg">All Projects</p>
-      <Button color="primary" on:click={openCreateProject}
-        >Create Project</Button
-      >
+<div class="h-full bg-gray-100 dark:bg-[#292929] dark:text-white">
+  <div class="h-full w-full bg-gradient-to-tl from-blue-500/30 to-cyan-500/60">
+    <div
+      class="container flex flex-col rounded bg-gradient-to-b from-blue-500/10 to-transparent "
+    >
+      <div class="p-3 flex w-full items-center justify-between">
+        <p class="font-bold text-lg">All Projects</p>
+        <Button color="primary" on:click={openCreateProject}>
+          Create Project
+        </Button>
+      </div>
+      <ul class="flex flex-col px-2 border-t border-blue-100">
+        {#each projects as project}
+          <li class="p-2"><a href="./{project.name}">{project.name}</a></li>
+        {/each}
+      </ul>
     </div>
-    <ul class="flex flex-col px-4 border-t border-blue-100">
-      {#each projects as project}
-        <li class="p-2"><a href="./{project.name}">{project.name}</a></li>
-      {/each}
-    </ul>
   </div>
 </div>
 
@@ -67,7 +68,6 @@
             placeholder="Enter Project's name"
           />
         </Row>
-        <Alert>Hello</Alert>
       </DialogBody>
       <DialogFooter>
         <Button on:click={closeCreateProject}>Cancel</Button>

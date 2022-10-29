@@ -210,7 +210,7 @@
       <DialogTitle>View row as JSON</DialogTitle>
     </DialogHeader>
     <DialogBody>
-      <pre>{JSON.stringify(activeRow, null, 2)}</pre>
+      <pre class="dark:bg-[#404040]">{JSON.stringify(activeRow, null, 2)}</pre>
     </DialogBody>
     <DialogFooter>
       <Button on:click={() => (jsonModalOpen = false)}>Close</Button>

@@ -120,7 +120,7 @@
       <MenuItem class="py-1 flex gap-2" on:rename={add}>
         <input
           placeholder="Enter a name..."
-          class="border border-gray-200 outline-none flex-1"
+          class="border bg-white/10 p-1 h-24px border-gray-200 dark:border-[#606060] outline-none flex-1"
           size="4"
           bind:value={name}
         />

@@ -25,6 +25,11 @@
     -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
     animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
   }
+  :global(.dark) .sk-cube-grid .sk-cube {
+
+    background-color: #59a;
+  }
+
   .sk-cube-grid .sk-cube1 {
     -webkit-animation-delay: 0.2s;
     animation-delay: 0.2s;

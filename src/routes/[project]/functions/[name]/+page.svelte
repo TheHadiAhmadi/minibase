@@ -48,7 +48,7 @@
   $: updateCode(data.function.name);
 </script>
 
-<Card>
+<Card class="h-full flex flex-col">
   <CardHeader>
     <CardTitle>
       Edit "{data.function.name}" (TODO: Playground)
@@ -75,7 +75,8 @@
     </CardActions>
   </CardHeader>
 
-  <div class="overflow-y-auto max-h-screen">
+  <div class="overflow-y-auto h-full">
     <CodeEditor bind:this={codeEditor} bind:code />
   </div>
+  <div class="w-full border-t border-gray-300 h-6 bg-gray-100" />
 </Card>

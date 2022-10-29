@@ -40,7 +40,7 @@
 
 {#if loading}
   <div
-    class="h-full overflow-hidden w-full flex flex-col text-lg text-teal-900 font-bold items-center justify-center"
+    class="h-full bg-transparent overflow-hidden w-full flex flex-col text-lg text-cyan-900/60 dark:text-cyan-200/60 font-bold items-center justify-center"
   >
     <Loading />
     Loading Project...
@@ -52,14 +52,18 @@
     <AppHeader class="!h-60px">
       <div
         class="p-2 flex justify-between align-center
-               bg-blue-200 border-b border-blue-400 w-full"
+               bg-[#1378b6] border-b border-blue-400 w-full"
       >
         <div class="flex gap-2 items-center justify-start">
-          <Button class="border-none sm:hidden" on:click={() => (open = !open)}>
+          <Button
+            ghost
+            class="border-none bg-transparent sm:hidden text-gray-200 focus:text-gray-200 hover:text-gray-300"
+            on:click={() => (open = !open)}
+          >
             <Icon pack="ion" name="menu" />
           </Button>
           <a
-            class="font-bold sm:pl-3 text-lg h-full flex items-center"
+            class=" hover:no-underline text-gray-200 hover:text-gray-300 font-bold sm:pl-3 text-lg h-full flex items-center"
             href="/"
           >
             Minibase
