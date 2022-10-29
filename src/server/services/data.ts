@@ -12,7 +12,7 @@ export const getRows: ServiceGetRows = async ({ project, collection }) => {
     .select("data", "id")
     .where({ project, collection });
 
-  return rows.map((row) => ({ ...row.data, id: row.id }));
+  return rows.map((row) => ({ ...JSON.parse(row.data), id: row.id }));
 };
 
 export const editData: ServiceEditData = async ({
@@ -68,7 +68,6 @@ export const insertData: ServiceInsertData = async ({
     project,
     collection,
     data: JSON.stringify(data),
-    
     id,
   });
 
