@@ -1,5 +1,35 @@
-import { respondError } from "$server/services";
-import type { ResponseError } from "$types";
+// import { respondError } from "$server/services";
+// import type { ResponseError } from "$types";
+
+export class ResponseError extends Error {
+  status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "ResponseError";
+    this.status = status ?? 500;
+  }
+}
+
+export function respondError(error: ResponseError | Error) {
+  if (error instanceof ResponseError)
+    return new Response(
+      JSON.stringify({
+        status: error.status,
+        message: error.message ?? "Internal Server Error",
+      }),
+      { status: error.status ?? 500 }
+    );
+
+  return new Response(
+    JSON.stringify({
+      status: 500,
+      message: error.message ?? "Internal Server Error",
+    }),
+    { status: 500 }
+  );
+}
+
+
 import type { Handle, HandleServerError } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {

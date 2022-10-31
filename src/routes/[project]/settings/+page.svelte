@@ -7,21 +7,22 @@
 
   export let data: PageData;
 
-  let newName = data.project.name;
+  let newName = data.project!.name;
   const dispatch = createEventDispatcher();
   async function save() {
     try {
-      await api.updateProject(data.project.name, {
+      await api.updateProject(data.project!.name, {
         name: newName,
       });
-      data.project.name = newName;
+      data.project!.name = newName;
     } catch (err) {}
   }
 
   async function remove() {
     try {
       console.log("PROMPT");
-      await api.removeProject(data.project.name);
+      await api.removeProject(data.project!.name);
+      goto('/projects')
     } catch (err) {
       //
     }

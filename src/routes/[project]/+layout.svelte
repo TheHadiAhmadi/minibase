@@ -21,13 +21,18 @@
 
   let apiKey = data.apiKey ?? "";
 
+  if (apiKey) api.setApiKey(apiKey);
+
   async function onContinue() {
-    await api.setCookie($page.params.project + "-apikey", apiKey);
+    console.log("onContinue");
+    console.log({ apiKey });
+    api.setApiKey(apiKey);
+    // console.log("getApiKey", api.getApiKey());
     invalidateAll();
   }
 
   async function logout() {
-    await api.setCookie(`${data.project.name}-apikey`, "");
+    api.setApiKey("");
     goto("/projects");
   }
 

@@ -1,4 +1,6 @@
+import { browser } from "$app/environment";
 import { alertMessage } from "$stores/alert";
+
 import type {
   ApiKey,
   ApiKeyScopes,
@@ -8,6 +10,7 @@ import type {
   ProjectFunction,
   ProjectInfo,
 } from "$types";
+import { get } from "svelte/store";
 
 function showError(err: App.Error) {
   console.log(err);
@@ -15,12 +18,14 @@ function showError(err: App.Error) {
 }
 
 const api = () => {
+  let api_key = "";
   async function send<T>(
     url: string,
     method = "GET",
     data: object | null = null
   ): Promise<T> {
     try {
+      console.log("send", { url, method, data, api_key });
       const opts: RequestInit = {};
 
       if (method !== "GET") {
@@ -28,13 +33,18 @@ const api = () => {
       }
       opts.headers = new Headers();
 
+      if (api_key) opts.headers.set("ApiKey", api_key);
+
       if (data != null) {
         opts.headers.set("Content-Type", "application/json");
 
         opts.body = JSON.stringify(data);
       }
 
-      const result = await fetch(url, opts).then((res) => res.json());
+      const baseUrl = "http://localhost:5100";
+      const result = await fetch(baseUrl + url, opts).then((res) => res.json());
+
+      console.log("result", { url, method, data, result });
 
       if (result.status >= 400)
         throw new Error(`${result.status} - ${result.message}`);
@@ -122,8 +132,18 @@ const api = () => {
 
     removeApiKey: (project: string, id: string) =>
       send<boolean>(`/api/${project}/apikeys/${id}`, "DELETE"),
-    setCookie: (name: string, value: string) =>
-      send<boolean>("/api/set-cookie", "POST", { name, value }),
+
+    setApiKey: async (value: string) => {
+      api_key = value;
+      if (browser)
+        await fetch("/api/set-cookie", {
+          method: "POST",
+          body: JSON.stringify({ value }),
+        });
+    },
+    // getApiKey: () => get(api_key),
+
+    // send<boolean>("/api/set-cookie", "POST", { name, value }),
   };
 };
 export default api();

@@ -12,6 +12,7 @@ const config = {
     adapter: adapter(),
     alias: {
       $services: path.resolve("./src/services"),
+      $core: path.resolve("./src/core"),
       $components: path.resolve("./src/components"),
       $types: path.resolve("./src/types"),
       $stores: path.resolve("./src/stores"),
