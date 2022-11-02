@@ -1,7 +1,7 @@
 import type { RequestEvent } from "./$types";
 
 export async function GET({ params }: RequestEvent) {
-  const code = await fetch(`https://cloud-3.domcloud.io/${params}/mod.js`).then(
+  const code = await fetch(`https://cloud-3.domcloud.io/${params.project}/mod.js`).then(
     (res) => res.text()
   );
 
