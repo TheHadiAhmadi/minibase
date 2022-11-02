@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="h-full" lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,37 +9,46 @@
 
     <title>Todo App</title>
   </head>
-  <body class="bg-gray-50">
-    <div class="w-1/2 bg-white border border-gray-200"></div>
-    <div class="w-full flex gap-1">
-      <input
-        id="addInput"
-        placeholder="Todo title..."
-        class="p-2 border border-gray-200 outline-none"
-        type="text"
-      />
-      <button
-        id="addBtn"
-        class="px-4 py-2 border border-gray-200 hover:bg-gray-100"
-      >
-        Add Todo
-      </button>
+  <body
+    class="w-full h-full flex flex-col items-center justify-center bg-gray-50"
+  >
+    <div
+      class="max-w-1/2 p-2 flex gap-4 flex-col bg-white border border-gray-200"
+    >
+      <div class="text-xl">To-Do App</div>
+      <div class="w-full flex gap-2">
+        <input
+          id="addInput"
+          placeholder="Todo title..."
+          class="p-2 border border-gray-200 outline-none"
+          type="text"
+        />
+        <button
+          id="addBtn"
+          class="px-4 py-2 border border-gray-200 hover:bg-gray-100"
+        >
+          Add Todo
+        </button>
+      </div>
+
+      <div class="w-full">
+        <div class="w-full text-lg text-gray-800" id="todosEl">Loading...</div>
+      </div>
     </div>
 
-    <div class="w-full">
-      <div id="todos"></div>
-    </div>
-
-    <div class="text-2xl">TODO App</div>
     <script>
       const addBtn = document.getElementById("addBtn");
       const addInput = document.getElementById("addInput");
-      const todosEl = document.getElementById("todos");
+      const todosEl = document.getElementById("todosEl");
 
       console.log(
         "you can enter as read-only user in minibase/todos dashboard using this apiKey: mb_trpM5R_Shw6yUmYKPk_XvZhwv5lJSLgr"
       );
       console.log("https://theminibase.com/todos");
+
+      todos.getTodos().then((res) => {
+        renderTodos(res);
+      });
 
       async function renderTodos(items) {
         return items.map(
