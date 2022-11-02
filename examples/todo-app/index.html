@@ -94,7 +94,7 @@
         todosEl.querySelectorAll("[delete-id]").forEach((todoEl) => {
           todoEl.addEventListener("click", async (el) => {
             const id = todoEl.getAttribute("delete-id");
-            todoEl.remove();
+            todoEl.parentElement.remove();
 
             await todos.removeTodo({ id });
           });
