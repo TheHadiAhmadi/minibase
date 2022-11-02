@@ -15,7 +15,7 @@
     <div
       class="max-w-1/2 p-2 flex gap-4 flex-col bg-white border border-gray-200"
     >
-      <div class="text-xl">To-Do App</div>
+      <div class="text-2xl mx-auto p-4">To-Do App</div>
       <div class="w-full flex gap-2">
         <input
           id="addInput"
@@ -32,7 +32,11 @@
       </div>
 
       <div class="w-full">
-        <div class="w-full text-lg text-gray-800" id="todosEl">Loading...</div>
+        <div class="w-full text-lg text-gray-800" id="todosEl">
+          <div class="p-4 flex text-gray-400 items-center justify-center">
+            Loading...
+          </div>
+        </div>
       </div>
     </div>
 
@@ -51,18 +55,57 @@
       });
 
       async function renderTodos(items) {
-        return items.map(
-          (item) =>
-            `<li class="p-2 border border-gray-200 ${
-              item.done ? "text-gray-500 line-through" : ""
-            }">${item.title}</li>`
-        );
+        console.log({ items });
+        if (items.length === 0) {
+          todosEl.innerHTML =
+            '<div class="flex items-center p-4 text-gray-400 justify-center">No To-Do yet!</div>';
+          return;
+        }
+
+        const content = items
+          .reverse()
+          .map(
+            (item) =>
+              `<li class="p-2 flex gap-2 items-center border shadow rounded border-gray-200 text-gray-800 ${
+                item.done ? "text-gray-500 line-through" : ""
+              }">
+            <input id="${item.id}" data-id="${item.id}" ${
+                item.done ? "checked" : ""
+              } type="checkbox"/>
+            <label class="flex-1" for="${item.id}">${item.title}</label>
+            <button delete-id="${item.id}">
+                <svg width="24" height="24" viewBox="0 0 256 256"><path fill="currentColor" d="M216 48h-40v-8a24.1 24.1 0 0 0-24-24h-48a24.1 24.1 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16ZM96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0Zm48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0Z"/></svg>
+                </button>
+            </li>`
+          )
+          .join("");
+        todosEl.innerHTML = `<ul class="flex flex-col gap-2 max-h-96 overflow-auto">${content}</ul>`;
+        todosEl.querySelectorAll("[data-id]").forEach((todoEl) => {
+          todoEl.addEventListener("change", async (el) => {
+            const newState = el.target.checked;
+            const id = todoEl.getAttribute("data-id");
+
+            console.log({ done: newState });
+            todoEl.parentElement.classList.toggle("line-through");
+            todoEl.parentElement.classList.toggle("text-gray-500");
+            await todos.editTodo({ id, done: newState });
+          });
+        });
+        todosEl.querySelectorAll("[delete-id]").forEach((todoEl) => {
+          todoEl.addEventListener("click", async (el) => {
+            const id = todoEl.getAttribute("delete-id");
+            todoEl.remove();
+
+            await todos.removeTodo({ id });
+          });
+        });
       }
 
       addBtn.addEventListener("click", () => {
         const title = addInput.value;
+        addInput.value = "";
         todos.addTodo({ title }).then(async (res) => {
-          todosEl = renderTodos(await todos.getTodos());
+          await renderTodos(await todos.getTodos());
         });
       });
     </script>
