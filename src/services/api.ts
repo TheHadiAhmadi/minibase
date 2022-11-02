@@ -123,7 +123,7 @@ const api = () => {
       send<ProjectFunction>(`/api/${project}/functions`, "POST", request),
 
     getFunctions: (project: string) =>
-      send<ProjectFunction>(`/api/${project}/functions`),
+      send<ProjectFunction[]>(`/api/${project}/functions`),
 
     editFunction: (project: string, id: string, request: ProjectFunction) =>
       send<ProjectFunction>(`/api/${project}/functions/${id}`, "PUT", request),

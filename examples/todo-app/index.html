@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://theminibase.com/todos/cdn.js"></script>
+
+    <title>Todo App</title>
+  </head>
+  <body class="bg-gray-50">
+    <div class="w-1/2 bg-white border border-gray-200"></div>
+    <div class="w-full flex gap-1">
+      <input
+        id="addInput"
+        placeholder="Todo title..."
+        class="p-2 border border-gray-200 outline-none"
+        type="text"
+      />
+      <button
+        id="addBtn"
+        class="px-4 py-2 border border-gray-200 hover:bg-gray-100"
+      >
+        Add Todo
+      </button>
+    </div>
+
+    <div class="w-full">
+      <div id="todos"></div>
+    </div>
+
+    <div class="text-2xl">TODO App</div>
+    <script>
+      const addBtn = document.getElementById("addBtn");
+      const addInput = document.getElementById("addInput");
+      const todosEl = document.getElementById("todos");
+
+      console.log(
+        "you can enter as read-only user in minibase/todos dashboard using this apiKey: mb_trpM5R_Shw6yUmYKPk_XvZhwv5lJSLgr"
+      );
+      console.log("https://theminibase.com/todos");
+
+      async function renderTodos(items) {
+        return items.map(
+          (item) =>
+            `<li class="p-2 border border-gray-200 ${
+              item.done ? "text-gray-500 line-through" : ""
+            }">${item.title}</li>`
+        );
+      }
+
+      addBtn.addEventListener("click", () => {
+        const title = addInput.value;
+        todos.addTodo({ title }).then(async (res) => {
+          todosEl = renderTodos(await todos.getTodos());
+        });
+      });
+    </script>
+  </body>
+</html>
