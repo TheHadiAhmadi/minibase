@@ -42,7 +42,7 @@ const api = () => {
       }
 
       // const baseUrl = "http://localhost:5100";
-      const baseUrl = "https://cloud-3.domcloud.io";
+      const baseUrl = "https://minibase-api.onrender.com";
       const result = await fetch(baseUrl + url, opts).then((res) => res.json());
 
       console.log("result", { url, method, data, result });
@@ -148,3 +148,5 @@ const api = () => {
   };
 };
 export default api();
+
+// eshop-api: mb_HdzAoLKbd0k4LdXJ6wmr6rrhH2mr8Jov
