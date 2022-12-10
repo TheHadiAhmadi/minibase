@@ -54,6 +54,7 @@ export type ProjectFunction = {
   name: string;
   code: string;
   routes: string[];
+  method: "GET" | "PUT" | "POST" | "DELETE";
   id?: string;
 };
 

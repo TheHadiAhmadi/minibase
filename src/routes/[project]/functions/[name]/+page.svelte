@@ -5,6 +5,7 @@
 
   import type { PageData } from "./$types";
   import { goto, invalidateAll } from "$app/navigation";
+  import { Menu } from "@ubeac/svelte/components";
 
   export let data: PageData;
 
@@ -42,10 +43,21 @@
     code = data.function.code;
   }
 
+  async function setMethod(method: string) {
+    data.function.method = method
+    const response: ProjectFunction = await api.editFunction(
+        data.project.name,
+        data.function.id!,
+        data.function
+      );
+      
+  }
+
   $: if (prevCode !== code) state = "dirty";
   else state = "clean";
 
   $: updateCode(data.function.name);
+
 </script>
 
 <Card class="h-full flex flex-col">
@@ -55,6 +67,15 @@
     </CardTitle>
     <CardActions>
       <ButtonGroup>
+        <Button>Method ({method})</Button>
+        <Menu>
+          <a class="dropdown-item" on:click={() => setMethod("POST"))}>POST</a>
+          <a class="dropdown-item" on:click={() => setMethod("GET"))}>GET</a>
+          <a class="dropdown-item" on:click={() => setMethod("PUT"))}>PUT</a>
+          <a class="dropdown-item" on:click={() => setMethod("DELETE"))}>
+            DELETE
+          </a>
+        </Menu>
         <Button on:click={() => goto("/" + data.project.name)}>Back</Button>
         <Button
           loading={state === "saving"}
