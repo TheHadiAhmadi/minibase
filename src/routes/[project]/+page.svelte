@@ -43,19 +43,41 @@
   //   activeEnv = detail;
   // }
 
+  let urls: string[] = [];
+
+  async function deploy() {
+    const result = await api.deploy(data.project?.name);
+    urls = result.urls;
+  }
+
   let showSdkModalOpen = false;
 </script>
 
 <MainBody>
   <h1>Welcome to Dashboard</h1>
+
+  <div class="py-8">
+    {#if urls}
+      <ul>
+        {#each urls as url}
+          <li>{url}</li>
+        {/each}
+      </ul>
+    {/if}
+  </div>
   <div class="h-200px" />
 </MainBody>
 <CardFooter>
   <CardActions>
     <ButtonGroup>
-      <Button color="primary" on:click={() => (showSdkModalOpen = true)}
-        >Show SDK File</Button
+      <Button color="primary" on:click={deploy}>Deploy to Vercel</Button>
+      <Button
+        color="primary"
+        outline
+        on:click={() => (showSdkModalOpen = true)}
       >
+        Show SDK File
+      </Button>
       <Button color="danger" class="w-min ms-auto" on:click={logout}>
         Exit from Project
       </Button>

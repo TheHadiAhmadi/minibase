@@ -119,6 +119,9 @@ const api = () => {
     removeCollection: (project: string, collection: string) =>
       send<boolean>(`/api/${project}/collections/${collection}`, "DELETE"),
 
+    deploy: (project: string) =>
+      send<{ urls: string[] }>(`/api/${project}/deploy`, "POST"),
+
     addFunction: (project: string, request: ProjectFunction) =>
       send<ProjectFunction>(`/api/${project}/functions`, "POST", request),
 
