@@ -1,4 +1,5 @@
 import { browser } from "$app/environment";
+import { PUBLIC_API_URL } from "$env/static/public";
 import { alertMessage } from "$stores/alert";
 
 import type {
@@ -10,7 +11,6 @@ import type {
   ProjectFunction,
   ProjectInfo,
 } from "$types";
-import { get } from "svelte/store";
 
 function showError(err: App.Error) {
   console.log(err);
@@ -25,7 +25,6 @@ const api = () => {
     data: object | null = null
   ): Promise<T> {
     try {
-      console.log("send", { url, method, data, api_key });
       const opts: RequestInit = {};
 
       if (method !== "GET") {
@@ -40,11 +39,9 @@ const api = () => {
 
         opts.body = JSON.stringify(data);
       }
-      // const baseUrl = "http://localhost:5100";
-      const baseUrl = "https://minibase-api.onrender.com";
-      const result = await fetch(baseUrl + url, opts).then((res) => res.json());
 
-      console.log("result", { url, method, data, result });
+      const baseUrl = PUBLIC_API_URL;
+      const result = await fetch(baseUrl + url, opts).then((res) => res.json());
 
       if (result.status >= 400)
         throw new Error(`${result.status} - ${result.message}`);
@@ -122,8 +119,8 @@ const api = () => {
     removeCollection: (project: string, collection: string) =>
       send<boolean>(`/api/${project}/collections/${collection}`, "DELETE"),
 
-    deploy: (project: string) =>
-      send<{ urls: string[] }>(`/api/${project}/deploy`, "POST"),
+    deploy: (request: any) =>
+      send<{ urls: string[] }>(`/api/${request.name}/deploy`, "POST", request),
 
     addFunction: (project: string, request: ProjectFunction) =>
       send<ProjectFunction>(`/api/${project}/functions`, "POST", request),
