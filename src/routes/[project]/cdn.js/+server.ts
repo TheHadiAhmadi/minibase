@@ -1,9 +1,9 @@
-import { API_URL } from "$env/static/private";
+import { PUBLIC_API_URL } from "$env/static/public";
 import type { RequestEvent } from "./$types";
 
 export async function GET({ params }: RequestEvent) {
-  const code = await fetch(`${API_URL}/${params.project}/cdn.js`).then((res) =>
-    res.text()
+  const code = await fetch(`${PUBLIC_API_URL}/${params.project}/cdn.js`).then(
+    (res) => res.text()
   );
 
   return new Response(code, {
