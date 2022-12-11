@@ -63,7 +63,7 @@
 <Card class="h-full flex flex-col">
   <CardHeader>
     <CardTitle>
-      Edit "{data.function.name}" (TODO: Playground)
+      Edit "{data.function.name}" (TODO: Playground) metod
     </CardTitle>
     <CardActions>
       <ButtonGroup>
