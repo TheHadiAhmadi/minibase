@@ -101,7 +101,6 @@
     </Main>
   </App>
 {/if}
-
 <Dialog persistent placement="center" open={!data.project}>
   <DialogContent>
     <DialogBody>

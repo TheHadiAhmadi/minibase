@@ -8,7 +8,7 @@
   export let data: PageData;
 
   async function logout() {
-    await api.setCookie(`${data.project.name}-apikey`, "");
+    // await api.setCookie(`apiKey`, "");
     goto("/projects");
   }
 
@@ -46,11 +46,15 @@
   let urls: string[] = [];
 
   async function deploy() {
-    const result = await api.deploy(data.project?.name);
-    urls = result.urls;
+    if (data.project?.name) {
+      const result = await api.deploy(data.project?.name);
+      urls = result.urls;
+    }
   }
 
   let showSdkModalOpen = false;
+
+  $: console.log(data);
 </script>
 
 <MainBody>

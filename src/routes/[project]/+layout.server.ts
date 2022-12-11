@@ -3,6 +3,7 @@ import type { LayoutServerLoadEvent } from "./$types";
 
 export async function load({ params, cookies }: LayoutServerLoadEvent) {
   const apiKey = cookies.get("apiKey") ?? "";
+  console.log("load", { apiKey });
   if (!apiKey)
     return {
       apiKey: "",
@@ -11,8 +12,10 @@ export async function load({ params, cookies }: LayoutServerLoadEvent) {
     };
 
   try {
-    api.setApiKey(apiKey);
+    await api.setApiKey(apiKey);
     const result = await api.getProject(params.project);
+
+    console.log("project", { result });
 
     return {
       apiKey,
@@ -22,7 +25,7 @@ export async function load({ params, cookies }: LayoutServerLoadEvent) {
   } catch (err) {
     console.log("Found error", err);
 
-    cookies.delete("apiKey");
+    // cookies.delete("apiKey");
 
     return {
       apiKey: "",

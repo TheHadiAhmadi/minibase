@@ -40,9 +40,8 @@ const api = () => {
 
         opts.body = JSON.stringify(data);
       }
-
-      // const baseUrl = "http://localhost:5100";
-      const baseUrl = "https://minibase-api.onrender.com";
+      const baseUrl = "http://localhost:5100";
+      // const baseUrl = "https://minibase-api.onrender.com";
       const result = await fetch(baseUrl + url, opts).then((res) => res.json());
 
       console.log("result", { url, method, data, result });
@@ -60,8 +59,12 @@ const api = () => {
   return {
     getProjects: () => send<Project[]>("/api"),
 
-    getProject: (name: string) =>
-      send<{ project: ProjectInfo; scopes: ApiKeyScopes[] }>(`/api/${name}`),
+    getProject: (name: string) => {
+      console.log({ name, api_key });
+      return send<{ project: ProjectInfo; scopes: ApiKeyScopes[] }>(
+        `/api/${name}`
+      );
+    },
 
     createProject: (name: string) =>
       send<ProjectInfo>("/api", "POST", { name }),
@@ -139,6 +142,7 @@ const api = () => {
 
     setApiKey: async (value: string) => {
       api_key = value;
+      console.log("set apikey", value);
       if (browser)
         await fetch("/api/set-cookie", {
           method: "POST",
@@ -147,7 +151,8 @@ const api = () => {
     },
     // getApiKey: () => get(api_key),
 
-    // send<boolean>("/api/set-cookie", "POST", { name, value }),
+    // setCookie: ({ name, value }: any) =>
+    //   send<boolean>("/api/set-cookie", "POST", { name, value }),
   };
 };
 export default api();
