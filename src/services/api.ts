@@ -40,8 +40,8 @@ const api = () => {
 
         opts.body = JSON.stringify(data);
       }
-      const baseUrl = "http://localhost:5100";
-      // const baseUrl = "https://minibase-api.onrender.com";
+      // const baseUrl = "http://localhost:5100";
+      const baseUrl = "https://minibase-api.onrender.com";
       const result = await fetch(baseUrl + url, opts).then((res) => res.json());
 
       console.log("result", { url, method, data, result });
