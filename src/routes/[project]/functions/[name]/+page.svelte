@@ -44,20 +44,18 @@
   }
 
   async function setMethod(method: string) {
-    data.function.method = method
+    data.function.method = method;
     const response: ProjectFunction = await api.editFunction(
-        data.project.name,
-        data.function.id!,
-        data.function
-      );
-      
+      data.project.name,
+      data.function.id!,
+      data.function
+    );
   }
 
   $: if (prevCode !== code) state = "dirty";
   else state = "clean";
 
   $: updateCode(data.function.name);
-
 </script>
 
 <Card class="h-full flex flex-col">
@@ -67,12 +65,12 @@
     </CardTitle>
     <CardActions>
       <ButtonGroup>
-        <Button>Method ({method})</Button>
+        <Button>Method ({data.function.method})</Button>
         <Menu>
-          <a class="dropdown-item" on:click={() => setMethod("POST"))}>POST</a>
-          <a class="dropdown-item" on:click={() => setMethod("GET"))}>GET</a>
-          <a class="dropdown-item" on:click={() => setMethod("PUT"))}>PUT</a>
-          <a class="dropdown-item" on:click={() => setMethod("DELETE"))}>
+          <a class="dropdown-item" on:click={() => setMethod("POST")}>POST</a>
+          <a class="dropdown-item" on:click={() => setMethod("GET")}>GET</a>
+          <a class="dropdown-item" on:click={() => setMethod("PUT")}>PUT</a>
+          <a class="dropdown-item" on:click={() => setMethod("DELETE")}>
             DELETE
           </a>
         </Menu>
