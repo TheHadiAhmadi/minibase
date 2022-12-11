@@ -18,7 +18,6 @@
   export let data: LayoutData;
 
   let errorMessage: string = "";
-
   let apiKey = data.apiKey ?? "";
 
   if (apiKey) api.setApiKey(apiKey);
