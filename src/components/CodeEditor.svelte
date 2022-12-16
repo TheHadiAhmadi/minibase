@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { CodeJar } from "codejar";
   import { onMount } from "svelte";
-  import hljs from "highlightjs";
   // import Prism from "prismjs";
 
   // import "prismjs/themes/prism-coy.min.css";
@@ -18,9 +17,10 @@
 
   onMount(() => {
     import("codejar").then(({ CodeJar }) => {
-      import("codejar/linenumbers").then(({ withLineNumbers }) => {
+      import("codejar/linenumbers").then(async ({ withLineNumbers }) => {
         //  withLineNumbers(hljs.highlight)
-        instance = CodeJar(el, withLineNumbers(hljs.default.highlight), {
+        const hljs = await import("highlightjs").then((res) => res.default);
+        instance = CodeJar(el, withLineNumbers(hljs.highlight), {
           window,
           tab: "\t",
         });
