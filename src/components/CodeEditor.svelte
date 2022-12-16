@@ -19,8 +19,11 @@
     import("codejar").then(({ CodeJar }) => {
       import("codejar/linenumbers").then(async ({ withLineNumbers }) => {
         //  withLineNumbers(hljs.highlight)
-        const hljs = await import("highlightjs").then((res) => res.default);
-        instance = CodeJar(el, withLineNumbers(hljs.highlight), {
+        // const hljs = await import("highlightjs").then((res) => res.default);
+        const highlight = (e) => {
+          e.innerHTML = e.textContent;
+        };
+        instance = CodeJar(el, withLineNumbers(highlight), {
           window,
           tab: "\t",
         });
