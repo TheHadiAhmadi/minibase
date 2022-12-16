@@ -83,17 +83,16 @@
       </div>
     </AppHeader>
 
-    <AppSidebar
-      mode={$media.sm ? "temporary" : "permanent"}
-      open={open || !$media.sm}
-      class="z-2 flex flex-col bg-blue-50 border-r w-240px !top-60px border-blue-400"
+    <div
+      class:w-240px={open || !$media.sm}
+      class="z-2 flex flex-col bg-blue-50 border-r w-0 !top-60px border-blue-400"
     >
       <HomeSideMenu />
       <FunctionSideMenu />
       <CollectionSideMenu />
       <EnvSideMenu />
       <SettingsSideMenu />
-    </AppSidebar>
+    </div>
 
     <Main on:click={() => (open = false)} backdrop={open && !media.sm}>
       <slot />
