@@ -101,7 +101,7 @@
 
     <div
       class:w-0={!open && $media.sm}
-      class="z-2 flex flex-col bg-blue-50 border-r bottom-0 absolute !top-60px border-blue-400"
+      class="z-2 flex flex-col bg-blue-50 w-240px border-r bottom-0 absolute !top-60px border-blue-400"
     >
       <HomeSideMenu />
       <FunctionSideMenu />
