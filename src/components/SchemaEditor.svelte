@@ -9,6 +9,8 @@
   let newSchem: CollectionSchema = {
     name: "",
     type: "string",
+    array: false,
+    collection: "",
   };
 
   function add() {
@@ -24,8 +26,9 @@
 <Row>
   {#each schema as schem}
     <CollectionTypeEditor bind:schem>
-      <Button color="danger" on:click={() => remove(schem)}>
+      <Button color="danger" block on:click={() => remove(schem)}>
         <Icon name="minus" pack="mdi" />
+        Remove
       </Button>
     </CollectionTypeEditor>
   {/each}
@@ -33,6 +36,10 @@
     <Divider>New</Divider>
   </Col>
   <CollectionTypeEditor bind:schem={newSchem}>
-    <Button color="primary" block on:click={add}>Add</Button>
+    <Button color="primary" block on:click={add}>
+      <Icon name="plus" pack="mdi" />
+
+      Add
+    </Button>
   </CollectionTypeEditor>
 </Row>

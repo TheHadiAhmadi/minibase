@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
+.vercel
 minibase.db
 /build
 /.svelte-kit
@@ -7,3 +8,4 @@ minibase.db
 .env
 .env.*
 !.env.example
+test-express

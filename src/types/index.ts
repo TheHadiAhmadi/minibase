@@ -34,7 +34,7 @@ export type ProjectInfoPromise = Project & {
 };
 
 export type DataType = "string" | "boolean" | "number" | "object" | "array";
-export type CollectionSchema = { name: string; type: DataType };
+export type CollectionSchema = { name: string; type: DataType, array?: boolean, collection?: string };
 
 export type ProjectCollection = {
   name: string;

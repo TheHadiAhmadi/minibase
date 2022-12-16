@@ -1,6 +1,6 @@
 <script>
   import { alertMessage } from "$stores/alert";
-  import "@ubeac/svelte/styles.css";
+  import "../tabler.css";
   import "virtual:windi.css";
   import "../styles.css";
 

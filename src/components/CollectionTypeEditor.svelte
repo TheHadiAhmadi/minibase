@@ -5,57 +5,28 @@
     name: "",
     type: "string",
   };
+
+  let items = ["string", "number", "uuid", "boolean", "json"];
 </script>
 
-<Row>
+<El row>
   <FormInput
-    cols="9"
+    cols="7"
     placeholder="Collection's name..."
     bind:value={schem.name}
   />
 
   <Col cols="2">
-    <Button block>{schem.type}</Button>
-    <UMenu>
-      <a
-        href="/"
-        on:click|preventDefault={() => (schem.type = "string")}
-        class="dropdown-item"
-      >
-        string
-      </a>
-      <a
-        href="/"
-        on:click|preventDefault={() => (schem.type = "boolean")}
-        class="dropdown-item"
-      >
-        boolean
-      </a>
-      <a
-        href="/"
-        on:click|preventDefault={() => (schem.type = "number")}
-        class="dropdown-item"
-      >
-        number
-      </a>
-      <a
-        href="/"
-        on:click|preventDefault={() => (schem.type = "object")}
-        class="dropdown-item"
-      >
-        object
-      </a>
-      <a
-        href="/"
-        on:click|preventDefault={() => (schem.type = "array")}
-        class="dropdown-item"
-      >
-        array
-      </a>
-    </UMenu>
+    <Button block>Type</Button>
+    <Popover trigger="click">
+      <PopoverBody>
+        <FormSelect {items} bind:value={schem.type} />
+        <FormSwitch label="Is Array?" />
+      </PopoverBody>
+    </Popover>
   </Col>
 
-  <Col cols="">
+  <Col cols="3">
     <slot />
   </Col>
-</Row>
+</El>

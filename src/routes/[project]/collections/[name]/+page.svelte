@@ -84,7 +84,7 @@
 </script>
 
 {#if loadingData}
-  <AppLoadingBar color="azure" show indeterminate />
+  <!-- <AppLoadingBar color="azure" show indeterminate /> -->
 {/if}
 <CardHeader slot="header">
   <CardTitle>
