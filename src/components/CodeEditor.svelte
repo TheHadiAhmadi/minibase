@@ -19,7 +19,8 @@
   onMount(() => {
     import("codejar").then(({ CodeJar }) => {
       import("codejar/linenumbers").then(({ withLineNumbers }) => {
-        instance = CodeJar(el, withLineNumbers(hljs.highlightElement), {
+        //  withLineNumbers(hljs.highlight)
+        instance = CodeJar(el, withLineNumbers(hljs.default.highlight), {
           window,
           tab: "\t",
         });
