@@ -23,7 +23,7 @@
   }
 </script>
 
-<Row>
+<El row>
   {#each schema as schem}
     <CollectionTypeEditor bind:schem>
       <Button color="danger" block on:click={() => remove(schem)}>
@@ -42,4 +42,4 @@
       Add
     </Button>
   </CollectionTypeEditor>
-</Row>
+</El>

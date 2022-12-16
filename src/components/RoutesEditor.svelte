@@ -12,10 +12,10 @@
   }
 </script>
 
-<Row>
+<El row>
   {#each routes as route, index}
     <Col cols="12">
-      <Row justify="end">
+      <El row justify="end">
         <FormInput placeholder="/route/:id" cols="grow" bind:value={route} />
 
         <Col cols="2">
@@ -23,7 +23,7 @@
             <Icon name="minus" pack="mdi" />
           </Button>
         </Col>
-      </Row>
+      </El>
     </Col>
   {/each}
   <Col cols="12">
@@ -31,4 +31,4 @@
   </Col>
   <FormInput placeholder="/route/:id" bind:value={newRoute} />
   <Button color="primary" block on:click={add}>Add</Button>
-</Row>
+</El>

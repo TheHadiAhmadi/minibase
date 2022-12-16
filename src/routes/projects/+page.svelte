@@ -60,14 +60,14 @@
         <DialogTitle>Create New Project</DialogTitle>
       </DialogHeader>
       <DialogBody>
-        <Row align="end">
+        <El row align="end">
           <FormInput
             cols="12"
             bind:value={newProject}
             label="name"
             placeholder="Enter Project's name"
           />
-        </Row>
+        </El>
       </DialogBody>
       <DialogFooter>
         <Button on:click={closeCreateProject}>Cancel</Button>

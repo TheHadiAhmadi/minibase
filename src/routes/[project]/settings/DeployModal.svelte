@@ -20,7 +20,7 @@
       <DialogTitle>Deploy to Vercel</DialogTitle>
     </DialogHeader>
     <DialogBody>
-      <Row>
+      <El row>
         <Alert>This information will not be stored anywhere</Alert>
         <FormSelect
           cols={3}
@@ -42,7 +42,7 @@
           If you provide your vercel token, project will be deployed in your
           account, otherwise project deploys from my vercel account.
         </Alert>
-      </Row>
+      </El>
     </DialogBody>
     <DialogFooter>
       <ButtonGroup>

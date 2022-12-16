@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { CodeJar } from "codejar";
   import { onMount } from "svelte";
-  import Prism from "prismjs";
+  import hljs from "highlightjs";
+  // import Prism from "prismjs";
 
-  import "prismjs/themes/prism-coy.min.css";
+  // import "prismjs/themes/prism-coy.min.css";
   import { onDestroy } from "svelte";
 
   let instance: CodeJar;
@@ -18,7 +19,7 @@
   onMount(() => {
     import("codejar").then(({ CodeJar }) => {
       import("codejar/linenumbers").then(({ withLineNumbers }) => {
-        instance = CodeJar(el, withLineNumbers(Prism.highlightElement), {
+        instance = CodeJar(el, withLineNumbers(hljs.highlightElement), {
           window,
           tab: "\t",
         });

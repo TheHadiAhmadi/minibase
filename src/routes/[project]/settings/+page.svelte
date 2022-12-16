@@ -65,7 +65,7 @@
 </CardHeader>
 
 <CardBody class="overflow-auto">
-  <Row class="g-3">
+  <El row class="g-3">
     <FormInput label="Rename Project" bind:value={newName} />
     <Col>
       <Button on:click={save}>Rename</Button>
@@ -97,7 +97,7 @@
       />
       <Button on:click={addNewPackage}>Add</Button>
     </FormField>
-  </Row>
+  </El>
 
   <div class="mt-4 p-2 flex flex-col gap-4 ">
     <div>
