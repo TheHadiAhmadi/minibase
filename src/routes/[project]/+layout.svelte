@@ -19,6 +19,15 @@
 
   let errorMessage: string = "";
   let apiKey = data.apiKey ?? "";
+  let theme: "light" | "dark" = "light";
+
+  function toggleTheme() {
+    if (theme === "light") {
+      theme = "dark";
+    } else {
+      theme = "light";
+    }
+  }
 
   if (apiKey) api.setApiKey(apiKey);
 
@@ -52,8 +61,8 @@
 {/if}
 
 {#if !loading && data.project}
-  <App>
-    <AppHeader class="!h-60px">
+  <App {theme}>
+    <AppHeader class="!h-60px !p-0">
       <div
         class="p-2 flex justify-between align-center
                bg-[#1378b6] border-b border-blue-400 w-full"
@@ -75,6 +84,13 @@
         </div>
 
         <div>
+          <Button on:click={toggleTheme}>
+            {#if theme === "dark"}
+              <Icon name="sun" />
+            {:else}
+              <Icon name="moon" />
+            {/if}
+          </Button>
           <Avatar shape="circle">AB</Avatar>
         </div>
         <UMenu>
