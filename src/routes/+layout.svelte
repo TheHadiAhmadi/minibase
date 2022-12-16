@@ -1,5 +1,6 @@
 <script>
   import { alertMessage } from "$stores/alert";
+  import "prismjs";
   import "../tabler.css";
   import "virtual:windi.css";
   import "../styles.css";

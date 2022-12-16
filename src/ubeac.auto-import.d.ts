@@ -79,8 +79,8 @@ declare global {
   const PopoverBody: typeof import("@ubeac/svelte/components")["PopoverBody"];
   const PopoverHeader: typeof import("@ubeac/svelte/components")["PopoverHeader"];
   const Popup: typeof import("@ubeac/svelte/components")["Popup"];
-  const Preview: typeof import("@ubeac/svelte/components")["Preview"];
-  const PreviewCopyButton: typeof import("@ubeac/svelte/components")["PreviewCopyButton"];
+  // const Preview: typeof import("@ubeac/svelte/components")["Preview"];
+  // const PreviewCopyButton: typeof import("@ubeac/svelte/components")["PreviewCopyButton"];
   const Radio: typeof import("@ubeac/svelte/components")["Radio"];
   const RadioGroup: typeof import("@ubeac/svelte/components")["RadioGroup"];
   // const Row: typeof import("@ubeac/svelte/components")["Row"];
